@@ -1,0 +1,7 @@
+{
+  "entry": "index.html",
+  "minApp": "2.1.0",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait"
+}

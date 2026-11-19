@@ -1,0 +1,277 @@
+/* ============================================================================
+ * history.css — History page stylesheet (mobile column + Windows desktop ledger)
+ * 1 · Scope     Everything lives under #pg-hist. Mobile (360 first, 390 reference, main max 430) is the
+ *               default and is untouched. Desktop = body.piq-shell and >=720px: one record per row,
+ *               left to right (date · measures · cycle ruler · open control); 800 is the compact tier.
+ *               Colour only from --ink / --bg. Segment length is data (inline height, 7px = 1 day).
+ * 2 · Contract  Frozen ids / classes of the History markup (#sky #top #list #cyc #ci #cs #cd #cp #cyp
+ *               #hsubt .fog .en .hd .dn .dt .gp .gi .ln .ch .ico .ct .cv .pl .ul .sg .cy .cl .pr .td .nx).
+ *               No renames, no hidden labels. Closed = hidden (visibility), never just transparent.
+ * 3 · x- names  Classes: x-empty · x-nil · x-gap · x-pk (unchanged). Custom properties: --x-c1 --x-c2
+ *               --x-pl --x-num --x-hair --x-r --x-t --x-rail. Keyframes: x-draw.
+ * 4 · Changes   W1-3A: desktop ledger. .sg is a container (cqh) turned 90deg so its inline height becomes
+ *               its width; the day ticks are drawn on .cy. Rows use the inline --x-r from history.js (no 30-record
+ *               cap); .en/.hd use explicit grid widths so labels cannot widen the row. #sky ruler drawing is
+ *               skipped at desktop in history.js; the mobile canvas path is untouched.
+ * ========================================================================== */
+#pg-hist{min-height:100dvh;overflow-x:clip;background:radial-gradient(120% 40% at 50% 8%,rgba(var(--ink),.1),transparent 62%),radial-gradient(80% 40% at 100% 70%,rgba(var(--ink),.05),transparent 60%),rgb(var(--bg))}
+#pg-hist #sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#pg-hist .fog{position:fixed;left:0;right:0;z-index:2;pointer-events:none}
+#pg-hist .fog.t{top:0;height:max(70px,var(--sai-top));background:linear-gradient(rgb(var(--bg)),rgba(var(--bg),0))}
+#pg-hist .fog.b{bottom:0;height:150px;background:linear-gradient(rgba(var(--bg),0),rgba(var(--bg),.8))}
+#pg-hist main{position:relative;z-index:1;max-width:430px;margin:0 auto;padding:max(10px,var(--sai-top)) 18px calc(150px + var(--sai-bottom))}
+#pg-hist header{display:flex;justify-content:space-between;align-items:center;height:60px}
+#pg-hist .brand b{font-weight:800;font-size:19px;letter-spacing:-.03em}
+#pg-hist .brand small{display:block;font-size:12px;font-weight:600;opacity:.55}
+#pg-hist .eb{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5}
+#pg-hist #top{margin:26px 0 0;transform-origin:0 0;will-change:transform,opacity}
+#pg-hist #top h1{margin:0;font-size:60px;font-weight:800;letter-spacing:-.06em;line-height:.95}
+#pg-hist #top p{margin:12px 0 0;font-size:14px;font-weight:600;opacity:.62}
+#pg-hist .rv{opacity:0;filter:blur(10px);translate:0 24px;transition:opacity 1s,filter 1s,translate 1.1s var(--e);transition-delay:var(--d,0s)}
+#pg-hist .in .rv{opacity:1;filter:none;translate:0}
+/* focus: one hairline ring in --ink, readable on both themes */
+#pg-hist .hd:focus-visible,#pg-hist .ch:focus-visible{outline:1.5px solid rgb(var(--ink));outline-offset:6px;border-radius:18px}
+#pg-hist #cs:focus-visible{outline:1.5px solid rgb(var(--ink));outline-offset:3px;border-radius:10px}
+#pg-hist .hd:focus-visible .ul{transform:none}
+/* segments: height is set inline from the data (7px per day) */
+#pg-hist .sg{position:relative}
+#pg-hist .sg .pr,#pg-hist .sg .td,#pg-hist .sg .nx{position:absolute;left:84px;font-size:11.5px;font-weight:700;display:grid;pointer-events:none}
+#pg-hist .sg .pr{bottom:11px}
+#pg-hist .sg .pr::before{content:"";position:absolute;left:-30px;top:50%;width:22px;border-top:1px solid rgba(var(--ink),.5)}
+#pg-hist .sg .pr span{grid-area:1/1;transition:opacity .6s,filter .6s,translate .8s var(--e)}
+#pg-hist .sg .pr span+span{opacity:0;filter:blur(6px);translate:0 8px}
+#pg-hist .sg.flow .pr span:first-child{opacity:0;filter:blur(6px);translate:0 -8px}
+#pg-hist .sg.flow .pr span+span{opacity:1;filter:none;translate:0}
+#pg-hist .sg .td{font-size:13px;font-weight:800;left:72px}
+#pg-hist .sg .td small{display:block;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5}
+#pg-hist .sg .nx{top:2px;left:72px;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.4}
+#pg-hist .cy{position:absolute;right:0;top:4px;bottom:4px;width:7px;border:1px solid rgba(var(--ink),.4);border-left:0}
+#pg-hist .cy.d{border-style:dashed}
+#pg-hist .cl{position:absolute;right:15px;top:50%;translate:0 -50%;writing-mode:vertical-rl;rotate:180deg;font-size:9.5px;font-weight:600;letter-spacing:.12em;line-height:1.5;text-transform:uppercase;opacity:.5;white-space:nowrap}
+#pg-hist .cl span{display:block}
+#pg-hist .cl span+span{font-weight:800}
+/* headroom so the in-progress "Next period"/"Today" labels never sit on the page subtitle */
+#pg-hist #list{margin-top:22px}
+/* records */
+#pg-hist .en{position:relative;padding-left:50px;--f:.4}
+#pg-hist .hd{display:block;width:100%;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer;transform-origin:0 40%;will-change:transform,opacity,filter}
+#pg-hist .dn{display:block;font-size:min(118px,31vw);line-height:.95;letter-spacing:-.06em;margin:6px 0 10px -4px;font-weight:calc(160 + 640*var(--f));white-space:nowrap}
+#pg-hist .dn i{display:inline-block;font-style:normal;opacity:0;filter:blur(16px);transform:translateY(38%) scale(1.25);transition:opacity 1s,filter 1s,transform 1.2s var(--e);transition-delay:calc(var(--k)*110ms + .1s)}
+#pg-hist .en.in .dn i{opacity:1;filter:none;transform:none}
+#pg-hist .row{display:flex;align-items:center;gap:18px}
+#pg-hist .ms{display:block;min-width:0}
+#pg-hist .mv{display:block;font-size:13px;font-weight:700;white-space:nowrap}
+#pg-hist .mv b{font-size:27px;font-weight:800;letter-spacing:-.045em;margin-right:2px}
+#pg-hist .ml{display:block;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5;margin-top:2px;white-space:nowrap}
+#pg-hist .pl{margin-left:auto;margin-right:clamp(0px,calc(100vw - 372px),46px);width:46px;height:46px;border-radius:50%;position:relative;flex:none;box-shadow:inset 0 0 0 .5px rgba(var(--ink),.38);transition:transform .9s var(--e),background .5s,box-shadow .5s}
+#pg-hist .pl::before,#pg-hist .pl::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:1.6px;margin:-.8px 0 0 -7px;background:currentColor;border-radius:2px;transition:transform .9s var(--e)}
+#pg-hist .pl::after{transform:rotate(90deg)}
+#pg-hist .open .pl{transform:rotate(180deg);background:rgb(var(--ink));color:rgb(var(--bg))}
+#pg-hist .open .pl::after{transform:rotate(0)}
+#pg-hist .ul{display:block;height:1px;margin-top:16px;background:rgb(var(--ink));transform:scaleX(0);transform-origin:left;transition:transform 1.2s var(--e)}
+#pg-hist .open .ul{transform:none}
+/* in-place expansion: the panel grows from the touch corner */
+#pg-hist .dt{display:grid;grid-template-rows:0fr;transition:grid-template-rows 1.05s var(--e),margin .9s var(--e)}
+#pg-hist .open .dt{grid-template-rows:1fr;margin-top:20px}
+#pg-hist .gp{min-height:0;overflow:hidden;border-radius:44px 44px 44px 14px;clip-path:circle(0 at 14% 0);visibility:hidden;transition:clip-path .9s cubic-bezier(.5,0,.2,1),visibility 0s .9s;text-shadow:0 0 14px rgba(var(--bg),.5)}
+#pg-hist .open .gp{clip-path:circle(160% at 14% 0);visibility:visible;transition:clip-path 1.3s cubic-bezier(.2,.8,.1,1),visibility 0s}
+#pg-hist .gi{padding:12px 24px 14px}
+#pg-hist .ln{padding:18px 0;border-top:1px solid rgba(var(--ink),.14);opacity:0;filter:blur(8px);transform:translateY(16px);transition:opacity .35s,filter .35s,transform .4s}
+#pg-hist .ln:first-child{border-top:0}
+#pg-hist .open .ln{opacity:1;filter:none;transform:none;transition:opacity .9s var(--e),filter .9s,transform 1s var(--e);transition-delay:calc(.32s + var(--k)*.09s)}
+#pg-hist .ln .eb{margin-bottom:10px}
+#pg-hist .fv{font-size:32px;font-weight:800;letter-spacing:-.045em;line-height:1}
+#pg-hist .dr{display:inline-flex;flex-wrap:wrap;gap:5px;margin-left:12px;vertical-align:middle}
+#pg-hist .dr i{width:9px;height:9px;border-radius:50%;box-shadow:inset 0 0 0 1.3px rgb(var(--ink))}
+#pg-hist .dr i.f{background:rgb(var(--ink))}
+/* flow, day by day: the grid fits any period length (never wider than its panel) */
+#pg-hist .bars{display:grid;grid-template-columns:repeat(var(--n,1),minmax(0,30px));column-gap:clamp(2px,1.4vw,8px);align-items:end;margin-top:16px}
+#pg-hist .b{display:grid;justify-items:center;gap:6px;min-width:0}
+#pg-hist .b i{width:min(22px,100%);border-radius:99px;background:rgb(var(--ink));transform-origin:bottom;transform:scaleY(0);transition:transform .5s}
+#pg-hist .b small{font-size:9.5px;font-weight:700;opacity:.5}
+#pg-hist .open .b i{transform:none;transition:transform 1.2s var(--e);transition-delay:calc(.7s + var(--k)*.07s)}
+#pg-hist .b.x-gap i{height:18px;background:none;border:1px dashed rgba(var(--ink),.55);box-sizing:border-box}
+#pg-hist .b.x-pk::before{content:"";width:10px;height:10px;background:rgb(var(--ink));clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);opacity:0;transition:opacity .4s}
+#pg-hist .open .b.x-pk::before{opacity:1;transition:opacity .8s;transition-delay:calc(1.3s + var(--k)*.07s)}
+#pg-hist .pn b{font-size:44px;font-weight:800;letter-spacing:-.06em}
+#pg-hist .pn small{font-size:15px;font-weight:700;opacity:.5}
+#pg-hist .t10{display:flex;gap:4px;margin-top:10px}
+#pg-hist .t10 i{flex:1;height:18px;border-radius:2px;background:rgba(var(--ink),.2);transform-origin:bottom;transform:scaleY(.3);transition:transform .4s}
+#pg-hist .t10 i.f{background:rgb(var(--ink))}
+#pg-hist .open .t10 i{transform:none;transition:transform 1s var(--e);transition-delay:calc(.8s + var(--k)*.05s)}
+#pg-hist .md{font-size:23px;font-weight:700;letter-spacing:-.035em;line-height:1.2}
+#pg-hist .sy{font-size:16px;font-weight:600;line-height:1.7}
+#pg-hist .sy i{font-style:normal;opacity:.4;margin:0 6px}
+#pg-hist .w{display:inline-block;opacity:0;filter:blur(6px);transform:translateY(8px);transition:.3s}
+#pg-hist .open .w{opacity:1;filter:none;transform:none;transition:opacity .8s,filter .8s,transform .9s var(--e);transition-delay:calc(1.1s + var(--k)*.1s)}
+#pg-hist .mut{font-size:14px;font-weight:600;opacity:.6;line-height:1.5}
+#pg-hist .mut.x-nil{display:inline-block;padding-bottom:3px;border-bottom:1px dashed rgba(var(--ink),.45);opacity:.5}
+/* no records: a hollow star on a dashed rail, the same grammar as "not yet happened" */
+#pg-hist .x-empty{position:relative;padding:34px 0 0 50px;opacity:0;filter:blur(10px);translate:0 24px;transition:opacity 1s,filter 1s,translate 1.1s var(--e)}
+#pg-hist .x-empty.in{opacity:1;filter:none;translate:0}
+#pg-hist .x-empty::before{content:"";position:absolute;left:8px;top:0;bottom:0;border-left:1px dashed rgba(var(--ink),.32)}
+#pg-hist .x-empty::after{content:"";position:absolute;left:2px;top:36px;width:12px;height:12px;border-radius:50%;background:rgb(var(--bg));box-shadow:inset 0 0 0 1.3px rgb(var(--ink))}
+#pg-hist .x-empty b{display:block;font-size:min(118px,31vw);line-height:.95;letter-spacing:-.06em;font-weight:160;margin:6px 0 10px -4px}
+#pg-hist .x-empty h2{margin:0;font-size:23px;font-weight:700;letter-spacing:-.035em;line-height:1.2}
+#pg-hist .x-empty p{margin:10px 0 0;max-width:30ch;font-size:14px;font-weight:600;line-height:1.5;opacity:.6}
+/* cycle lengths */
+#pg-hist .cyc{position:relative;margin-top:92px;padding-left:50px}
+#pg-hist .cyc::before{content:"";position:absolute;left:50px;right:0;top:-40px;border-top:1px solid rgba(var(--ink),.14)}
+#pg-hist .ch{display:flex;align-items:center;gap:18px;width:100%;min-height:72px;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+#pg-hist .ico{width:72px;height:72px;border-radius:26px;flex:none;display:grid;place-items:center;transition:transform .8s var(--e)}
+#pg-hist .ch:active .ico{transform:scale(.94)}
+#pg-hist .ico canvas{width:56px;height:56px;display:block}
+#pg-hist .ct{display:block;flex:1;min-width:0}
+#pg-hist .cv{display:block;text-wrap:balance;font-size:15px;font-weight:800;letter-spacing:-.03em;margin-top:5px;line-height:1.25}
+#pg-hist #cs{display:block;width:100%;height:192px;touch-action:pan-y;cursor:ew-resize}
+#pg-hist .cr{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px}
+#pg-hist .cr b{font-size:36px;font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums;min-width:112px}
+#pg-hist .cr span{font-size:13px;font-weight:700;opacity:.7}
+#pg-hist .cyc .mut{margin:10px 0 0;font-size:12px}
+#pg-hist .end{margin:60px 0 0;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.4;padding-left:50px}
+/* reduced motion: same states, no travel, no blur, no waiting */
+@media (prefers-reduced-motion:reduce){
+#pg-hist *,#pg-hist *::before,#pg-hist *::after{transition-duration:.01ms!important;transition-delay:0s!important;animation:none!important}
+#pg-hist .rv,#pg-hist .x-empty{opacity:1;filter:none;translate:0}
+#pg-hist .dn i{opacity:1;filter:none;transform:none}
+}
+
+/* ---- desktop: horizontal ledger ---- */
+@media (min-width:720px){
+body.piq-shell #pg-hist{--shell-col:none;--x-c1:236px;--x-c2:200px;--x-pl:46px;--x-num:68px;--x-k:1.4286;--x-p:calc(7px*var(--x-k));--x-hair:rgba(var(--ink),.13);--x-rail:var(--rail-w,88px);padding:var(--shell-h,44px) 0 0 var(--x-rail)}
+body.piq-shell #pg-hist .fog.t{top:var(--shell-h,44px);height:26px}
+body.piq-shell #pg-hist .fog.b{left:var(--x-rail);height:60px}
+body.piq-shell #pg-hist main{display:grid;max-width:1240px;margin:0;padding:4px 40px 34px 36px}
+body.piq-shell #pg-hist header{order:1;height:40px;justify-content:flex-start}
+body.piq-shell #pg-hist .brand{display:flex;align-items:baseline;gap:10px}
+body.piq-shell #pg-hist #top{order:2;display:flex;align-items:flex-end;gap:28px;margin:6px 0 0}
+body.piq-shell #pg-hist #top h1{font-size:88px;letter-spacing:-.065em}
+body.piq-shell #pg-hist #top::after{content:"";order:1;flex:1;align-self:flex-end;margin-bottom:20px;height:1px;background:linear-gradient(90deg,rgba(var(--ink),.36),rgba(var(--ink),.03))}
+body.piq-shell #pg-hist #top p{order:2;margin:0 0 12px;max-width:30ch;text-align:right;font-size:13px}
+body.piq-shell #pg-hist .end{order:3;display:flex;align-items:center;gap:12px;margin:14px 0 0;padding-left:calc(var(--x-c1) + var(--x-c2))}
+body.piq-shell #pg-hist .end::before{content:"";flex:none;width:calc(var(--x-p)*7 + 1px);height:8px;background:repeating-linear-gradient(90deg,rgba(var(--ink),.6) 0 1px,transparent 1px var(--x-p)) 0 0/100% 7px no-repeat,linear-gradient(rgba(var(--ink),.6),rgba(var(--ink),.6)) 0 100%/calc(100% - 1px) 1px no-repeat}
+/* ledger grid: date | measures | ruler | open control */
+body.piq-shell #pg-hist #list{order:4;position:relative;display:grid;grid-template-columns:var(--x-c1) var(--x-c2) minmax(0,1fr) var(--x-pl);margin-top:8px}
+body.piq-shell #pg-hist #list::before{content:"";position:absolute;left:7px;top:12px;bottom:0;border-left:1px solid rgba(var(--ink),.2)}
+body.piq-shell #pg-hist #list:has(.x-empty)::before{display:none}
+body.piq-shell #pg-hist .en{grid-column:1/-1;grid-row:var(--x-r)/span 2;display:block;min-width:0;padding:0}
+body.piq-shell #pg-hist .hd{position:relative;display:grid;grid-template-columns:var(--x-c1) var(--x-c2) minmax(0,1fr) var(--x-pl);grid-template-rows:auto auto auto;align-items:end;width:100%;min-width:0;padding:13px 0 0;border-radius:0;transition:background .7s var(--e)}
+body.piq-shell #pg-hist .hd::before{content:"";position:absolute;left:2px;top:18px;width:11px;height:11px;border-radius:50%;background:rgb(var(--ink));box-shadow:0 0 0 0 rgba(var(--ink),.18);transition:box-shadow .8s var(--e),transform .8s var(--e)}
+body.piq-shell #pg-hist .hd::after{content:"";position:absolute;left:0;right:0;bottom:0;border-bottom:1px solid var(--x-hair)}
+body.piq-shell #pg-hist .hd:hover{background:linear-gradient(90deg,rgba(var(--ink),.075),rgba(var(--ink),.015) 60%,transparent)}
+body.piq-shell #pg-hist .hd:hover::before,body.piq-shell #pg-hist .hd:focus-visible::before{transform:scale(1.25);box-shadow:0 0 0 6px rgba(var(--ink),.12)}
+body.piq-shell #pg-hist .open .hd::before{box-shadow:0 0 0 7px rgba(var(--ink),.16)}
+body.piq-shell #pg-hist .hd:focus-visible{outline:1.5px solid rgb(var(--ink));outline-offset:-3px;border-radius:14px}
+body.piq-shell #pg-hist .hd .eb{grid-column:1;grid-row:1;margin:0 0 0 34px;align-self:start;line-height:1.4}
+body.piq-shell #pg-hist .dn{grid-column:1;grid-row:2;margin:4px 0 0 30px;font-size:var(--x-num);line-height:.88;transition:translate .8s var(--e)}
+body.piq-shell #pg-hist .hd:hover .dn{translate:5px 0}
+body.piq-shell #pg-hist .row{display:flex;grid-column:2;grid-row:2;flex-direction:row;flex-wrap:nowrap;justify-content:flex-start;align-self:end;align-items:flex-end;gap:12px;min-width:0;padding-bottom:7px}
+body.piq-shell #pg-hist .ms{grid-column:auto;grid-row:auto;align-self:auto;padding-bottom:0;min-width:0}
+body.piq-shell #pg-hist .mv{font-size:11px;line-height:1.1}
+body.piq-shell #pg-hist .mv b{font-size:30px}
+body.piq-shell #pg-hist .ml{font-size:9px;letter-spacing:.1em;margin-top:1px}
+body.piq-shell #pg-hist .row .pl{position:absolute;right:0;top:50%;translate:0 -50%;justify-self:auto;margin:0}
+body.piq-shell #pg-hist .ul{grid-column:1/-1;grid-row:3;margin-top:12px}
+body.piq-shell #pg-hist .hd:hover .pl{box-shadow:inset 0 0 0 .5px rgba(var(--ink),.7)}
+/* the cycle ruler: .sg is rotated so its inline height (7px per day) runs left to right from the record date */
+body.piq-shell #pg-hist .sg{position:absolute;grid-column:3;grid-row:var(--x-r);left:0;top:auto;bottom:calc(100% - var(--x-by,38px));width:60px;container-type:size;transform-origin:0 100%;rotate:90deg;scale:1 var(--x-k);pointer-events:none;z-index:1}
+body.piq-shell #pg-hist .sg .cy{top:0;bottom:0;right:21px;width:9px;--x-t:.55;border-color:rgba(var(--ink),.5);background:repeating-linear-gradient(to top,rgba(var(--ink),var(--x-t)) 0 1px,transparent 1px 49px) 100% 0/8px 100% no-repeat,repeating-linear-gradient(to top,rgba(var(--ink),calc(var(--x-t)*.8)) 0 1px,transparent 1px 7px) 100% 0/4px 100% no-repeat;animation:x-draw 1.5s calc(var(--x-r)*70ms + .25s) var(--e) both}
+body.piq-shell #pg-hist .sg .cy.d{--x-t:.3}
+body.piq-shell #pg-hist .sg .pr,body.piq-shell #pg-hist .sg .td,body.piq-shell #pg-hist .sg .nx{left:auto;rotate:-90deg;scale:calc(1/var(--x-k)) 1;white-space:nowrap;width:max-content}
+body.piq-shell #pg-hist .sg .pr{left:0;top:calc(100cqh - 38px/var(--x-k));bottom:auto;transform-origin:0 0;margin-left:45px}
+body.piq-shell #pg-hist .sg .td{left:3px;transform-origin:0 0}
+body.piq-shell #pg-hist .sg .td::before{content:"";position:absolute;left:-1px;top:100%;height:12px;border-left:1px solid rgba(var(--ink),.55)}
+body.piq-shell #pg-hist .sg .nx{left:0;right:auto;top:-18px;transform-origin:0 0}
+body.piq-shell #pg-hist .sg .cl{top:0;right:20px;translate:0 -100%;margin-top:-8px;font-size:10px;opacity:1;scale:1 calc(1/var(--x-k))}
+body.piq-shell #pg-hist .sg .td ~ .cl{display:none}
+body.piq-shell #pg-hist .sg .cl span:first-child{opacity:.5}
+body.piq-shell #pg-hist .sg .cl span+span{font-size:18px;letter-spacing:-.02em;opacity:1;text-transform:none}
+/* open record: a full-width glass sheet that grows from the open control */
+body.piq-shell #pg-hist .dt{grid-column:1/-1;grid-row:2}
+body.piq-shell #pg-hist .open .dt{margin-top:4px}
+body.piq-shell #pg-hist .gp{border-radius:28px;clip-path:circle(0 at 96% 0)}
+body.piq-shell #pg-hist .open .gp{clip-path:circle(170% at 96% 0)}
+body.piq-shell #pg-hist .en .gi{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));padding:4px 6px 6px}
+body.piq-shell #pg-hist .en .ln{padding:16px 22px 18px;border-top:0;border-left:1px solid var(--x-hair)}
+body.piq-shell #pg-hist .en .ln:nth-child(1){grid-column:span 2;border-left:0}
+body.piq-shell #pg-hist .en .ln:nth-child(2){grid-column:span 4}
+body.piq-shell #pg-hist .en .ln:nth-child(n+3){grid-column:span 2;border-top:1px solid var(--x-hair)}
+body.piq-shell #pg-hist .en .ln:nth-child(3){border-left:0}
+body.piq-shell #pg-hist .bars{grid-template-columns:repeat(var(--n,1),minmax(0,34px));column-gap:8px;margin-top:14px}
+body.piq-shell #pg-hist .b i{width:min(24px,100%)}
+/* cycle lengths: a second, shorter instrument under the ledger */
+body.piq-shell #pg-hist .cyc{order:5;margin-top:26px;padding-left:0}
+body.piq-shell #pg-hist .cyc::before{left:0;top:-16px}
+body.piq-shell #pg-hist .ch{display:grid;grid-template-columns:72px minmax(0,1fr) var(--x-pl);gap:0 22px;margin-left:30px;width:calc(100% - 30px)}
+body.piq-shell #pg-hist .ch .pl{margin:0;grid-column:3;grid-row:auto}
+body.piq-shell #pg-hist .cv{font-size:22px;margin-top:6px}
+body.piq-shell #pg-hist .cyc .gi{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);padding:6px 10px}
+body.piq-shell #pg-hist .cyc .ln{padding:18px 26px;border-top:0}
+body.piq-shell #pg-hist .cyc .ln+.ln{border-left:1px solid var(--x-hair);align-self:stretch}
+body.piq-shell #pg-hist #cs{height:172px}
+body.piq-shell #pg-hist .cr b{font-size:60px;min-width:0}
+body.piq-shell #pg-hist .cr span{font-size:14px}
+body.piq-shell #pg-hist .cyc .mut{font-size:13px}
+/* empty ledger */
+body.piq-shell #pg-hist .x-empty{grid-column:1/-1;display:grid;grid-template-columns:var(--x-c1) minmax(0,1fr);align-items:center;column-gap:0;padding:30px 0 26px 34px}
+body.piq-shell #pg-hist .x-empty::before{left:7px}
+body.piq-shell #pg-hist .x-empty::after{left:2px;top:34px}
+body.piq-shell #pg-hist .x-empty b{grid-row:1/3;margin:0;font-size:var(--x-num)}
+body.piq-shell #pg-hist .x-empty h2{align-self:end;font-size:28px}
+body.piq-shell #pg-hist .x-empty p{align-self:start;max-width:46ch}
+/* Keep the ledger aligned: the mobile scroll-scale would move the open control under the cycle label. */
+body.piq-shell #pg-hist .hd{transform:none!important;opacity:1!important;filter:none!important}
+/* The rotated micro-labels collide with the open control at desktop widths; the ledger keeps the data in the row and states the live cycle in the date line. */
+body.piq-shell #pg-hist .sg .nx,body.piq-shell #pg-hist .sg .td,body.piq-shell #pg-hist .sg .cl{display:none}
+body.piq-shell #pg-hist .sg:has(.td)+.en > .hd > .eb::after{content:" · Now";opacity:.6;letter-spacing:.06em}
+@keyframes x-draw{from{clip-path:inset(100% 0 0 0);opacity:.2}to{clip-path:inset(0);opacity:1}}
+}
+@media (min-width:720px) and (max-width:879px){
+body.piq-shell #pg-hist{--x-c1:178px;--x-c2:180px;--x-num:58px;--x-k:1;--x-by:30px}
+body.piq-shell #pg-hist main{padding:4px 28px 72px 24px}
+body.piq-shell #pg-hist #top h1{font-size:72px}
+body.piq-shell #pg-hist #top p{max-width:none;white-space:nowrap}
+body.piq-shell #pg-hist .mv b{font-size:24px}
+body.piq-shell #pg-hist .en .ln{padding:14px 16px 16px}
+body.piq-shell #pg-hist .cr b{font-size:46px}
+}
+@media (min-width:720px) and (prefers-reduced-motion:reduce){
+body.piq-shell #pg-hist .sg .cy{animation:none}
+}
+@media (forced-colors:active){
+body.piq-shell #pg-hist .hd::after,body.piq-shell #pg-hist .cy{border-color:CanvasText}
+body.piq-shell #pg-hist .hd:focus-visible{outline:2px solid Highlight}
+}
+/* row index per record (sg = 2k-1, en = 2k) */
+@media (min-width:720px){
+body.piq-shell #pg-hist #list>:nth-child(1),body.piq-shell #pg-hist #list>:nth-child(2){--x-r:1}
+body.piq-shell #pg-hist #list>:nth-child(3),body.piq-shell #pg-hist #list>:nth-child(4){--x-r:3}
+body.piq-shell #pg-hist #list>:nth-child(5),body.piq-shell #pg-hist #list>:nth-child(6){--x-r:5}
+body.piq-shell #pg-hist #list>:nth-child(7),body.piq-shell #pg-hist #list>:nth-child(8){--x-r:7}
+body.piq-shell #pg-hist #list>:nth-child(9),body.piq-shell #pg-hist #list>:nth-child(10){--x-r:9}
+body.piq-shell #pg-hist #list>:nth-child(11),body.piq-shell #pg-hist #list>:nth-child(12){--x-r:11}
+body.piq-shell #pg-hist #list>:nth-child(13),body.piq-shell #pg-hist #list>:nth-child(14){--x-r:13}
+body.piq-shell #pg-hist #list>:nth-child(15),body.piq-shell #pg-hist #list>:nth-child(16){--x-r:15}
+body.piq-shell #pg-hist #list>:nth-child(17),body.piq-shell #pg-hist #list>:nth-child(18){--x-r:17}
+body.piq-shell #pg-hist #list>:nth-child(19),body.piq-shell #pg-hist #list>:nth-child(20){--x-r:19}
+body.piq-shell #pg-hist #list>:nth-child(21),body.piq-shell #pg-hist #list>:nth-child(22){--x-r:21}
+body.piq-shell #pg-hist #list>:nth-child(23),body.piq-shell #pg-hist #list>:nth-child(24){--x-r:23}
+body.piq-shell #pg-hist #list>:nth-child(25),body.piq-shell #pg-hist #list>:nth-child(26){--x-r:25}
+body.piq-shell #pg-hist #list>:nth-child(27),body.piq-shell #pg-hist #list>:nth-child(28){--x-r:27}
+body.piq-shell #pg-hist #list>:nth-child(29),body.piq-shell #pg-hist #list>:nth-child(30){--x-r:29}
+body.piq-shell #pg-hist #list>:nth-child(31),body.piq-shell #pg-hist #list>:nth-child(32){--x-r:31}
+body.piq-shell #pg-hist #list>:nth-child(33),body.piq-shell #pg-hist #list>:nth-child(34){--x-r:33}
+body.piq-shell #pg-hist #list>:nth-child(35),body.piq-shell #pg-hist #list>:nth-child(36){--x-r:35}
+body.piq-shell #pg-hist #list>:nth-child(37),body.piq-shell #pg-hist #list>:nth-child(38){--x-r:37}
+body.piq-shell #pg-hist #list>:nth-child(39),body.piq-shell #pg-hist #list>:nth-child(40){--x-r:39}
+body.piq-shell #pg-hist #list>:nth-child(41),body.piq-shell #pg-hist #list>:nth-child(42){--x-r:41}
+body.piq-shell #pg-hist #list>:nth-child(43),body.piq-shell #pg-hist #list>:nth-child(44){--x-r:43}
+body.piq-shell #pg-hist #list>:nth-child(45),body.piq-shell #pg-hist #list>:nth-child(46){--x-r:45}
+body.piq-shell #pg-hist #list>:nth-child(47),body.piq-shell #pg-hist #list>:nth-child(48){--x-r:47}
+body.piq-shell #pg-hist #list>:nth-child(49),body.piq-shell #pg-hist #list>:nth-child(50){--x-r:49}
+body.piq-shell #pg-hist #list>:nth-child(51),body.piq-shell #pg-hist #list>:nth-child(52){--x-r:51}
+body.piq-shell #pg-hist #list>:nth-child(53),body.piq-shell #pg-hist #list>:nth-child(54){--x-r:53}
+body.piq-shell #pg-hist #list>:nth-child(55),body.piq-shell #pg-hist #list>:nth-child(56){--x-r:55}
+body.piq-shell #pg-hist #list>:nth-child(57),body.piq-shell #pg-hist #list>:nth-child(58){--x-r:57}
+body.piq-shell #pg-hist #list>:nth-child(59),body.piq-shell #pg-hist #list>:nth-child(60){--x-r:59}
+}

@@ -1,0 +1,249 @@
+/* ------------------------------------------------------------------
+   1 Role: B9 auth gate. Mobile: a full-screen threshold into the sky (starfield canvas, one liquid-glass
+     lens holding an iris, the sign-in form as hairline instrumentation under it). Desktop (W1-5B, piq-shell,
+     >=720px): a split horizon. One hairline crosses the screen at the lens centre; the lens/iris rests on it
+     at the left, the title rests on it at the right, the form hangs from it, the local-first foot closes the
+     lens side. Focus, hover and submit raise one shared --x-lit that lights iris, rings and horizon together.
+   2 Depends on: base.css tokens (--ink --bg --hl --sh --gl --ds --e --sai-*) and .glass; the #pg-auth shell
+     (#asky .auth-wrap .auth-hd .auth-card .auth-foot); auth.js builds the x-* nodes and toggles html.x-gated and
+     #pg-auth.x-on / x-out / x-reg / x-busy. Desktop also reads body.piq-shell, :has() and @property; without
+     them the gate stays composed and static.
+   3 Invariants: only #pg-auth, its descendants and the one html.x-gated rule; every desktop rule starts
+     body.piq-shell #pg-auth inside @media(min-width:720px), so 390/360 without the shell keep the mobile gate
+     untouched; no external URLs, no @import; strict monochrome (errors = dashed hairline + a break, never
+     colour); inputs 17px, targets >=44px, visible focus; no DOM, ids or classes added. x- classes used: x-gated
+     x-on x-out x-reg x-busy x-hero x-lens x-iris x-note x-form x-row x-fl x-opt x-in x-rv x-bad x-keep x-ck
+     x-box x-kt x-hint x-go x-gl x-sw (+ svg parts x-flare x-ring x-tgt x-bl x-bl2 x-hole x-orb x-ldr x-core
+     x-s0 x-s1). New: --x-lit --x-g --x-run --x-dia --x-c2 --x-c3 --x-pad --x-pr --x-th --x-tb and keyframes
+     x-focus x-ring x-rise x-run x-snap x-open x-leave.
+   4 Forbidden: no .page/.dock rules, no edits to .glass or base tokens, no dock tab, no titlebar, no modal,
+     no page transition, no endless loop, no fonts or images from outside the file.
+   ------------------------------------------------------------------ */
+html.x-gated :is(#dock,#app){visibility:hidden;pointer-events:none}
+
+#pg-auth{--x-sp:cubic-bezier(.34,1.56,.64,1);position:fixed;inset:0;z-index:120;display:none;overflow:hidden;background:rgb(var(--bg));color:rgb(var(--ink))}
+#pg-auth.x-on{display:block;animation:x-in .7s var(--e) .26s backwards}
+#pg-auth.x-on.x-out{animation:x-gone .42s var(--e) forwards;pointer-events:none}
+#pg-auth [hidden]{display:none!important}
+#pg-auth #asky{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+
+/* ---------- layout: scroller > header, hero (lens), card (inscription + form), foot */
+#pg-auth .auth-wrap{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 max(22px,var(--sai-right)) calc(var(--x-kb,0px) + max(12px,var(--sai-bottom))) max(22px,var(--sai-left))}
+#pg-auth .auth-wrap>*{width:100%;max-width:410px;margin-left:auto;margin-right:auto;flex:none}
+#pg-auth .auth-hd{padding-top:max(16px,var(--sai-top))}
+#pg-auth .brand{display:flex;align-items:baseline;gap:10px;min-height:28px}
+#pg-auth .brand b{font-size:15px;font-weight:800;letter-spacing:-.01em}
+#pg-auth .brand small{font-size:10.5px;font-weight:600;letter-spacing:.1em;opacity:.5}
+#pg-auth .x-hero{flex:1 1 0;min-height:132px;display:grid;place-items:center;position:relative}
+#pg-auth .x-hero::before{content:"";position:absolute;left:50%;top:50%;width:min(calc(var(--x-d,200px)*1.9),100%);aspect-ratio:1;translate:-50% -50%;background:radial-gradient(closest-side,rgba(var(--ink),.1),transparent);pointer-events:none}
+#pg-auth .auth-foot{margin-top:14px;margin-bottom:0;padding-bottom:4px;font-size:11.5px;font-weight:600;line-height:1.4;text-align:center;opacity:.5}
+
+/* ---------- the gate: one glass lens, iris inside, one leader to a state word */
+#pg-auth .x-lens.glass{width:var(--x-d,200px);height:var(--x-d,200px);border-radius:50%;--gl:.045;will-change:transform}
+#pg-auth .x-lens>.x-iris{position:absolute;inset:0;width:100%;height:100%;overflow:visible;display:block}
+#pg-auth .x-iris *{fill:none;vector-effect:non-scaling-stroke}
+#pg-auth .x-iris .x-flare{fill:url(#x-iris-g);stroke:none}
+#pg-auth .x-iris .x-core{fill:rgb(var(--ink));stroke:none}
+#pg-auth .x-s0{stop-color:rgb(var(--ink));stop-opacity:.85}
+#pg-auth .x-s1{stop-color:rgb(var(--ink));stop-opacity:0}
+#pg-auth .x-ring{stroke:rgba(var(--ink),.5);stroke-width:.7px}
+#pg-auth .x-tgt{stroke:rgba(var(--ink),.45);stroke-width:.7px;stroke-dasharray:2 4}
+#pg-auth .x-bl{stroke:rgba(var(--ink),.85);stroke-width:.8px}
+#pg-auth .x-bl2{stroke:rgba(var(--ink),.3);stroke-width:.6px}
+#pg-auth .x-hole{stroke:rgb(var(--ink));stroke-width:1px}
+#pg-auth .x-orb{stroke:rgba(var(--ink),.85);stroke-width:2.2px;stroke-linecap:round}
+#pg-auth .x-ldr{stroke:rgba(var(--ink),.55);stroke-width:.7px}
+#pg-auth .x-lens>.x-note{position:absolute;left:104%;top:18%;translate:0 -50%;font-size:10.5px;font-weight:600;line-height:1;letter-spacing:.04em;white-space:nowrap;opacity:.72;pointer-events:none}
+#pg-auth.x-on .x-lens{animation:x-pop 1.2s var(--x-sp) .3s backwards}
+
+/* ---------- inscription: eyebrow, title, sub; same threshold, other words per mode */
+#pg-auth .auth-card.glass{display:flex;flex-direction:column;border-radius:0;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;text-align:center;padding-top:4px}
+#pg-auth .auth-card.glass::before,#pg-auth .auth-card.glass::after{content:none}
+#pg-auth .eb{display:block;margin:0 0 10px;font-size:10.5px;font-weight:600;line-height:1;letter-spacing:.14em;opacity:.55}
+#pg-auth #auth-title{margin:0;font-size:clamp(31px,10vw,43px);font-weight:760;line-height:1;letter-spacing:-.035em}
+#pg-auth #auth-sub{margin:12px auto 0;max-width:31ch;min-height:2.9em;font-size:14px;font-weight:500;line-height:1.45;opacity:.62}
+#pg-auth #auth-form,#pg-auth .x-form{display:contents}
+#pg-auth.x-on .eb,#pg-auth.x-on #auth-title,#pg-auth.x-on #auth-sub{animation:x-blur .9s var(--e) .4s backwards}
+
+/* ---------- fields: label on a hairline, the focus bar draws in from the left */
+#pg-auth .x-row{order:1;position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;margin-top:8px;padding-top:12px;text-align:left}
+#pg-auth.x-on .x-row{animation:x-draw .95s var(--e) calc(var(--i,0)*90ms + .5s) backwards}
+#pg-auth .x-fl{grid-column:1/-1;font-size:10.5px;font-weight:600;line-height:1;letter-spacing:.04em;opacity:.58;transition:opacity .5s var(--e)}
+#pg-auth .x-opt{margin-left:6px;opacity:.7;font-weight:500}
+#pg-auth .x-in{grid-column:1;width:100%;height:46px;margin:0;padding:0;border:0;border-radius:0;background:none;color:inherit;font-family:inherit;font-size:17px;font-weight:600;line-height:1.2;outline:0;-webkit-appearance:none;appearance:none;caret-color:rgb(var(--ink))}
+#pg-auth .x-in:-webkit-autofill{-webkit-box-shadow:0 0 0 60px rgb(var(--bg)) inset;-webkit-text-fill-color:rgb(var(--ink))}
+#pg-auth .x-row::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(var(--ink),.3)}
+#pg-auth .x-row::before{content:"";position:absolute;left:0;right:0;bottom:-.5px;height:2px;background:rgb(var(--ink));transform:scaleX(0);transform-origin:0 50%;transition:transform .8s var(--e);z-index:1}
+#pg-auth .x-row:focus-within::before{transform:scaleX(1)}
+#pg-auth .x-row:focus-within .x-fl{opacity:1}
+#pg-auth .x-row.x-bad::after{background:repeating-linear-gradient(90deg,rgb(var(--ink)) 0 6px,transparent 6px 10px);height:1.5px}
+#pg-auth .x-row.x-bad::before{background:repeating-linear-gradient(90deg,rgb(var(--ink)) 0 6px,transparent 6px 10px)}
+#pg-auth .x-row.x-bad .x-fl{opacity:1}
+#pg-auth .x-rv{grid-column:2;min-width:56px;height:46px;margin:0;padding:0 0 0 12px;border:0;background:none;font-size:11.5px;font-weight:650;letter-spacing:.04em;text-align:right;opacity:.62;cursor:pointer}
+#pg-auth .x-rv:hover,#pg-auth .x-rv[aria-pressed=true]{opacity:1}
+
+/* ---------- keep me signed in: hollow ring, a four-point star when on */
+#pg-auth .x-keep{order:2;position:relative;display:flex;align-items:center;gap:12px;min-height:46px;margin-top:8px;text-align:left;font-size:14px;font-weight:600;cursor:pointer;-webkit-user-select:none;user-select:none}
+#pg-auth .x-ck{position:absolute;z-index:2;left:-11px;top:50%;width:44px;height:44px;margin:-22px 0 0;opacity:0;cursor:pointer}
+#pg-auth .x-box{position:relative;flex:none;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(var(--ink),.55);transition:box-shadow .5s var(--e)}
+#pg-auth .x-box::after{content:"";position:absolute;inset:3px;background:rgb(var(--ink));clip-path:path('M8 .7Q8.5 7.5 15.3 8Q8.5 8.5 8 15.3Q7.5 8.5 .7 8Q7.5 7.5 8 .7Z');transform:scale(0) rotate(-40deg);transition:transform .7s var(--x-sp)}
+#pg-auth .x-ck:checked+.x-box{box-shadow:inset 0 0 0 1px rgba(var(--ink),.95)}
+#pg-auth .x-ck:checked+.x-box::after{transform:scale(1.2) rotate(0)}
+#pg-auth .x-ck:focus-visible+.x-box{outline:2px solid rgb(var(--ink));outline-offset:3px}
+#pg-auth .x-hint{margin-left:auto;font-size:10.5px;font-weight:600;letter-spacing:.04em;opacity:.5}
+
+/* ---------- message, submit (glass pill, edge light turns while busy), switch link */
+#pg-auth #auth-msg{order:3;margin:6px 0 0;min-height:2.9em;font-size:13px;font-weight:600;line-height:1.45;text-align:center}
+#pg-auth .x-go.glass{order:4;display:block;width:100%;height:54px;margin:0;padding:0;border:0;border-radius:27px;--gl:.08;color:inherit;font-size:15.5px;font-weight:700;line-height:1;text-align:center;cursor:pointer;-webkit-appearance:none;appearance:none;transition:scale .6s var(--x-sp),opacity .4s}
+#pg-auth .x-go.glass:active:not(:disabled){scale:.975}
+#pg-auth .x-go.glass:disabled{opacity:.66;cursor:progress}
+#pg-auth .x-go>.x-gl{display:block}
+#pg-auth .x-sw{order:5;position:relative;align-self:center;min-height:48px;margin:4px 0 0;padding:0 16px;border:0;background:none;font-size:13.5px;font-weight:650;line-height:1;opacity:.74;cursor:pointer}
+#pg-auth .x-sw::after{content:"";position:absolute;left:16px;right:16px;bottom:15px;height:1px;background:currentColor;opacity:.4;transform-origin:0 50%;transition:transform .7s var(--e),opacity .4s}
+#pg-auth .x-sw:hover,#pg-auth .x-sw:focus-visible{opacity:1}
+#pg-auth .x-sw:disabled{opacity:.4;cursor:progress}
+#pg-auth.x-reg .x-hint{display:none}
+
+/* ---------- short screens: keep the lens, shrink the type */
+@media(max-height:700px){#pg-auth #auth-title{font-size:clamp(28px,8.6vw,36px)}#pg-auth #auth-sub{margin-top:8px}#pg-auth .x-row{margin-top:4px}}
+
+/* ---------- motion */
+@keyframes x-in{from{opacity:0}}
+@keyframes x-gone{to{opacity:0}}
+@keyframes x-pop{from{scale:.62;opacity:0}}
+@keyframes x-blur{from{opacity:0;filter:blur(8px)}}
+@keyframes x-draw{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+@media(prefers-reduced-motion:reduce){#pg-auth,#pg-auth *,#pg-auth *::before,#pg-auth *::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-delay:0s!important}}
+
+/* =====================================================================
+   W1-5B desktop threshold: a split horizon (piq-shell, >=720px)
+   cols  [ lens stage | inscription | margin ]    rows [ brand | horizon row | form... | foot ]
+   ===================================================================== */
+@property --x-lit{syntax:"<number>";inherits:true;initial-value:0}
+@property --x-g{syntax:"<length>";inherits:false;initial-value:0px}
+@property --x-run{syntax:"<percentage>";inherits:false;initial-value:-40%}
+@keyframes x-focus{from{opacity:0;filter:blur(18px) drop-shadow(0 0 0 transparent);scale:1.32}55%{opacity:1}to{opacity:1;filter:blur(0) drop-shadow(0 0 0 transparent)}}
+@keyframes x-ring{from{opacity:0;scale:.55}}
+@keyframes x-rise{from{clip-path:inset(0 calc((100% + var(--x-pr))/2) 0 calc((100% - var(--x-pr))/2))}to{clip-path:inset(0)}}
+@keyframes x-run{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+@keyframes x-snap{0%{--x-g:0px}34%{--x-g:40px}100%{--x-g:14px}}
+@keyframes x-open{to{scale:1.7;opacity:0}}
+@keyframes x-leave{to{opacity:0;translate:26px 0}}
+
+@media(min-width:720px){
+/* ---------- frame: the lens diameter drives everything; --x-lit is the shared light (0 idle, .5 focus/hover, 1 submit) */
+body.piq-shell #pg-auth{--x-tb:44px;--x-dia:clamp(280px,min(61vh,47vw),520px);--x-c2:clamp(300px,36vw,440px);--x-c3:clamp(32px,5.5vw,64px);--x-pad:clamp(32px,5.5vw,56px);--x-pr:clamp(80px,9.4vw,104px);--x-th:calc(var(--x-dia)/2 + 6px);transition:--x-lit .9s var(--e)}
+body.piq-shell #pg-auth:has(:where(.x-row:focus-within,.x-go:hover:not(:disabled))){--x-lit:.5}
+body.piq-shell #pg-auth.x-busy{--x-lit:1}
+body.piq-shell #pg-auth .auth-wrap{display:grid;grid-template-columns:minmax(0,1fr) var(--x-c2) var(--x-c3);grid-template-rows:auto minmax(var(--x-th),auto) repeat(9,auto) minmax(0,1fr);padding:var(--x-tb) 0 calc(var(--x-kb,0px) + 20px);scrollbar-width:thin;scrollbar-color:rgba(var(--ink),.3) transparent}
+body.piq-shell #pg-auth .auth-wrap>*{width:auto;max-width:none;margin:0}
+body.piq-shell #pg-auth .auth-card.glass{display:contents;text-align:left}
+
+/* ---------- brand row: the app mark and a word for where you are, echoing the shell titlebar without being one */
+body.piq-shell #pg-auth .auth-hd{grid-column:1/-1;grid-row:1;display:flex;align-items:center;min-height:28px;padding:14px 0 0 var(--x-pad)}
+body.piq-shell #pg-auth .brand{align-items:center;gap:12px}
+body.piq-shell #pg-auth .brand::before{content:"";flex:none;width:13px;height:13px;background:rgb(var(--ink));clip-path:path('M6.5 0Q6.9 6.1 13 6.5Q6.9 6.9 6.5 13Q6.1 6.9 0 6.5Q6.1 6.1 6.5 0Z')}
+body.piq-shell #pg-auth .brand b{font-size:16px}
+body.piq-shell #pg-auth .brand small{padding-left:12px;border-left:1px solid rgba(var(--ink),.6);line-height:12px;letter-spacing:.14em}
+
+/* ---------- the horizon: two hairline halves at the bottom of the title row; the lens is centred on this line */
+body.piq-shell #pg-auth .auth-wrap::before,body.piq-shell #pg-auth .auth-wrap::after{content:"";grid-row:2;align-self:end;height:1px;pointer-events:none;opacity:calc(.8 + var(--x-lit)*.2);background-repeat:no-repeat;background-size:100% 100%,26% 100%;background-position:0 0,var(--x-run) 0;transition:--x-run 0s}
+body.piq-shell #pg-auth .auth-wrap::before{grid-column:1;background-image:linear-gradient(90deg,transparent,rgba(var(--ink),.42) 40%,rgba(var(--ink),.3)),linear-gradient(90deg,transparent,rgb(var(--ink)) 50%,transparent)}
+body.piq-shell #pg-auth .auth-wrap::after{grid-column:2/-1;background-image:linear-gradient(90deg,rgba(var(--ink),.3),rgba(var(--ink),.12)),linear-gradient(90deg,transparent,rgb(var(--ink)) 50%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 0 30px,transparent 30px calc(30px + var(--x-g)),#000 calc(30px + var(--x-g)));mask-image:linear-gradient(90deg,#000 0 30px,transparent 30px calc(30px + var(--x-g)),#000 calc(30px + var(--x-g)));transition:--x-run 0s,--x-g .7s var(--x-sp)}
+body.piq-shell #pg-auth:has(.x-bad,#auth-msg:not(:empty)) .auth-wrap::after{--x-g:22px}
+
+/* ---------- the stage: glass lens centred on the horizon, two orbit hairlines, a soft light behind the iris */
+body.piq-shell #pg-auth .x-hero{grid-column:1;grid-row:2;position:relative;display:block;flex:none;min-height:0;padding:0}
+body.piq-shell #pg-auth .x-hero::before,body.piq-shell #pg-auth .x-hero::after{content:"";position:absolute;left:calc((100% - var(--x-pr))/2);top:100%;aspect-ratio:auto;translate:-50% -50%;border-radius:50%;background:none;pointer-events:none;transition:scale 1.1s var(--x-sp)}
+body.piq-shell #pg-auth .x-hero::before{width:calc(var(--x-dia)*1.2);height:calc(var(--x-dia)*1.2);border:1px solid rgba(var(--ink),calc(.2 + var(--x-lit)*.22));background:radial-gradient(closest-side,rgba(var(--ink),calc(.12 + var(--x-lit)*.08)),rgba(var(--ink),.03) 72%,transparent)}
+body.piq-shell #pg-auth .x-hero::after{width:calc(var(--x-dia)*1.42);height:calc(var(--x-dia)*1.42);border:1px dashed rgba(var(--ink),calc(.26 + var(--x-lit)*.2));transition-delay:.12s}
+body.piq-shell #pg-auth.x-busy .x-hero::before{scale:1.05}
+body.piq-shell #pg-auth.x-busy .x-hero::after{scale:1.04}
+body.piq-shell #pg-auth:has(.x-ck:checked) .x-hero::after{border-style:solid}
+body.piq-shell #pg-auth .x-lens.glass{position:absolute;left:calc((100% - var(--x-pr))/2);bottom:0;width:var(--x-dia);height:var(--x-dia);translate:-50% 50%;--gl:.036}
+body.piq-shell #pg-auth .x-iris{filter:drop-shadow(0 0 calc(var(--x-lit)*10px) rgba(var(--ink),calc(var(--x-lit)*.9)));scale:calc(1 + var(--x-lit)*.035)}
+body.piq-shell #pg-auth .x-bl{stroke-width:1px}
+body.piq-shell #pg-auth .x-ring{stroke-width:.9px}
+
+/* ---------- inscription: eyebrow with the brand, title resting on the horizon, sub and form hanging below it */
+body.piq-shell #pg-auth .eb{grid-column:2;grid-row:1;align-self:end;display:flex;align-items:center;height:28px;margin:0;letter-spacing:.2em;text-transform:uppercase;text-align:left}
+body.piq-shell #pg-auth #auth-title{grid-column:2;grid-row:2;align-self:end;margin:0 0 18px;font-size:clamp(38px,6.3vw,70px);font-weight:780;line-height:.94;letter-spacing:-.045em;text-align:left;overflow-wrap:break-word}
+body.piq-shell #pg-auth #auth-sub{grid-column:2;grid-row:3;max-width:31ch;margin:16px 0 8px;min-height:2.9em;text-align:left}
+body.piq-shell #pg-auth .x-row{grid-column:2;margin-top:0}
+body.piq-shell #pg-auth .x-keep{grid-column:2;margin-top:6px}
+body.piq-shell #pg-auth #auth-msg{grid-column:2;margin:4px 0 0;text-align:left}
+body.piq-shell #pg-auth #auth-msg:not(:empty){padding-top:8px;border-top:1px dashed rgba(var(--ink),.4);animation:x-draw .7s var(--e) backwards}
+body.piq-shell #pg-auth .x-row.x-bad::after{-webkit-mask-image:linear-gradient(90deg,#000 0 58%,transparent 58% calc(58% + var(--x-g)),#000 calc(58% + var(--x-g)));mask-image:linear-gradient(90deg,#000 0 58%,transparent 58% calc(58% + var(--x-g)),#000 calc(58% + var(--x-g)));animation:x-snap .85s var(--e) both}
+body.piq-shell #pg-auth .x-sw{grid-column:2;justify-self:start;margin:4px 0 0 -16px}
+
+/* ---------- Enter: a glass slot whose own small iris opens on hover, focus and submit */
+body.piq-shell #pg-auth .x-go.glass{grid-column:2;height:56px;border-radius:28px;text-align:left}
+body.piq-shell #pg-auth .x-go>.x-gl{position:relative;display:flex;align-items:center;justify-content:space-between;height:100%;padding:0 22px 0 28px}
+body.piq-shell #pg-auth .x-gl::before{content:"";position:absolute;right:30px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:rgb(var(--ink));transition:scale .7s var(--x-sp)}
+body.piq-shell #pg-auth .x-gl::after{content:"";flex:none;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(var(--ink),.7);transition:scale .7s var(--x-sp)}
+body.piq-shell #pg-auth .x-go:hover:not(:disabled) .x-gl::before,body.piq-shell #pg-auth .x-go:focus-visible .x-gl::before{scale:2.6}
+body.piq-shell #pg-auth.x-busy .x-gl::before{scale:3.4}
+body.piq-shell #pg-auth.x-busy .x-gl::after{scale:1.14}
+body.piq-shell #pg-auth :is(.x-go,.x-sw,.x-rv):focus-visible{outline:2px solid rgb(var(--ink));outline-offset:3px}
+
+/* ---------- foot: a leader and the local-first line, closing the lens side; the lens ring is the device boundary */
+body.piq-shell #pg-auth .auth-foot{grid-column:1;grid-row:12;align-self:end;justify-self:start;display:flex;align-items:center;gap:12px;max-width:48ch;margin:0 0 0 var(--x-pad);padding:0;font-size:11px;letter-spacing:.02em;text-align:left}
+body.piq-shell #pg-auth .auth-foot::before{content:"";flex:none;width:28px;height:1px;background:rgba(var(--ink),.6)}
+
+/* ---------- opening: lens, iris focus, orbits, horizon, then the inscription draws in (one pass, no loop) */
+body.piq-shell #pg-auth.x-on .x-iris{animation:x-focus 1.5s var(--e) .45s backwards}
+body.piq-shell #pg-auth.x-on .x-hero::before{animation:x-ring 1s var(--e) .55s backwards}
+body.piq-shell #pg-auth.x-on .x-hero::after{animation:x-ring 1.1s var(--e) .7s backwards}
+body.piq-shell #pg-auth.x-on .auth-wrap::before{animation:x-rise 1.1s var(--e) .7s backwards}
+body.piq-shell #pg-auth.x-on .auth-wrap::after{animation:x-run 1s var(--e) .95s backwards}
+body.piq-shell #pg-auth.x-on .eb{animation:x-blur .9s var(--e) .5s backwards}
+body.piq-shell #pg-auth.x-on #auth-title{animation:x-blur 1s var(--e) .85s backwards}
+body.piq-shell #pg-auth.x-on #auth-sub{animation:x-blur .9s var(--e) 1s backwards}
+body.piq-shell #pg-auth.x-on .x-row{animation:x-draw .9s var(--e) calc(var(--i,0)*80ms + 1s) backwards}
+body.piq-shell #pg-auth.x-on .x-keep{animation:x-draw .8s var(--e) 1.2s backwards}
+body.piq-shell #pg-auth.x-on .x-go{animation:x-draw .8s var(--e) 1.28s backwards}
+body.piq-shell #pg-auth.x-on .x-sw{animation:x-draw .8s var(--e) 1.36s backwards}
+
+/* ---------- submit: light runs along the horizon and through the iris (--x-lit also glows iris and orbits) */
+body.piq-shell #pg-auth.x-busy .auth-wrap::before{--x-run:140%;transition:--x-run .9s var(--e)}
+body.piq-shell #pg-auth.x-busy .auth-wrap::after{--x-run:140%;transition:--x-run .9s var(--e) .5s,--x-g .7s var(--x-sp)}
+
+/* ---------- entry: the aperture opens and the inscription leaves, inside the .42s of the gate fade */
+body.piq-shell #pg-auth.x-on.x-out .x-lens,body.piq-shell #pg-auth.x-on.x-out .x-hero::before,body.piq-shell #pg-auth.x-on.x-out .x-hero::after{animation:x-open .42s var(--e) forwards}
+body.piq-shell #pg-auth.x-on.x-out :is(.eb,#auth-title,#auth-sub,.x-row,.x-keep,.x-go,.x-sw){animation:x-leave .36s var(--e) forwards}
+}
+
+/* ---------- short desktop windows (800x600): smaller lens, tighter rhythm, same composition */
+@media(min-width:720px) and (max-height:700px){
+body.piq-shell #pg-auth{--x-dia:clamp(240px,min(50vh,42vw),420px)}
+body.piq-shell #pg-auth .auth-wrap{padding-bottom:calc(var(--x-kb,0px) + 12px)}
+body.piq-shell #pg-auth .auth-hd{padding-top:0}
+body.piq-shell #pg-auth #auth-title{margin-bottom:14px;font-size:clamp(34px,5.6vw,56px)}
+body.piq-shell #pg-auth #auth-sub{margin:10px 0 4px;min-height:2.6em;font-size:13.5px}
+body.piq-shell #pg-auth .x-row{padding-top:8px}
+body.piq-shell #pg-auth :is(.x-in,.x-rv){height:44px}
+body.piq-shell #pg-auth .x-keep{min-height:44px;margin-top:2px}
+body.piq-shell #pg-auth #auth-msg{min-height:2.3em;margin-top:2px;font-size:12.5px}
+body.piq-shell #pg-auth .x-go.glass{height:50px;border-radius:25px}
+body.piq-shell #pg-auth .x-sw{min-height:44px;margin-top:-2px}
+body.piq-shell #pg-auth .x-sw::after{bottom:13px}
+}
+
+/* ---------- forced colours: system colours, hairlines become borders and solid fills */
+@media(min-width:720px) and (forced-colors:active){
+body.piq-shell #pg-auth .auth-wrap::before,
+body.piq-shell #pg-auth .auth-wrap::after,
+body.piq-shell #pg-auth .x-row::after,
+body.piq-shell #pg-auth .auth-foot::before,
+body.piq-shell #pg-auth .brand::before,
+body.piq-shell #pg-auth .x-gl::before,
+body.piq-shell #pg-auth .x-box::after{forced-color-adjust:none;background-image:none;background-color:CanvasText;-webkit-mask-image:none;mask-image:none}
+body.piq-shell #pg-auth .x-row.x-bad::after{background-image:repeating-linear-gradient(90deg,CanvasText 0 6px,transparent 6px 10px);background-color:transparent}
+body.piq-shell #pg-auth .x-hero::before,body.piq-shell #pg-auth .x-hero::after{border-color:CanvasText;background:none}
+body.piq-shell #pg-auth .x-go.glass{border:1px solid ButtonText}
+body.piq-shell #pg-auth .x-box,body.piq-shell #pg-auth .x-gl::after{border:1px solid CanvasText}
+body.piq-shell #pg-auth #auth-msg:not(:empty){border-top-color:CanvasText}
+body.piq-shell #pg-auth .x-iris .x-flare{display:none}
+body.piq-shell #pg-auth .x-iris :not(.x-flare):not(.x-core){stroke:CanvasText}
+body.piq-shell #pg-auth .x-iris .x-core{fill:CanvasText}
+}

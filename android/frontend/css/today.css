@@ -1,0 +1,154 @@
+/* ===== css/today.css =====
+ * 1 角色：Today 页版式（首屏环 / 卡片 / chips / dock 留白），只做布局与状态样式，不含业务逻辑。
+ * 2 依赖：css/base.css 的变量与 .glass；html/body 的字体栈；安全区变量 --sai-top / --sai-bottom。W1-1R：桌面段读取 css/shell.css 的 --shell-h / --rail-w，以及 js/pages/today.ring.js 写在 #stage 上的 --x-R（环半径，桌面）。
+ * 3 契约：`#pg-today main` 的 padding 消费 var(--sai-top) / calc(112px + var(--sai-bottom))（勿改包裹结构）；
+ *          .chips 横向滚动、.card 的展开/收起状态类由 pages/today.js 切换，CSS 只描述状态。
+ *          契约引用：frontend/CONTEXT.md §4 状态/API（只读 core.m；沿用既有 id/class，新增仅 x- 前缀：x-nb / x-quiet / x-now）。
+ *          改动摘要（B1）：环顶标签独立分层 + 发线引线；首卡日期防孤行；chips 边缘渐隐/吸附滚动/≥44px；补 reduced-motion 分支。
+ *          打磨：#sub 引线加端点刻度；x-now 竖线两端渐隐；数字等宽；字体渲染细节。
+ *          W1-1R summary: desktop block rewritten (appended after the untouched mobile rules, all under body.piq-shell). Orbit is the hero; the three cards become observation notes (no glass: hairline, node, leader); .grid is a flex column beside the orbit from 960px and an auto-fit row below it under that. Only pseudo-elements added: .card::before (node), .card h2::before (leader); no new classes, ids or keyframes.
+ * 4 禁止改动项：不得改 class/id 名；不得引入外链字体或图片；不得在消费点直接写 env(safe-area-inset-*)（必须走 --sai-*）；
+ *                不得改 base.css 的共享变量与字体栈。W1-1R：桌面规则只写在 body.piq-shell 之下；不得重命名或隐藏任何既有元素，不改文案与数字。
+ */
+#pg-today{min-height:100dvh;overflow-x:clip;background:radial-gradient(120% 55% at 50% 22%,rgba(var(--ink),.1),transparent 62%),radial-gradient(70% 40% at 8% 72%,rgba(var(--ink),.05),transparent 60%),rgb(var(--bg));-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#pg-today #sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#pg-today main{position:relative;z-index:1;max-width:430px;margin:0 auto;padding:max(10px,var(--sai-top)) 18px calc(112px + var(--sai-bottom))}
+#pg-today header{display:flex;justify-content:space-between;align-items:center;height:60px}
+#pg-today .brand b{font-weight:800;font-size:19px;letter-spacing:-.03em}
+#pg-today .brand small{display:block;font-size:12px;font-weight:600;opacity:.55}
+#pg-today .card h2,#pg-today .card .s,#pg-today .sw span{text-shadow:0 0 14px rgba(var(--bg),.55)}
+#pg-today .rl{display:grid;position:relative}
+#pg-today .rl>.r{grid-area:1/1}
+#pg-today .rl>.r.out{grid-area:auto;position:absolute;left:0;top:0;width:100%;pointer-events:none}
+#pg-today #nw>.r.out{left:50%;top:50%;width:max-content;translate:-50% -50%}
+#pg-today #sub>.r.out{width:calc(100% - 30px)}
+/* 环顶标签带：自成一层，永远压在 stage 之上；不与环或中心数字争位 */
+#pg-today #ttl{position:relative;z-index:3;font-size:clamp(25px,7.6vw,29px);font-weight:800;letter-spacing:-.04em;line-height:1.05;margin:12px 0 6px;min-height:31px;text-wrap:balance;overflow-wrap:break-word;hyphens:none;text-shadow:0 0 16px rgba(var(--bg),.7)}
+#pg-today #sub{position:relative;z-index:3;font-size:13px;font-weight:600;line-height:1.38;opacity:.62;min-height:36px;align-content:start;padding-right:30px;text-wrap:pretty;overflow-wrap:break-word;hyphens:none;text-shadow:0 0 14px rgba(var(--bg),.7)}
+#pg-today #sub::after{content:"";display:block;grid-area:2/1;height:6px;margin-top:8px;background:linear-gradient(rgba(var(--ink),.8),rgba(var(--ink),.8)) 0 0/1px 6px no-repeat,linear-gradient(90deg,rgba(var(--ink),.7),rgba(var(--ink),.2) 65%,transparent) 0 5px/100% 1px no-repeat}
+#pg-today #stage{position:relative;z-index:1;height:340px;margin:10px -18px 0;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#pg-today #stage canvas{position:absolute;inset:0;width:100%;height:100%}
+#pg-today #front{pointer-events:none}
+#pg-today #nw{position:absolute;left:50%;top:50%;transform:translate(-50%,-53%);justify-items:center;font-size:min(158px,40.5vw);line-height:1;letter-spacing:-.065em;font-variant-numeric:tabular-nums;pointer-events:none;animation:in_today 1.4s var(--e) both}
+#pg-today #nw .r{font-weight:calc(800 - 520*var(--m));color:rgba(var(--ink),calc(1 - var(--m)));-webkit-text-stroke:calc(1.7px*var(--m)) rgb(var(--ink))}
+@keyframes in_today{from{opacity:0;filter:blur(18px);scale:.7}}
+#pg-today #tap{position:absolute;left:50%;top:50%;width:210px;height:150px;transform:translate(-50%,-55%);border:0;background:none;border-radius:40px;cursor:pointer;z-index:5}
+#pg-today #home{position:absolute;right:18px;top:4px;z-index:6;opacity:0;scale:.8;pointer-events:none;transition:.55s var(--e)}
+#pg-today #home.on{opacity:1;scale:1;pointer-events:auto}
+#pg-today .chip{flex:none;box-sizing:border-box;min-width:44px;min-height:44px;padding:0 17px;border:0;border-radius:99px;display:flex;align-items:center;gap:9px;font-family:inherit;font-weight:700;font-size:13px;line-height:1.2;white-space:nowrap;cursor:pointer;scroll-snap-align:start;scroll-margin-inline:18px;-webkit-tap-highlight-color:transparent;transition:background .4s,color .4s,transform .4s var(--e)}
+#pg-today .chip:active{transform:scale(.94)}
+#pg-today .chip:focus-visible{outline:1.5px solid rgb(var(--ink));outline-offset:2px}
+#pg-today .chip[aria-pressed=true]{background:rgb(var(--ink));color:rgb(var(--bg))}
+#pg-today .sw{display:grid;grid-template-columns:1fr 1fr;width:252px;height:54px;margin:2px auto 0;padding:0;border:0;border-radius:99px;font-weight:700;font-size:13px;cursor:pointer}
+#pg-today .sw span{display:grid;place-items:center}
+#pg-today .sw span:nth-of-type(1){opacity:calc(1 - .5*var(--m))}
+#pg-today .sw span:nth-of-type(2){opacity:calc(.5 + .5*var(--m))}
+#pg-today .thumb{position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:99px;background:rgba(var(--ink),.13);box-shadow:inset 0 1px 1px rgba(var(--hl),.6),inset 0 -6px 10px -6px rgba(var(--sh),.4),0 0 0 .5px rgba(var(--ink),.35);transform:translateX(calc(var(--mo)*100%)) scaleX(var(--sq))}
+/* chips：渐隐区落在左右 padding 内，静止时首尾标签完整不被遮；滚动时内容滑入渐隐区 */
+#pg-today .chips{--fd:24px;position:relative;display:flex;gap:8px;min-height:64px;overflow-x:auto;overflow-y:hidden;margin:10px -18px 0;padding:10px 18px;scrollbar-width:none;scroll-snap-type:x proximity;scroll-padding-inline:18px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fd),#000 calc(100% - var(--fd)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fd),#000 calc(100% - var(--fd)),transparent 100%)}
+#pg-today .chips::-webkit-scrollbar{display:none}
+#pg-today .mk{display:inline-block;background:currentColor;width:10px;height:10px}
+#pg-today .chip .mk{flex:none}
+#pg-today .m0{border-radius:50%;width:11px;height:11px}
+#pg-today .m1{width:12px;height:5px;margin:0;background:radial-gradient(circle,currentColor 1.1px,transparent 1.6px) 0 50%/4px 5px repeat-x}
+#pg-today .m2{width:14px;height:14px;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%)}
+#pg-today .m3{border-radius:50%;background:none;border:1.5px dashed currentColor;width:10px;height:10px}
+#pg-today .m4{border-radius:50%;width:12px;height:12px;background:radial-gradient(circle,currentColor 2px,transparent 2.5px);box-shadow:inset 0 0 0 1.4px currentColor}
+#pg-today .chip.gone{position:absolute;pointer-events:none;margin:0}
+#pg-today .grid{display:grid;gap:12px;margin-top:20px}
+#pg-today .card{padding:22px 20px 18px;--k:1;transform:scale(calc(.965 + .035*var(--k)));transform-origin:50% 0;translate:0 30px;opacity:0;max-height:640px;transition:translate 1s var(--e),opacity 1s,max-height .9s var(--e),padding .9s var(--e),margin .9s var(--e)}
+#pg-today .card.off{max-height:0;padding-top:0;padding-bottom:0;margin-top:-12px;opacity:0!important;overflow:hidden;pointer-events:none}
+#pg-today .card.in{translate:0;opacity:1}
+#pg-today .card>*{opacity:calc(.6 + .4*var(--k))}
+#pg-today .card h2{margin:0 0 5px;min-width:0;font-size:21px;font-weight:800;letter-spacing:-.035em;line-height:1.12;text-wrap:balance;overflow-wrap:break-word;hyphens:none}
+#pg-today .s{font-size:12.5px;font-weight:600;line-height:1.4;opacity:.6;margin-bottom:18px;text-wrap:pretty;overflow-wrap:break-word;hyphens:none}
+#pg-today .src{margin-top:16px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.4}
+#pg-today .ticks{display:flex;gap:3px;align-items:flex-end;height:46px}
+#pg-today .t{flex:1;height:42%;border-radius:4px;background:rgba(var(--ink),.22);transition:background .5s,height .6s var(--e)}
+#pg-today .t.on{background:rgb(var(--ink));height:62%}
+#pg-today .t.z{height:100%;background:rgb(var(--ink))}
+#pg-today .tl{display:flex;justify-content:space-between;margin-top:8px;font-size:11.5px;font-weight:700}
+#pg-today .fw{display:grid;grid-template-columns:repeat(var(--n,7),1fr);gap:4px;text-align:center}
+#pg-today .fw small{display:block;font-size:11px;font-weight:600;opacity:.55;margin-bottom:8px}
+#pg-today .fw i{display:grid;place-items:center;width:min(38px,100%);height:auto;aspect-ratio:1;margin:0 auto;border-radius:50%;font:700 13px Inter,sans-serif;box-shadow:inset 0 0 0 1px rgba(var(--ink),.8)}
+#pg-today .pa i{background:rgba(var(--ink),.2);box-shadow:inset 0 0 0 1px rgba(var(--ink),.35)}
+#pg-today .ov i{background:rgb(var(--ink));color:rgb(var(--bg));animation:pul_today 2.6s infinite}
+#pg-today .fu i{border:1px dashed rgba(var(--ink),.8)}
+@keyframes pul_today{0%,100%{box-shadow:0 0 0 0 rgba(var(--ink),.5)}60%{box-shadow:0 0 0 12px rgba(var(--ink),0)}}
+#pg-today .row{display:grid;grid-template-columns:50px 1fr 30px;align-items:center;gap:10px;height:30px;font-size:11.5px;font-weight:600}
+#pg-today .row span{opacity:.55}
+#pg-today .row b{font-weight:800;font-size:14px;text-align:right}
+#pg-today .trk{position:relative;height:100%;display:flex;align-items:center}
+#pg-today .trk::after{content:"";position:absolute;left:var(--avg,90.9%);top:2px;bottom:2px;border-left:1px dashed rgba(var(--ink),.5)}
+#pg-today .bar{position:relative;width:100%;height:12px}
+#pg-today .bar i,#pg-today .bar u{position:absolute;left:0;top:0;height:100%;border-radius:0 99px 99px 0;transform-origin:left;transform:scaleX(0);transition:transform 1.1s var(--e);transition-delay:calc(var(--i)*110ms)}
+#pg-today .bar i{background:rgb(var(--ink));z-index:1}
+#pg-today .bar u{box-shadow:inset 0 0 0 1px rgba(var(--ink),.55)}
+#pg-today .card.in .bar i,#pg-today .card.in .bar u{transform:none}
+#pg-today .ovd i{box-shadow:inset 0 0 0 1px rgba(var(--ink),.95),0 0 0 4px rgba(var(--ink),.16)!important}
+#pg-today .eb{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+#pg-today .tl,#pg-today .row b,#pg-today .fw small{font-variant-numeric:tabular-nums}
+/* x- 新增：状态与排版辅助（由 today.js 切换，CSS 只描述状态） */
+#pg-today .x-nb{white-space:nowrap;font-variant-numeric:tabular-nums;hyphens:none}
+#pg-today .card.x-now::after{content:"";position:absolute;left:0;top:20px;bottom:20px;width:2px;border-radius:2px;background:linear-gradient(180deg,transparent,rgb(var(--ink)) 16%,rgb(var(--ink)) 84%,transparent)}
+#pg-today .card.x-now h2{font-weight:900}
+@media (prefers-reduced-motion:reduce){
+#pg-today #nw{animation:none}
+#pg-today .ov i{animation:none}
+#pg-today .card,#pg-today .chip,#pg-today .t,#pg-today #home{transition:none}
+#pg-today .bar i,#pg-today .bar u{transition:none;transition-delay:0s}
+#pg-today .chips{scroll-snap-type:none}
+}
+
+/* ===== W1-1R Win desktop Today: everything below is scoped to body.piq-shell ===== */
+/* One hero: the orbit. Editorial head top-left, orbit centred in the wide zone with the number as its star body, switch and legend on the orbit's axis. The three cards become observation notes in a quiet right column: no glass, a hairline with a node, and a leader pointing back at the orbit. Below 960px everything stacks and the notes follow the orbit. */
+body.piq-shell #pg-today{--shell-col:1560px;--x-pad:clamp(20px,2.8vw,40px);--x-gap:clamp(28px,4vw,64px);--x-nw:clamp(236px,24vw,320px);--x-sh:clamp(250px,calc(100dvh - 240px),480px);
+background:radial-gradient(52% 50% at calc(var(--rail-w) + (100% - var(--rail-w))*.36) 44%,rgba(var(--ink),.085),transparent 70%),radial-gradient(40% 40% at 92% 96%,rgba(var(--ink),.04),transparent 62%),rgb(var(--bg))}
+body.piq-shell #pg-today main{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto var(--x-sh) auto auto auto auto;grid-template-areas:"hd" "ttl" "sub" "stage" "sw" "chips" "notes" "hint";max-width:none;margin:0;padding:4px var(--x-pad) 28px}
+body.piq-shell #pg-today header{grid-area:hd;height:32px;align-self:center}
+body.piq-shell #pg-today #ttl{grid-area:ttl;margin:6px 0 4px;min-height:0;font-size:clamp(27px,3.2vw,44px)}
+body.piq-shell #pg-today #sub{grid-area:sub;max-width:44ch;min-height:0;padding:0;font-size:13.5px}
+body.piq-shell #pg-today #sub::after{width:min(100%,300px)}
+body.piq-shell #pg-today #stage{grid-area:stage;--x-R:200px;height:auto;margin:0}
+body.piq-shell #pg-today #nw{font-size:calc(var(--x-R)*.6);text-shadow:0 0 .22em rgba(var(--ink),.32),0 0 .7em rgba(var(--ink),.16)}
+body.piq-shell #pg-today #tap{width:calc(var(--x-R)*.95);height:calc(var(--x-R)*.62)}
+body.piq-shell #pg-today #tap:focus-visible{outline-offset:-4px;border-radius:60px}
+body.piq-shell #pg-today #home{left:50%;right:auto;top:auto;bottom:6px;translate:-50% 0}
+body.piq-shell #pg-today .sw{grid-area:sw;justify-self:center;width:236px;height:44px;margin:10px 0 0}
+body.piq-shell #pg-today .chips{grid-area:chips;--fd:0px;justify-content:center;flex-wrap:wrap;gap:8px;min-height:0;margin:10px 0 0;padding:0;overflow:visible;-webkit-mask-image:none;mask-image:none;scroll-snap-type:none}
+body.piq-shell #pg-today .chip{min-height:36px;padding:0 14px;font-size:12.5px}
+body.piq-shell #pg-today .chip:hover:not([aria-pressed=true]){background-color:rgba(var(--ink),.1)}
+body.piq-shell #pg-today main>p.eb{grid-area:hint;margin:26px 0 0!important;text-align:center!important;font-size:10px;line-height:1.5;text-wrap:balance}
+/* observation notes: hairline + node + leader, typography only */
+body.piq-shell #pg-today .grid{grid-area:notes;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:30px 36px;margin:26px 0 0;align-items:start}
+body.piq-shell #pg-today .card{--lead:56px;margin:0;max-height:none;padding:2px 0 2px 22px;border-radius:0;border-left:1px solid rgba(var(--ink),.16);background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+body.piq-shell #pg-today .card.off{max-height:0;padding-block:0;border-left-color:transparent}
+body.piq-shell #pg-today .card:not(.x-now)::after{display:none}
+body.piq-shell #pg-today .card.x-now::after{left:-1px;top:2px;bottom:2px}
+body.piq-shell #pg-today .card::before{inset:auto;left:-5px;top:7px;width:9px;height:9px;border-radius:50%;background:rgb(var(--bg));box-shadow:inset 0 0 0 1.5px rgb(var(--ink));z-index:1}
+body.piq-shell #pg-today #k1::before{box-shadow:none;border:1px dashed rgb(var(--ink))}
+body.piq-shell #pg-today #k2::before{background:rgb(var(--ink));box-shadow:0 0 0 3px rgba(var(--ink),.18)}
+body.piq-shell #pg-today #k3::before{left:-3px;top:9px;width:5px;height:5px;background:rgba(var(--ink),.7);box-shadow:none}
+body.piq-shell #pg-today .card h2{font-size:15px;letter-spacing:-.02em}
+body.piq-shell #pg-today #k1{--lead:84px}
+body.piq-shell #pg-today #k1 h2{font-size:18px}
+body.piq-shell #pg-today #k3{--lead:36px}
+body.piq-shell #pg-today .s{font-size:12.5px;margin-bottom:12px}
+body.piq-shell #pg-today .src{margin-top:10px;font-size:9.5px}
+body.piq-shell #pg-today .ticks{height:36px}
+body.piq-shell #pg-today .fw small{margin-bottom:6px}
+body.piq-shell #pg-today .fw i{width:min(30px,100%);font-size:12px}
+body.piq-shell #pg-today .row{height:26px;grid-template-columns:46px 1fr 28px}
+body.piq-shell #pg-today .bar{height:8px}
+body.piq-shell #pg-today .card:hover>*{opacity:1}
+body.piq-shell #pg-today .card:hover .src{opacity:.58}
+/* wide window (960px+): orbit zone left, notes column right, hint above the notes; leaders only here, where they point back at the orbit */
+@media (min-width:960px){
+body.piq-shell #pg-today .card h2::before{content:"";position:absolute;right:100%;top:.6em;width:calc(22px + var(--lead));height:1px;background:linear-gradient(90deg,transparent,rgba(var(--ink),.55));pointer-events:none}
+body.piq-shell #pg-today #k1 h2::before{background:repeating-linear-gradient(90deg,rgba(var(--ink),.6) 0 3px,transparent 3px 6px);-webkit-mask-image:linear-gradient(90deg,transparent,#000);mask-image:linear-gradient(90deg,transparent,#000)}
+body.piq-shell #pg-today{--x-sh:clamp(320px,calc(100dvh - 318px),620px)}
+body.piq-shell #pg-today header{height:40px}
+body.piq-shell #pg-today main{grid-template-columns:minmax(0,1fr) var(--x-nw);column-gap:var(--x-gap);grid-template-rows:auto auto auto var(--x-sh) auto auto 1fr;grid-template-areas:"hd hint" "ttl notes" "sub notes" "stage notes" "sw notes" "chips notes" ". notes"}
+body.piq-shell #pg-today main>p.eb{margin:0!important;align-self:center;justify-self:start;text-align:left!important;padding-left:22px}
+body.piq-shell #pg-today .grid{grid-area:2/2/-1/3;display:flex;flex-direction:column;justify-content:space-evenly;align-self:stretch;gap:20px;margin:0}
+}
