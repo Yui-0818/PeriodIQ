@@ -15,15 +15,15 @@ PeriodIQ 把周期、经期、症状、心情和日记保存在本机 SQLite 中
 - **三语界面**：简体中文、English、Español，切换即时生效。
 - **本地优先**：Windows 端只绑定 `127.0.0.1`，无出站请求；卸载不删除数据。
 
-## 下载
+## 下载（Windows）
 
-Windows 安装包在 GitHub Releases 发布：
+本次发布为 **PeriodIQ Win 3.0.8**，GitHub Releases 仅包含 Windows 安装包：
 
 - `PeriodIQ-Setup-3.0.8.exe`
 
 系统要求：Windows 10/11 x64，已安装 Microsoft Edge WebView2 Runtime。
 
-Android 端源码位于 [`android/`](android/)，当前不提供预编译 APK。
+Android 端源码位于 [`android/`](android/)，本次不提供预编译 APK。
 
 ## 隐私
 
@@ -74,7 +74,7 @@ powershell -ExecutionPolicy Bypass -File win\desktop\build_native_host.ps1
 
 ## 版本
 
-当前版本：**3.0.8**。
+当前 Windows 版本：**3.0.8**。
 
 ## 免责声明
 
