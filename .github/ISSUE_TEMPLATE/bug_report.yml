@@ -1,0 +1,28 @@
+name: Bug Report
+description: Report a bug in PeriodIQ (Windows or Android)
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Android (3.2.0)
+        - Windows (3.0.8)
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Please describe the issue clearly. Do NOT attach personal cycle databases or private journals.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open...
+        2. Tap / Click...
+        3. Observe...

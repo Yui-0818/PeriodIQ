@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en" data-theme="dark" class="piq-boot"><head><meta charset="utf-8">
+<!-- 冷启动首帧主题：Android 宿主在文档起始处把落盘值注入 window.__piqThemeMode；这里在 CSS 之前应用，
+     避免"先暗后亮/先亮后暗"的闪烁。未选过（无该全局）时保持既有的暗色首屏。 -->
+<script>(function(){try{var m=window.__piqThemeMode;if(m==='light'||m==='dark'||m==='system'){var sys=typeof window.__piqSystemDark==='boolean'?window.__piqSystemDark:(window.matchMedia?window.matchMedia('(prefers-color-scheme:dark)').matches:true);var d=m==='dark'||(m==='system'&&sys);document.documentElement.setAttribute('data-theme',d?'dark':'light')}}catch(_){}})();</script>
+<!-- 先于可见 UI 同步 <html lang>（cookie → localStorage → window.__piqLang → 系统默认链）；只读，绝不写 menstrual_lang -->
+<script>(function(){var S='menstrual_lang',OK=['zh-CN','en','es'],v=null,c=null,n=null,i;
+try{v=localStorage.getItem(S)}catch(_){}
+try{var a=document.cookie||'',p=a.split(';');for(i=0;i<p.length;i++){var q=p[i].trim(),e=q.indexOf('=');if(e>0&&q.slice(0,e)===S){c=decodeURIComponent(q.slice(e+1));break}}}catch(_){}
+try{if(typeof window.__piqLang==='string'&&window.__piqLang)n=window.__piqLang}catch(_){}
+if(v!==null&&OK.indexOf(v)<0)v=null;if(c!==null&&OK.indexOf(c)<0)c=null;if(n!==null&&OK.indexOf(n)<0)n=null;
+var res=c||v||n;
+if(!res){var ls=[];try{ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']}catch(_){}
+for(i=0;i<ls.length;i++){var l=String(ls[i]||'').toLowerCase();if(l.indexOf('zh')===0){res='zh-CN';break}if(l.indexOf('es')===0){res='es';break}}res=res||'en'}
+document.documentElement.lang=res})();</script>
+<!-- 认证门禁首帧（Round 4）：auth bootstrap 未落定之前只显示与主题同色的中性启动层，
+     不露出 dock / 已登录主界面壳。main.js 在认证结论落地后移除 html.piq-boot。 -->
+<style id="piq-boot-css">html.piq-boot #app,html.piq-boot #dock{visibility:hidden!important}html.piq-boot #piq-boot{display:grid}html:not(.piq-boot) #piq-boot{display:none}#piq-boot{position:fixed;inset:0;z-index:60;place-items:center;background:rgb(var(--bg));color:rgb(var(--ink));pointer-events:none}#piq-boot b{font:800 13px/1 Inter,system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;opacity:.45}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PeriodIQ</title>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/today.css">
+<link rel="stylesheet" href="css/calendar.css">
+<link rel="stylesheet" href="css/history.css">
+<link rel="stylesheet" href="css/insights.css">
+<link rel="stylesheet" href="css/you.css"><link rel="stylesheet" href="css/you.data.css"><link rel="stylesheet" href="css/journal.css"><link rel="stylesheet" href="css/auth.css"><link rel="stylesheet" href="css/shell.css"></head><body>
+<div id="app-titlebar" aria-hidden="true"></div>
+<div id="piq-boot" aria-hidden="true"><b>PeriodIQ</b></div>
+<div id="app">
+<section class="page" id="pg-today">
+<canvas id="sky"></canvas>
+<div class="pgi"><main>
+<header><div class="brand"><b>PeriodIQ</b><small id="hsub"></small></div>
+</header>
+<h1 id="ttl" class="rl"></h1><div id="sub" class="rl"></div>
+<div id="stage"><canvas id="back"></canvas><div id="nw" class="rl"></div><canvas id="front"></canvas>
+<button id="tap" data-i18n-attr="aria-label:today.tapAria" aria-label="Switch between cycle day and days until next period"></button>
+<button id="home" class="chip glass" tabindex="-1" aria-hidden="true" data-i18n="today.back">Back to today</button></div>
+<button id="sw" class="sw glass" data-i18n-attr="aria-label:today.swAria" aria-label="Switch between cycle day and days until period"><i class="thumb"></i><span data-i18n="today.lblCycle">Cycle day</span><span data-i18n="today.until">Until period</span></button>
+<div class="chips" id="chips" role="group" data-i18n-attr="aria-label:today.chipsAria" aria-label="Highlight a segment on the ring"></div>
+<section class="grid">
+<article class="card glass" id="k1" data-u><h2 id="c1t"></h2><div class="s" id="c1s"></div><div class="ticks" id="tk"></div><div class="tl"><span data-i18n="today.todayMark">Today</span><span id="c1e"></span></div><div class="src" data-i18n="today.src1">One tick = one day · estimated window from the prediction service</div></article>
+<article class="card glass" id="k2" data-d><h2 id="c2t"></h2><div class="s" id="c2s"></div><div class="fw" id="fw"></div><div class="src" data-i18n="today.src2">Filled = passed · dashed = still to come · ring = ovulation</div></article>
+<article class="card glass" id="k3"><h2 id="c3t"></h2><div class="s" id="c3s"></div><div id="hist"></div><div class="src" data-i18n="today.src3">Start date · length in days · * estimated · + still open</div></article>
+</section><p class="eb" style="text-align:center;margin:26px 0 0;opacity:.4" data-i18n="today.tapHint">Tap a star on the ring to open that day in Calendar</p></main>
+
+</div></section>
+<section class="page" id="pg-cal">
+<canvas id="sky"></canvas>
+<div class="pgi"><main>
+<header><div class="brand"><b>PeriodIQ</b><small data-i18n="shell.pageCal">Calendar</small></div>
+<button class="gh jrn" id="jrn" type="button" data-i18n="journal.title">Journal</button>
+</header>
+<div id="mh"><div class="mtop"><span class="eb" data-i18n="cal.sub">Cycle calendar</span>
+<div class="nv"><button class="tdy glass hide" id="tdy" data-i18n="ui.today">Today</button><button class="ib glass" id="pv" data-i18n-attr="aria-label:cal.prevAria" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6l-6 6 6 6"/></svg></button><button class="ib glass" id="nx" data-i18n-attr="aria-label:cal.nextAria" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 6l6 6-6 6"/></svg></button></div></div><h1 id="mt" class="rl"></h1></div>
+<div id="wk"><span data-i18n="cal.dow0">S</span><span data-i18n="cal.dow1">M</span><span data-i18n="cal.dow2">T</span><span data-i18n="cal.dow3">W</span><span data-i18n="cal.dow4">T</span><span data-i18n="cal.dow5">F</span><span data-i18n="cal.dow6">S</span></div>
+<div id="cal" data-i18n-attr="aria-label:cal.gridAria" aria-label="Month calendar. Swipe left or right to change month."></div>
+<div class="lgd" id="lgd"><span data-k="p"><i class="mk p"></i><span data-i18n="cal.lgPeriod">Period</span></span><span data-k="d"><i class="mk d"></i><span data-i18n="cal.lgPred">Predicted</span></span><span data-k="o"><i class="mk o"></i><span data-i18n="cal.lgOv">Ovulation</span></span><span data-k="f"><i class="mk f"></i><span data-i18n="cal.lgFert">Fertile</span></span><span data-k="l"><i class="mk l"></i><span data-i18n="cal.lgLc">Less certain</span></span><button class="ql glass" id="ql" data-i18n="cal.logToday">Log today</button></div>
+<p class="unm" id="unm"></p>
+<div class="dpw" id="dpw"><section class="dp glass" id="dp" aria-live="polite"><div class="dpi">
+<div class="dh"><div style="min-width:0"><span class="eb" id="dd"></span><h2 id="dt" class="rl"></h2><div class="dsub rl" id="ds"></div></div><button class="x" id="dx" data-i18n-attr="aria-label:cal.closeAria" aria-label="Close details"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<div class="sts"><div class="s"><div class="rl" id="s1"></div></div><div class="s"><div class="rl" id="s2"></div></div><div class="s"><div class="rl" id="s3"></div></div></div>
+<div class="gx on" id="bxw"><div class="gxi"><div class="lq" id="lq"><div class="dth"><span class="eb" data-i18n="cal.boundary">Period boundary</span><span class="eb gc" data-i18n="cal.boundaryHint">Marks cycle start / end</span></div><div class="q" id="lqt"></div>
+<div class="rowb"><button class="pb" id="bs" aria-pressed="false" data-i18n="cal.markStart">Mark start</button><button class="pb" id="be" aria-pressed="false" data-i18n="cal.markEnd">Mark end</button><button class="pb" id="bc" data-i18n="cal.clearDay">Clear day</button></div>
+<div class="bxs" id="bxs"></div><button class="tx" id="brm" data-i18n="cal.removePeriod">Remove this whole period</button><div class="say" id="bxm"></div></div></div></div>
+<div class="dtl" id="dtl"><div class="dth"><span class="eb" data-i18n="cal.daily">Daily details</span><span class="eb gc" id="gcode"></span></div>
+<div class="gx" id="gate"><div class="gxi"><div class="gw"><canvas id="gt" aria-hidden="true"></canvas><div class="gtx"><b id="gh"></b><span id="gs"></span></div></div></div></div>
+<div class="gx" id="rg"><div class="gxi">
+<div class="rd"><div class="eb" data-i18n="cal.flowLbl">Flow · 1 to 10</div><div class="rh"><b id="fv" data-i18n="cal.tier3">Medium</b><small id="fc">4 of 10</small></div><canvas id="rf" role="slider" tabindex="0" aria-orientation="horizontal" data-i18n-attr="aria-label:cal.flowAria" aria-label="Flow level, 1 to 10. Drag or use the arrow keys to set." aria-valuemin="1" aria-valuemax="10" aria-valuenow="4" aria-valuetext="Flow 4 of 10"></canvas></div>
+<div class="rd"><div class="prow"><div><div class="eb" data-i18n="cal.painLbl">Pain</div><div class="rh"><b id="pn">–</b><small id="pc" data-i18n="cal.noPain">No pain</small></div></div><button class="pb" id="pt" aria-pressed="false" data-i18n="cal.hasPain">Has pain</button></div>
+<div class="gx" id="pgx"><div class="gxi"><canvas id="rp" role="slider" tabindex="-1" aria-orientation="horizontal" data-i18n-attr="aria-label:cal.painAria" aria-label="Pain level, 1 to 10. Drag or use the arrow keys to set." aria-valuemin="1" aria-valuemax="10" aria-valuenow="5" aria-valuetext="No pain"></canvas></div></div></div>
+<div class="rd"><div class="eb" data-i18n="cal.moodLbl">Mood · 1 to 10 · higher is brighter</div><div class="rh"><b id="mv">—</b><small id="mc" data-i18n="cal.notSet">Not set yet</small></div><canvas id="rm" role="slider" tabindex="0" aria-orientation="horizontal" data-i18n-attr="aria-label:cal.moodAria" aria-label="Mood level, 1 to 10, higher is brighter. Drag or use the arrow keys to set." aria-valuemin="1" aria-valuemax="10" aria-valuenow="5" aria-valuetext="Mood not set yet"></canvas></div>
+<div class="rd"><div class="eb" data-i18n="cal.noteLbl">Note · stays on this device · never exported</div><div class="nt" id="ntw"><textarea id="nt" maxlength="300" rows="3" data-i18n-attr="placeholder:cal.notePh;aria-label:cal.noteAria" placeholder="A few words about today…" aria-label="Mood note, up to 300 characters"></textarea><canvas id="nc" aria-hidden="true"></canvas></div></div>
+<div class="say" id="sv" data-i18n="cal.pickMood">Pick a mood to save this day.</div></div></div>
+</div>
+</div></section></div>
+</main>
+
+
+</div>
+<div class="x-cf" id="cf" hidden role="alertdialog" aria-modal="true" aria-labelledby="cft" aria-describedby="cfm">
+<div class="x-cfi"><span class="eb" data-i18n="cal.cfEb">Period</span><h3 id="cft" data-i18n="cal.cfDelTitle">Delete this period?</h3><p id="cfm"></p>
+<div class="rowb"><button class="pb solid" id="cfno" type="button" data-i18n="ui.cancel">Cancel</button><button class="pb" id="cfyes" type="button" data-i18n="cal.cfDelOk">Delete period</button></div></div></div>
+</section>
+<section class="page" id="pg-hist">
+<canvas id="sky"></canvas><div class="fog t"></div><div class="fog b"></div>
+<div class="pgi"><main id="main">
+<header><div class="brand"><b>PeriodIQ</b><small data-i18n="shell.pageHist">Memory</small></div>
+</header>
+<div id="top"><h1 class="rv" data-i18n="hist.title">History</h1><p class="rv" id="hsubt" style="--d:.15s"></p></div>
+<div id="list"></div>
+<div class="cyc" id="cyc"><button class="ch rv" aria-expanded="false" aria-controls="cyp"><span class="ico glass"><canvas id="ci"></canvas></span><span class="ct"><span class="eb" data-i18n="hist.rhythmTitle">Period rhythm</span><span class="cv" data-i18n="hist.rhythmNoRec">No period records yet</span></span><span class="pl"></span></button>
+<div class="dt" id="cyp"><div class="gp glass"><div class="gi">
+<div class="ln" style="--k:0"><div class="eb" style="margin-bottom:6px" data-i18n="hist.rhythmSub">Day by day, every period</div><canvas id="cs" data-i18n-attr="aria-label:hist.rhythmCanvas" aria-label="Period rhythm, daily flow and pain across recent periods"></canvas></div>
+<div class="ln" style="--k:1"><div class="cr"><b id="cd" data-i18n="hist.dayNone">Day —</b><span id="cp" data-i18n="hist.rhythmNoRec">No period records yet</span></div><p class="mut" data-i18n="hist.rhythmNone">Log a period to compare daily rhythm</p></div>
+</div></div></div></div>
+<p class="end" data-i18n="hist.end0">PeriodIQ · one tick = one day</p>
+</main>
+
+</div></section>
+<section class="page" id="pg-ins">
+<canvas id="sky"></canvas>
+<div class="pgi"><main>
+<header><div class="brand"><b>PeriodIQ</b><small data-i18n="shell.pageIns">Insights</small></div>
+</header>
+
+<section id="hero">
+<div class="eb" id="obs" data-i18n="ins.obs">Observation log</div>
+<div id="orbit"><canvas id="hb"></canvas><div id="big">—</div><canvas id="hf"></canvas><div class="glass orb" id="orb"></div></div>
+<div class="cap"><b data-i18n="ui.dayW.other">days</b><span id="capt"></span></div>
+<h1 class="rv" id="h1t"></h1>
+<p class="lede rv" id="h1s" style="--d:.1s"></p>
+<p class="key rv" id="h1k" style="--d:.2s"></p>
+</section>
+
+<section><div class="eb rv" data-i18n="ins.sixEb">Six readings</div><h2 class="rv" data-i18n="ins.sixH">What the sky has recorded</h2>
+<div id="six"><svg aria-hidden="true"><path class="base" id="p0"/><path class="prog" id="p1"/><circle id="hd" r="3.6"/></svg></div></section>
+
+<section><div class="eb rv" id="cet"></div><h2 class="rv" id="cht"></h2>
+<p class="lede rv" style="--d:.1s" data-i18n="ins.ledeDrag">Drag across the sky to observe each cycle close.</p>
+<div id="cw" class="glass"><canvas id="chart" role="img" aria-label="Cycle length trend, one point per closed cycle"></canvas>
+<div id="tip" class="glass tip"><div class="t1 rl" id="t1"></div><div class="t2 rl" id="t2"></div></div></div>
+<div id="cap" class="rl" aria-live="polite"></div></section>
+
+<section><div class="eb rv" data-i18n="ins.nextEb">Next observation</div><h2 class="rv" id="nxt"></h2>
+<p class="lede rv" id="nxl" style="--d:.1s"></p>
+<div id="ns" class="rv"><div class="mkr"><span id="mkt"></span><i></i></div><div class="tk" id="ntk"></div><div class="nl"><span id="nl1"></span><span id="nl2"></span></div></div>
+<p class="src" id="srct"></p></section>
+<section id="x-forecast" data-fc-mode="backtest" aria-labelledby="x-fc-title">
+<div class="x-fc-l">
+<p class="eb"><span data-i18n="ins.fcCheck">Forecast check · </span><b data-fc="mode">Backtest</b> · <b data-fc="scored"></b> <span data-i18n="ins.scoredSuf">scored</span></p>
+<h2 id="x-fc-title" data-i18n="ins.fcTitle">How the shape lands.</h2>
+<p class="lede" data-i18n="ins.fcLede">Every past forecast, replayed against the day that cycle actually began.</p>
+<div class="x-fc-miss"><b data-fc="median-error"></b><small data-i18n="ins.fcMedian">Median miss · days</small></div>
+<div class="x-fc-trust"><small data-i18n="ins.fcTrust">Trust in the next date</small><b data-fc="confidence"></b><span data-fc="confidence-reason"></span></div>
+</div>
+<div class="x-fc-r">
+<div class="x-fc-stage glass">
+<p class="x-fc-aim"><small data-i18n="ins.fcStart">Forecast start</small><b data-fc="next-date"></b><span data-fc="next-window"></span></p>
+<div class="x-fc-field">
+<div class="x-fc-meridian" aria-hidden="true"><svg class="x-fc-star" viewBox="-13 -13 26 26"><path d="M0-12Q1.3-1.3 12 0 1.3 1.3 0 12-1.3 1.3-12 0-1.3-1.3 0-12Z"/></svg><i class="x-fc-ret"></i></div>
+<div class="x-fc-art" aria-hidden="true">
+<i class="x-fc-ring" data-days="7"></i><i class="x-fc-ring" data-days="5"></i><i class="x-fc-ring" data-days="3"></i><i class="x-fc-ring" data-days="1"></i>
+<i class="x-fc-axis"></i>
+<b class="x-fc-tag" data-days="1">±1</b><b class="x-fc-tag" data-days="3">±3</b><b class="x-fc-tag" data-days="5">±5</b><b class="x-fc-tag" data-days="7">±7</b>
+<div class="x-fc-errs" data-fc="errors"></div>
+</div>
+<ol class="x-fc-ladder">
+<li class="x-fc-h" data-fc="horizon" data-days="1" tabindex="0"><span class="x-fc-d" aria-hidden="true">±1</span><span class="x-fc-w">±1 day</span><span class="x-fc-track" aria-hidden="true"><i class="x-fc-span"></i><span class="x-fc-dots" data-fc="dots"></span></span><span class="x-fc-stat"><span class="x-fc-c"><b data-fc="hit"></b><i data-i18n="ins.ladderOf">of</i><span data-fc="scored"></span></span><em data-fc="status"></em></span></li>
+<li class="x-fc-h" data-fc="horizon" data-days="3" tabindex="0"><span class="x-fc-d" aria-hidden="true">±3</span><span class="x-fc-w">±3 days</span><span class="x-fc-track" aria-hidden="true"><i class="x-fc-span"></i><span class="x-fc-dots" data-fc="dots"></span></span><span class="x-fc-stat"><span class="x-fc-c"><b data-fc="hit"></b><i data-i18n="ins.ladderOf">of</i><span data-fc="scored"></span></span><em data-fc="status"></em></span></li>
+<li class="x-fc-h" data-fc="horizon" data-days="5" tabindex="0"><span class="x-fc-d" aria-hidden="true">±5</span><span class="x-fc-w">±5 days</span><span class="x-fc-track" aria-hidden="true"><i class="x-fc-span"></i><span class="x-fc-dots" data-fc="dots"></span></span><span class="x-fc-stat"><span class="x-fc-c"><b data-fc="hit"></b><i data-i18n="ins.ladderOf">of</i><span data-fc="scored"></span></span><em data-fc="status"></em></span></li>
+<li class="x-fc-h" data-fc="horizon" data-days="7" tabindex="0"><span class="x-fc-d" aria-hidden="true">±7</span><span class="x-fc-w">±7 days</span><span class="x-fc-track" aria-hidden="true"><i class="x-fc-span"></i><span class="x-fc-dots" data-fc="dots"></span></span><span class="x-fc-stat"><span class="x-fc-c"><b data-fc="hit"></b><i data-i18n="ins.ladderOf">of</i><span data-fc="scored"></span></span><em data-fc="status"></em></span></li>
+</ol>
+<div class="x-fc-scale" aria-hidden="true"><span class="x-fc-s" data-i18n="ins.fcEarlier">← Actual earlier</span><i class="x-fc-zero">0</i><span class="x-fc-s" data-i18n="ins.fcLater">Actual later →</span></div>
+<p class="x-fc-empty" data-fc="empty" hidden><b data-i18n="ins.fcEmptyT">No scored forecasts yet</b><span data-i18n="ins.fcEmptyS">A forecast is scored once the cycle it predicted has begun.</span></p>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+
+</div></section>
+<section class="page" id="pg-you">
+<canvas id="sky"></canvas>
+<div class="pgi"><main>
+<header><div class="brand"><b>PeriodIQ</b><small data-i18n="shell.pageYou">You</small></div></header>
+<div id="stage">
+<div class="pf" id="pf">
+<button id="av" class="glass" data-i18n-attr="aria-label:you.avatar" aria-label="Avatar"><canvas id="avc"></canvas></button>
+<h1 id="nm" data-i18n="you.noname">No nickname</h1><div id="sbt" data-i18n="you.none">Nothing recorded yet</div>
+<button id="ebtn" class="glass" data-i18n="you.edit">Edit Profile</button>
+<div class="ed" id="ed"><div class="edi">
+<div class="fld"><label for="nin"><span data-i18n="you.nick">Nickname</span> <span id="ncnt">0 / 24</span></label><input id="nin" data-i18n-attr="placeholder:you.nickPh" placeholder="Your nickname" maxlength="24" autocomplete="off" aria-describedby="ncnt"></div>
+<div class="rowb"><button class="pb" id="rav" data-i18n="you.resetAv">Reset avatar</button><button class="pb solid" id="sav" data-i18n="you.save">Save</button></div>
+</div></div></div>
+
+<div class="sat glass" data-i="0"><button class="face" aria-expanded="false" data-i18n-attr="aria-label:you.appearance" aria-label="Appearance"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg><span class="tt" data-i18n="you.appearance">Appearance</span><span class="fs" data-i18n="you.dark">Dark</span></button>
+<div class="bd" inert><div class="bh"><div><span class="eb" data-i18n="you.zone1">Zone 01</span><h2 data-i18n="you.appearance">Appearance</h2><div class="cur"><span data-i18n="you.current">Current: </span><span class="fsv">Dark</span></div></div><button class="x" data-i18n-attr="aria-label:ui.close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<div class="sc"><div class="orbs rvl" style="--k:0">
+<button class="bo" data-ap="light" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg><span data-i18n="you.light">Light</span></button>
+<button class="bo" data-ap="dark" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg><span data-i18n="you.dark">Dark</span></button>
+<button class="bo" data-ap="system" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg><span data-i18n="you.system">System</span></button></div>
+<p class="hint rvl" style="--k:1" data-i18n="you.themeHint">Touch a body and the new theme spreads outward from it like light. System follows your device.</p></div></div></div>
+
+<div class="sat glass" data-i="1"><button class="face" aria-expanded="false" data-i18n-attr="aria-label:you.notifications" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M6 17h12l-1.5-2v-4a4.5 4.5 0 0 0-9 0v4zM10 20a2 2 0 0 0 4 0"/></svg><span class="tt" data-i18n="you.notifications">Notifications</span><span class="fs" data-i18n="you.remindOff">Off</span></button>
+<div class="bd" inert><div class="bh"><div><span class="eb" data-i18n="you.zone2">Zone 02</span><h2 data-i18n="you.notifications">Notifications</h2><div class="cur"><span data-i18n="you.current">Current: </span><span class="fsv">Off</span></div></div><button class="x" data-i18n-attr="aria-label:ui.close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<div class="sc"><div class="rvl" style="--k:0"><button class="bigsw" id="nmain" role="switch" aria-checked="false"><span class="trk"><i class="kn"><svg viewBox="-12 -12 24 24"><path d="M0-10Q0 0 10 0Q0 0 0 10Q0 0-10 0Q0 0 0-10Z" fill="currentColor"/></svg></i></span><span><b id="nlab">Off</b><span data-i18n="you.remindNote">Reminders are on this device only</span></span></button></div>
+<div class="say" id="nstat" role="status"></div>
+<div id="nz" class="off">
+<div class="blk rvl" style="--k:1"><div class="eb" data-i18n="you.periodRem">Period reminders</div>
+<button class="orow" id="s-adv" role="switch" aria-checked="false" data-k="reminder_advance"><span class="lbl"><b data-i18n="you.advB">Ahead of your period</b><small data-i18n="you.advS">A heads-up before it arrives</small></span><span class="tk2"><i></i></span></button>
+<div class="gx" id="dgx"><div class="gxi"><div class="orb5" id="orb5" role="radiogroup" data-i18n-attr="aria-label:you.daysBeforeAria" aria-label="Days before your period"><i class="pl2" aria-hidden="true"></i><button role="radio" aria-checked="false" data-d="1" data-i18n-attr="aria-label:you.d1aria" aria-label="1 day before">1</button><button role="radio" aria-checked="false" data-d="2" data-i18n-attr="aria-label:you.d2aria" aria-label="2 days before">2</button><button role="radio" aria-checked="true" data-d="3" data-i18n-attr="aria-label:you.d3aria" aria-label="3 days before">3</button><button role="radio" aria-checked="false" data-d="5" data-i18n-attr="aria-label:you.d5aria" aria-label="5 days before">5</button><button role="radio" aria-checked="false" data-d="7" data-i18n-attr="aria-label:you.d7aria" aria-label="7 days before">7</button></div><div class="cap" id="dcap" data-i18n="you.dcap">days before</div></div></div>
+<button class="orow" id="s-day" role="switch" aria-checked="false" data-k="reminder_on_day"><span class="lbl"><b data-i18n="you.onDayB">On the day</b><small data-i18n="you.onDayS">When your period is due</small></span><span class="tk2"><i></i></span></button>
+<button class="orow" id="s-over" role="switch" aria-checked="false" data-k="reminder_overdue"><span class="lbl"><b data-i18n="you.overB">Overdue reminder</b><small data-i18n="you.overS">If it has not started by then</small></span><span class="tk2"><i></i></span></button></div>
+<div class="blk rvl" style="--k:2"><div class="eb" data-i18n="you.dailyFill">Daily fill</div>
+<button class="orow" id="s-fill" role="switch" aria-checked="false" data-k="reminder_daily_fill"><span class="lbl"><b data-i18n="you.fillB">Daily fill</b><small data-i18n="you.fillS">A nudge to log your day</small></span><span class="tk2"><i></i></span></button></div>
+<div class="blk rvl" style="--k:3"><div class="eb" data-i18n="you.timeOfDay">Time of day</div>
+<div class="dials"><div class="dl" id="dlw1"><canvas id="dl1" role="slider" tabindex="0" data-i18n-attr="aria-label:you.dial1Aria" aria-label="Period reminders time" aria-valuemin="0" aria-valuemax="23" aria-valuenow="9" aria-valuetext="9:00 AM"></canvas><div class="dcap"><b data-i18n="you.periodRem">Period reminders</b><small id="dv1">9:00 AM</small></div></div>
+<div class="dl" id="dlw2"><canvas id="dl2" role="slider" tabindex="0" data-i18n-attr="aria-label:you.dial2Aria" aria-label="Daily fill time" aria-valuemin="0" aria-valuemax="23" aria-valuenow="21" aria-valuetext="9:00 PM"></canvas><div class="dcap"><b data-i18n="you.dailyFill">Daily fill</b><small id="dv2">9:00 PM</small></div></div></div></div></div>
+<p class="hint rvl" style="--k:4" data-i18n="you.notifHint">Drag a planet around its ring, or focus a dial and use the arrow keys. Reminders are on this device only.</p><div class="say" id="nsay"></div></div></div></div>
+
+<div class="sat glass" data-i="2"><button class="face" aria-expanded="false" data-i18n-attr="aria-label:you.dataMgmt" aria-label="Data Management"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3 3 7 3s7-1.3 7-3v-6"/></svg><span class="tt" data-i18n="you.dataMgmt">Data Management</span><span class="fs" data-i18n="you.dataFS">Export / Import</span></button>
+<div class="bd" inert><div class="bh"><div><span class="eb" data-i18n="you.zone3">Zone 03</span><h2 data-i18n="you.h2Data">Data</h2><div class="cur" data-i18n="you.curData">Current: Export / Import</div></div><button class="x" data-i18n-attr="aria-label:ui.close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<div class="sc"><div class="loc rvl" style="--k:0"><svg viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="3"/><path d="M10.5 18.5h3"/></svg><div><b data-i18n="you.notesHere">Notes stay here</b><span data-i18n="you.notesSub">Mood notes stay on this device; exports do not carry them.</span></div></div>
+<div class="blk rvl" style="--k:1"><div class="eb" data-i18n="you.export">Export</div>
+<div class="xrow"><button class="xb" id="ex-json"><b data-i18n="you.exJson">JSON backup</b><span data-i18n="you.exJsonS">Cycles, predictions, model, daily details</span></button><button class="xb" id="ex-csv"><b data-i18n="you.exCsv">CSV cycles</b><span data-i18n="you.exCsvS">Cycles and daily details, one row per period day</span></button></div>
+<div class="pr" id="exr"></div><div class="say" id="exs" role="status"></div></div>
+<div class="blk rvl" style="--k:2"><div class="eb" data-i18n="you.importSec">Import</div>
+<div class="imp" id="imp" data-st="0"><canvas id="air" aria-hidden="true"></canvas>
+<div class="gx on" id="ip0"><div class="gxi"><button class="pb" id="imp-go" data-i18n="you.impGo">Import</button><p class="hint" data-i18n="tra.ip0Hint">Importing replaces what is on this device. It cannot be undone.</p></div></div>
+<div class="gx" id="ip1"><div class="gxi"><div class="rowb" role="group" data-i18n-attr="aria-label:you.import" aria-label="Import format"><button class="pb fmt" data-fmt="json"><b>JSON</b><small data-i18n="you.fmtJsonS">Full backup</small></button><button class="pb fmt" data-fmt="csv"><b>CSV</b><small data-i18n="you.fmtCsvS">Cycles + daily details</small></button></div><button class="gh" id="imp-x1" data-i18n="ui.cancel">Cancel</button></div></div>
+<div class="gx" id="ip2"><div class="gxi"><button class="pb" id="imp-file" data-i18n="you.choose">Choose file</button><div class="fline" id="fline" data-i18n="you.noFile">No file chosen</div><div class="rowb"><button class="pb solid" id="imp-ok" aria-disabled="true" data-i18n="you.confirmImport">Confirm Import</button><button class="gh" id="imp-back" data-i18n="ui.back">Back</button></div></div></div>
+<input type="file" id="fi" hidden>
+<div class="gx" id="ipa"><div class="gxi"><div class="ano" id="imano"></div><div class="rowb"><button class="pb solid" id="imp-any" data-i18n="you.impAny">Import anyway</button><button class="gh" id="imp-x2" data-i18n="ui.cancel">Cancel</button></div></div></div>
+<div class="gx" id="ipr"><div class="gxi"><div class="echo" id="echo"><div><b id="e1">0</b><span data-i18n="you.eCyc">Cycles</span></div><div><b id="e2">0</b><span data-i18n="you.ePred">Predictions</span></div><div><b id="e3">0</b><span data-i18n="you.eDaily">Daily records</span></div></div></div></div>
+<div class="say" id="ims" role="status"></div></div></div></div></div></div>
+
+<div class="sat glass" data-i="3"><button class="face" aria-expanded="false" data-i18n-attr="aria-label:you.privAria" aria-label="Privacy and Login"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9.5" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="tt" data-i18n="you.privTT">Privacy &amp; Login</span><span class="fs"><span data-i18n="you.privFS1">Keep signed in · Password</span><br><span data-i18n="you.privFS2">Delete account</span></span></button>
+<div class="bd" inert><div class="bh"><div><span class="eb" data-i18n="you.zone4">Zone 04</span><h2 data-i18n="you.h2Priv">Privacy</h2><div class="cur" data-i18n="you.curPriv">Keep me signed in · Password · Delete account</div></div><button class="x" data-i18n-attr="aria-label:ui.close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<div class="sc"><div class="blk rvl" style="--k:0;margin-top:6px"><button class="orow" id="al" role="switch" aria-checked="false"><span class="lbl"><b data-i18n="you.keepB">Keep me signed in</b><small data-i18n="you.keepS">Needs your password to turn on</small></span><span class="tk2"><i></i></span></button>
+<p class="hint" data-i18n="you.keepHint">Stays in a local slot on this device. Logging out, changing your password or deleting your account clears it.</p></div>
+<div class="blk rvl" style="--k:1"><div class="rowb"><button class="pb" id="pwb" data-i18n="you.chpw">Change password</button><button class="pb" id="lo" data-i18n="you.logout">Log out</button></div><div class="say" id="prs" role="status"></div></div>
+<div class="blk rvl" style="--k:2"><div class="eb" data-i18n="you.danger">Danger zone</div><button class="dg" id="del" data-i18n="you.delAcc">Delete account</button><p class="hint" data-i18n="you.delHint">Two steps: hold to erase, then confirm with your password.</p></div></div></div></div>
+
+<div class="sat glass" data-i="4"><button class="face" aria-expanded="false" data-i18n-attr="aria-label:you.about" aria-label="About"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/></svg><span class="tt" data-i18n="you.about">About</span><span class="fs" data-i18n="you.aboutFS">Version &amp; Licenses</span></button>
+<div class="bd" inert><div class="bh"><div><span class="eb" data-i18n="you.zone5">Zone 05</span><h2 data-i18n="you.about">About</h2><div class="cur" data-i18n="you.aboutFS">Version &amp; Licenses</div></div><button class="x" data-i18n-attr="aria-label:ui.close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+<div class="sc ab"><div class="rvl" style="--k:0"><div class="big" id="aver">—</div><div class="eb" style="margin-top:8px" id="avlab" data-i18n="you.versionNA">Version unavailable</div></div>
+<div class="blk rvl" style="--k:1"><div class="eb" data-i18n="you.licenses">Licenses</div><p data-i18n="you.licText">PeriodIQ © 2026. Set in Inter, SIL Open Font License 1.1. No third-party trackers or advertising SDKs.</p></div>
+<div class="blk rvl" style="--k:2"><div class="eb" data-i18n="you.privacy">Privacy policy</div><p data-i18n="you.privText">PeriodIQ is local-first. Your cycle data lives only on this device and is never uploaded, sold or used for ads. Remove it any time under Privacy &amp; Login.</p></div></div></div></div>
+<div class="dlg" id="dlg" inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="dh"><canvas id="dgc" aria-hidden="true"></canvas><div class="dgi"><span class="eb" id="dstep"></span><h3 id="dh"></h3><p id="dmsg"></p><div class="ano" id="dano"></div>
+<div class="sec" id="sec"><canvas id="secc" aria-hidden="true"></canvas><input id="secin" type="password" maxlength="64" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" data-i18n-attr="aria-label:you.pwAria" aria-label="Password" aria-describedby="derr"></div><div class="hint demo" id="demo"></div><div class="say" id="derr" role="alert"></div>
+<button class="hold" id="hold" data-i18n-attr="aria-label:you.holdAria" aria-label="Hold to erase everything"><span class="a" data-i18n="you.hold">Hold to erase</span><i></i><span class="b" data-i18n="you.hold">Hold to erase</span></button>
+<div class="dact"><button class="pb solid" id="dok" data-i18n="ui.confirm">Confirm</button><button class="gh" id="dno" data-i18n="ui.cancel">Cancel</button></div></div></div>
+</div></main>
+
+</div></section>
+<section class="page" id="pg-journal">
+<canvas id="jsky" aria-hidden="true"></canvas>
+<div class="pgi"><main>
+<header class="jhd">
+  <div class="brand"><b>PeriodIQ</b><small data-i18n="shell.pageJournal">Journal</small></div>
+  <button class="x" id="jback" data-i18n-attr="aria-label:journal.back" aria-label="Back to Calendar"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+</header>
+<div class="jhero">
+  <span class="eb" data-i18n="hist.brand">Memory</span>
+  <h1 data-i18n="journal.title">Journal</h1>
+  <p id="jmeta"></p>
+</div>
+<div id="jtoday"></div>
+<div id="jlist"></div>
+<p id="jempty"></p>
+</main></div>
+</section>
+</div>
+<section id="pg-auth" aria-hidden="true">
+<canvas id="asky" aria-hidden="true"></canvas>
+<div class="auth-wrap">
+  <header class="auth-hd">
+    <div class="brand"><b>PeriodIQ</b><small data-i18n="shell.access">Access</small></div>
+  </header>
+  <div class="auth-card glass" id="auth-card">
+    <span class="eb" data-i18n="auth.sky">Your sky</span>
+    <h1 id="auth-title" data-i18n="auth.welcome">Welcome back</h1>
+    <p id="auth-sub"></p>
+    <div id="auth-form"></div>
+    <p id="auth-msg" role="alert"></p>
+  </div>
+  <p class="auth-foot" data-i18n="auth.foot">Local-first. Your data stays on this device.</p>
+</div>
+</section>
+<canvas id="fx"></canvas>
+<nav class="dock glass" id="dock" style="--i:0"><i class="pill"></i>
+<button class="tb" aria-current="page"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg><span data-i18n="dock.today">Today</span><i class="nb"></i></button>
+<button class="tb"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span data-i18n="dock.cal">Calendar</span><i class="nb"></i></button>
+<button class="tb"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg><span data-i18n="dock.hist">History</span><i class="nb"></i></button>
+<button class="tb"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 19v-8M12 19V5M19 19v-6"/></svg><span data-i18n="dock.ins">Insights</span><i class="nb"></i></button>
+<button class="tb"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="9" r="3.5"/><path d="M5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5"/></svg><span data-i18n="dock.you">You</span><i class="nb"></i></button></nav>
+<!-- 依赖序：core/* → pages/*.helpers → pages/*.js → main.js -->
+<!-- 依赖序（自上而下，改动须同步本注释）：state→fx→edit→app→core→platform→词典(zh-CN/en/es)→i18n→i18n.apply→errors→mock→transport→hydrate→api.auth→api.domain→api.mock→api.surface→pages.helpers→pages.main→pages.journal→pages.auth→shell.desktop→main -->
+<script src="js/core/state.js"></script>
+<script src="js/core/fx.js"></script>
+<script src="js/core/edit.js"></script>
+<script src="js/core/app.js"></script>
+<script src="js/core.js"></script>
+<script src="js/core/platform.js"></script>
+<script src="js/i18n/zh-CN.js"></script>
+<script src="js/i18n/en.js"></script>
+<script src="js/i18n/es.js"></script>
+<script src="js/core/i18n.js"></script>
+<script src="js/core/i18n.apply.js"></script>
+<script src="js/core/errors.js"></script>
+<script src="js/core/mock.js"></script>
+<script src="js/core/transport.js"></script>
+<script src="js/core/hydrate.js"></script>
+<script src="js/core/api.auth.js"></script>
+<script src="js/core/api.domain.js"></script>
+<script src="js/core/api.mock.js"></script>
+<script src="js/core/api.surface.js"></script>
+<script src="js/pages/today.ring.js"></script>
+<script src="js/pages/today.js"></script>
+<script src="js/pages/calendar.grid.js"></script>
+<script src="js/pages/calendar.detail.js"></script>
+<script src="js/pages/calendar.js"></script>
+<script src="js/pages/history.js"></script>
+<script src="js/pages/insights.chart.js"></script>
+<script src="js/pages/insights.js"></script>
+<script src="js/pages/you.settings.js"></script>
+<script src="js/pages/you.transfer.js"></script>
+<script src="js/pages/you.dialog.js"></script>
+<script src="js/pages/you.scene.js"></script>
+<script src="js/pages/you.js"></script>
+<script src="js/pages/journal.js"></script>
+<script src="js/pages/auth.js"></script>
+<script src="js/shell/desktop.js"></script>
+<script src="js/main.js"></script></body></html>

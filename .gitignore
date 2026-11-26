@@ -1,0 +1,92 @@
+# ===== PeriodIQ 根 .gitignore（2026-11-20 单仓库布局）=====
+# 目录说明见 README.md；本文件是唯一的忽略规则源。
+
+# --- 私有与冻结资产（只留本机，不入库）---
+/AGENTS.md
+/tools/
+/docs/
+/win/packaging/
+/photo/
+/个人数据/
+/前端demo/
+/setup_out/
+/.screenshots/
+/.trae-html-share-packages/
+/.zcode/
+/%TEMP%/
+
+# --- 用户数据与数据库（永不入库）---
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.bak
+/win/backend/data/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# --- Windows 端构建产物 ---
+/win/dist/
+/win/build/
+*.spec
+/win/desktop/bin/
+/win/desktop/native_host.exe
+
+# --- Android / Gradle ---
+.gradle/
+.kotlin/
+.idea/
+/android/build/
+/android/app/build/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+.cxx/
+local.properties
+*.iml
+*.hprof
+.navigation/
+
+# Android 构建期生成的前端副本（由 tools/Standing/copy_frontend.py 复制）
+/android/app/src/main/assets/www/
+
+# --- 签名材料（永不入库）---
+/keys/
+/keystore.properties
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+
+# --- 安装包输出（GitHub Releases 或本机 setup_out，不入库）---
+*.exe
+*.msi
+*.zip
+*.7z
+
+# --- 工具 / 编辑器私有目录 ---
+.zcode/
+.zcodeignore
+.qoder/
+.mimocode/
+.opencode/
+.dsh/
+.vscode/
+.acl-diagnostics/
+*.swp
+
+# --- 系统杂项 ---
+Thumbs.db
+desktop.ini
+.DS_Store
+*.log

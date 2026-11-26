@@ -1,0 +1,2822 @@
+{
+  "replay_ema": [
+    {
+      "name": "empty_excl",
+      "cycles": [],
+      "exclude_last": true,
+      "expected": 28.0
+    },
+    {
+      "name": "empty_incl",
+      "cycles": [],
+      "exclude_last": false,
+      "expected": 28.0
+    },
+    {
+      "name": "one_excl",
+      "cycles": [
+        31.0
+      ],
+      "exclude_last": true,
+      "expected": 28.0
+    },
+    {
+      "name": "one_incl",
+      "cycles": [
+        31.0
+      ],
+      "exclude_last": false,
+      "expected": 28.9
+    },
+    {
+      "name": "normal_excl",
+      "cycles": [
+        28.0,
+        29.0,
+        27.0,
+        30.0,
+        28.0
+      ],
+      "exclude_last": true,
+      "expected": 28.536999999999995
+    },
+    {
+      "name": "normal_incl",
+      "cycles": [
+        28.0,
+        29.0,
+        27.0,
+        30.0,
+        28.0
+      ],
+      "exclude_last": false,
+      "expected": 28.375899999999994
+    },
+    {
+      "name": "anomalous_excl",
+      "cycles": [
+        28.0,
+        29.0,
+        55.0,
+        28.0,
+        14.0
+      ],
+      "exclude_last": true,
+      "expected": 33.81699999999999
+    },
+    {
+      "name": "anomalous_incl",
+      "cycles": [
+        28.0,
+        29.0,
+        55.0,
+        28.0,
+        14.0
+      ],
+      "exclude_last": false,
+      "expected": 27.871899999999993
+    }
+  ],
+  "predict_core": [
+    {
+      "name": "n0_none_ema",
+      "cycles": [],
+      "prev_ema": null,
+      "expected": {
+        "legal_cycles": [],
+        "robust_weights": [],
+        "n": 0,
+        "n_eff": 0.0,
+        "window": 6,
+        "latest_cycle": null,
+        "dropped_illegal": 0,
+        "ema_prev": 28.0,
+        "new_ema": 28.0,
+        "w_mean": 28.0,
+        "fused": 28.0,
+        "mu_post": 28.0,
+        "sigma_post": 7.0,
+        "prior_weight": 1.0,
+        "posterior_n_eff": 0.0,
+        "shrink_irregularity": 1.0,
+        "bayes_applied": false,
+        "predicted_cycle": 28.0,
+        "std": 7.0,
+        "interval_days": 10.5,
+        "interval_n_eff_applied": false,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.4,
+        "stage": "empty",
+        "model_version": "cold_start_1"
+      }
+    },
+    {
+      "name": "n0_with_ema",
+      "cycles": [],
+      "prev_ema": 29.5,
+      "expected": {
+        "legal_cycles": [],
+        "robust_weights": [],
+        "n": 0,
+        "n_eff": 0.0,
+        "window": 6,
+        "latest_cycle": null,
+        "dropped_illegal": 0,
+        "ema_prev": 29.5,
+        "new_ema": 29.5,
+        "w_mean": 28.0,
+        "fused": 28.0,
+        "mu_post": 28.0,
+        "sigma_post": 7.0,
+        "prior_weight": 1.0,
+        "posterior_n_eff": 0.0,
+        "shrink_irregularity": 1.0,
+        "bayes_applied": false,
+        "predicted_cycle": 28.0,
+        "std": 7.0,
+        "interval_days": 10.5,
+        "interval_n_eff_applied": false,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.4,
+        "stage": "empty",
+        "model_version": "cold_start_1"
+      }
+    },
+    {
+      "name": "n1_none_ema",
+      "cycles": [
+        31.0
+      ],
+      "prev_ema": null,
+      "expected": {
+        "legal_cycles": [
+          31.0
+        ],
+        "robust_weights": [
+          1.0
+        ],
+        "n": 1,
+        "n_eff": 1.0,
+        "window": 6,
+        "latest_cycle": 31.0,
+        "dropped_illegal": 0,
+        "ema_prev": 28.0,
+        "new_ema": 28.9,
+        "w_mean": 31.0,
+        "fused": 31.0,
+        "mu_post": 30.773584905660375,
+        "sigma_post": 1.9230478952816463,
+        "prior_weight": 0.8333333333333334,
+        "posterior_n_eff": 1.0,
+        "shrink_irregularity": 1.0,
+        "bayes_applied": false,
+        "predicted_cycle": 31.0,
+        "std": 7.0,
+        "interval_days": 10.5,
+        "interval_n_eff_applied": false,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.5,
+        "stage": "cold_1",
+        "model_version": "cold_start_2"
+      }
+    },
+    {
+      "name": "n1_with_ema",
+      "cycles": [
+        31.0
+      ],
+      "prev_ema": 26.0,
+      "expected": {
+        "legal_cycles": [
+          31.0
+        ],
+        "robust_weights": [
+          1.0
+        ],
+        "n": 1,
+        "n_eff": 1.0,
+        "window": 6,
+        "latest_cycle": 31.0,
+        "dropped_illegal": 0,
+        "ema_prev": 28.0,
+        "new_ema": 28.9,
+        "w_mean": 31.0,
+        "fused": 31.0,
+        "mu_post": 30.773584905660375,
+        "sigma_post": 1.9230478952816463,
+        "prior_weight": 0.8333333333333334,
+        "posterior_n_eff": 1.0,
+        "shrink_irregularity": 1.0,
+        "bayes_applied": false,
+        "predicted_cycle": 31.0,
+        "std": 7.0,
+        "interval_days": 10.5,
+        "interval_n_eff_applied": false,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.5,
+        "stage": "cold_1",
+        "model_version": "cold_start_2"
+      }
+    },
+    {
+      "name": "n2_none_ema",
+      "cycles": [
+        28.0,
+        32.0
+      ],
+      "prev_ema": null,
+      "expected": {
+        "legal_cycles": [
+          28.0,
+          32.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0
+        ],
+        "n": 2,
+        "n_eff": 2.0,
+        "window": 6,
+        "latest_cycle": 32.0,
+        "dropped_illegal": 0,
+        "ema_prev": 28.0,
+        "new_ema": 29.199999999999996,
+        "w_mean": 30.162162162162158,
+        "fused": 29.777297297297295,
+        "mu_post": 29.99798878679762,
+        "sigma_post": 1.9288802760147712,
+        "prior_weight": 0.7142857142857143,
+        "posterior_n_eff": 1.986937590711176,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": false,
+        "predicted_cycle": 29.777297297297295,
+        "std": 2.8284271247461903,
+        "interval_days": 5.196152422706632,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.7979694910895578,
+        "stage": "cold_2",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "n2_with_ema",
+      "cycles": [
+        28.0,
+        32.0
+      ],
+      "prev_ema": 28.0,
+      "expected": {
+        "legal_cycles": [
+          28.0,
+          32.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0
+        ],
+        "n": 2,
+        "n_eff": 2.0,
+        "window": 6,
+        "latest_cycle": 32.0,
+        "dropped_illegal": 0,
+        "ema_prev": 28.0,
+        "new_ema": 29.199999999999996,
+        "w_mean": 30.162162162162158,
+        "fused": 29.777297297297295,
+        "mu_post": 29.99798878679762,
+        "sigma_post": 1.9288802760147712,
+        "prior_weight": 0.7142857142857143,
+        "posterior_n_eff": 1.986937590711176,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": false,
+        "predicted_cycle": 29.777297297297295,
+        "std": 2.8284271247461903,
+        "interval_days": 5.196152422706632,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.7979694910895578,
+        "stage": "cold_2",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "n3_regular",
+      "cycles": [
+        28.0,
+        29.0,
+        28.0
+      ],
+      "prev_ema": 28.3,
+      "expected": {
+        "legal_cycles": [
+          28.0,
+          29.0,
+          28.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n": 3,
+        "n_eff": 3.0,
+        "window": 6,
+        "latest_cycle": 28.0,
+        "dropped_illegal": 0,
+        "ema_prev": 28.3,
+        "new_ema": 28.21,
+        "w_mean": 28.33041788143829,
+        "fused": 28.282250728862977,
+        "mu_post": 28.32151610475327,
+        "sigma_post": 1.1489592249913931,
+        "prior_weight": 0.625,
+        "posterior_n_eff": 2.9484240687679084,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": true,
+        "predicted_cycle": 28.32151610475327,
+        "std": 2.0,
+        "interval_days": 3.4641016151377544,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.8571428571428572,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "n5_regular_30",
+      "cycles": [
+        30.0,
+        30.0,
+        31.0,
+        29.0,
+        30.0
+      ],
+      "prev_ema": 29.5,
+      "expected": {
+        "legal_cycles": [
+          30.0,
+          30.0,
+          31.0,
+          29.0,
+          30.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n": 5,
+        "n_eff": 5.0,
+        "window": 6,
+        "latest_cycle": 30.0,
+        "dropped_illegal": 0,
+        "ema_prev": 29.5,
+        "new_ema": 29.65,
+        "w_mean": 29.965620739457446,
+        "fused": 29.839372443674467,
+        "mu_post": 29.932426699434753,
+        "sigma_post": 0.9096581895461633,
+        "prior_weight": 0.5,
+        "posterior_n_eff": 4.752332593844355,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": true,
+        "predicted_cycle": 29.932426699434753,
+        "std": 2.0,
+        "interval_days": 3.2863353450309964,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.8571428571428572,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "n5_mid_irregular",
+      "cycles": [
+        25.0,
+        33.0,
+        26.0,
+        34.0,
+        28.0
+      ],
+      "prev_ema": 29.0,
+      "expected": {
+        "legal_cycles": [
+          25.0,
+          33.0,
+          26.0,
+          34.0,
+          28.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n": 5,
+        "n_eff": 5.0,
+        "window": 6,
+        "latest_cycle": 28.0,
+        "dropped_illegal": 0,
+        "ema_prev": 29.0,
+        "new_ema": 28.699999999999996,
+        "w_mean": 29.391242726005718,
+        "fused": 29.114745635603427,
+        "mu_post": 29.30267112862135,
+        "sigma_post": 1.7662160431312035,
+        "prior_weight": 0.5,
+        "posterior_n_eff": 4.752332593844355,
+        "shrink_irregularity": 0.27164083708512754,
+        "bayes_applied": true,
+        "predicted_cycle": 29.125741790708684,
+        "std": 4.08656334834051,
+        "interval_days": 7.322923266843932,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.6358204185425638,
+        "confidence": 0.7081026179756779,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "n5_high_irregular",
+      "cycles": [
+        18.0,
+        42.0,
+        20.0,
+        45.0,
+        22.0
+      ],
+      "prev_ema": 30.0,
+      "expected": {
+        "legal_cycles": [
+          18.0,
+          42.0,
+          20.0,
+          45.0,
+          22.0
+        ],
+        "robust_weights": [
+          1.0,
+          0.22192222168061232,
+          1.0,
+          0.1502310199366606,
+          1.0
+        ],
+        "n": 5,
+        "n_eff": 3.7018516089332927,
+        "window": 6,
+        "latest_cycle": 22.0,
+        "dropped_illegal": 0,
+        "ema_prev": 30.0,
+        "new_ema": 27.6,
+        "w_mean": 22.849016985122343,
+        "fused": 24.74941019107341,
+        "mu_post": 24.419226795107345,
+        "sigma_post": 3.8648427136634917,
+        "prior_weight": 0.5745903544099759,
+        "posterior_n_eff": 3.43970827158913,
+        "shrink_irregularity": 1.0,
+        "bayes_applied": true,
+        "predicted_cycle": 26.47670453996836,
+        "std": 8.720713697580582,
+        "interval_days": 19.656535761967643,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 2.0,
+        "confidence": 0.3770918787442442,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "n10_drift",
+      "cycles": [
+        26.0,
+        27.0,
+        28.0,
+        29.0,
+        30.0,
+        31.0,
+        32.0,
+        33.0,
+        34.0,
+        35.0
+      ],
+      "prev_ema": 31.2,
+      "expected": {
+        "legal_cycles": [
+          26.0,
+          27.0,
+          28.0,
+          29.0,
+          30.0,
+          31.0,
+          32.0,
+          33.0,
+          34.0,
+          35.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n": 10,
+        "n_eff": 10.0,
+        "window": 6,
+        "latest_cycle": 35.0,
+        "dropped_illegal": 0,
+        "ema_prev": 31.2,
+        "new_ema": 32.34,
+        "w_mean": 32.966463836588396,
+        "fused": 32.71587830195304,
+        "mu_post": 31.7092041231054,
+        "sigma_post": 0.9885630259819524,
+        "prior_weight": 0.3333333333333333,
+        "posterior_n_eff": 8.275902336848677,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": true,
+        "predicted_cycle": 31.7092041231054,
+        "std": 2.0,
+        "interval_days": 3.146426544510455,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.8571428571428572,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "with_anomalous_outlier",
+      "cycles": [
+        28.0,
+        28.0,
+        29.0,
+        62.0,
+        28.0,
+        29.0
+      ],
+      "prev_ema": 31.0,
+      "expected": {
+        "legal_cycles": [
+          28.0,
+          28.0,
+          29.0,
+          62.0,
+          28.0,
+          29.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0,
+          1.0,
+          0.15,
+          1.0,
+          1.0
+        ],
+        "n": 6,
+        "n_eff": 5.28073668491787,
+        "window": 6,
+        "latest_cycle": 29.0,
+        "dropped_illegal": 0,
+        "ema_prev": 31.0,
+        "new_ema": 30.4,
+        "w_mean": 29.497613951681274,
+        "fused": 29.858568371008765,
+        "mu_post": 29.271123768601477,
+        "sigma_post": 2.722217319705881,
+        "prior_weight": 0.4863464704173525,
+        "posterior_n_eff": 4.850874576119684,
+        "shrink_irregularity": 0.8245985091813974,
+        "bayes_applied": true,
+        "predicted_cycle": 28.761351562242226,
+        "std": 6.29839403672559,
+        "interval_days": 13.135412622585601,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.9122992545906987,
+        "confidence": 0.5501147116624578,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "with_illegal_values",
+      "cycles": [
+        3.0,
+        28.0,
+        120.0,
+        29.0,
+        6.0,
+        30.0,
+        91.0,
+        28.0
+      ],
+      "prev_ema": 28.6,
+      "expected": {
+        "legal_cycles": [
+          28.0,
+          29.0,
+          30.0,
+          28.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n": 4,
+        "n_eff": 4.0,
+        "window": 6,
+        "latest_cycle": 28.0,
+        "dropped_illegal": 4,
+        "ema_prev": 28.6,
+        "new_ema": 28.42,
+        "w_mean": 28.760208684736988,
+        "fused": 28.624125210842195,
+        "mu_post": 28.744517612005694,
+        "sigma_post": 1.005675672006492,
+        "prior_weight": 0.5555555555555556,
+        "posterior_n_eff": 3.873345625223287,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": true,
+        "predicted_cycle": 28.744517612005694,
+        "std": 2.0,
+        "interval_days": 3.3541019662496847,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.8571428571428572,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "all_illegal",
+      "cycles": [
+        1.0,
+        6.0,
+        91.0,
+        200.0
+      ],
+      "prev_ema": null,
+      "expected": {
+        "legal_cycles": [],
+        "robust_weights": [],
+        "n": 0,
+        "n_eff": 0.0,
+        "window": 6,
+        "latest_cycle": null,
+        "dropped_illegal": 4,
+        "ema_prev": 28.0,
+        "new_ema": 28.0,
+        "w_mean": 28.0,
+        "fused": 28.0,
+        "mu_post": 28.0,
+        "sigma_post": 7.0,
+        "prior_weight": 1.0,
+        "posterior_n_eff": 0.0,
+        "shrink_irregularity": 1.0,
+        "bayes_applied": false,
+        "predicted_cycle": 28.0,
+        "std": 7.0,
+        "interval_days": 10.5,
+        "interval_n_eff_applied": false,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.4,
+        "stage": "empty",
+        "model_version": "cold_start_1"
+      }
+    },
+    {
+      "name": "exact_bounds_7_90",
+      "cycles": [
+        7.0,
+        90.0,
+        28.0,
+        28.0
+      ],
+      "prev_ema": 28.0,
+      "expected": {
+        "legal_cycles": [
+          7.0,
+          90.0,
+          28.0,
+          28.0
+        ],
+        "robust_weights": [
+          1.0,
+          0.15,
+          1.0,
+          1.0
+        ],
+        "n": 4,
+        "n_eff": 3.2828784119106698,
+        "window": 6,
+        "latest_cycle": 28.0,
+        "dropped_illegal": 0,
+        "ema_prev": 28.0,
+        "new_ema": 28.0,
+        "w_mean": 25.598688046647233,
+        "fused": 26.55921282798834,
+        "mu_post": 27.313912623402494,
+        "sigma_post": 5.9160828061709925,
+        "prior_weight": 0.603654883163571,
+        "posterior_n_eff": 3.134305673461183,
+        "shrink_irregularity": 1.0,
+        "bayes_applied": true,
+        "predicted_cycle": 27.72807261856246,
+        "std": 21.08832357738158,
+        "interval_days": 48.17397977864912,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 2.0,
+        "confidence": 0.3,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "banker_half_even_27_5",
+      "cycles": [
+        27.0,
+        28.0
+      ],
+      "prev_ema": 27.5,
+      "expected": {
+        "legal_cycles": [
+          27.0,
+          28.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0
+        ],
+        "n": 2,
+        "n_eff": 2.0,
+        "window": 6,
+        "latest_cycle": 28.0,
+        "dropped_illegal": 0,
+        "ema_prev": 27.5,
+        "new_ema": 27.65,
+        "w_mean": 27.54054054054054,
+        "fused": 27.58432432432432,
+        "mu_post": 27.55867233701333,
+        "sigma_post": 1.3905764146604642,
+        "prior_weight": 0.7142857142857143,
+        "posterior_n_eff": 1.986937590711176,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": false,
+        "predicted_cycle": 27.58432432432432,
+        "std": 2.0,
+        "interval_days": 3.674234614174767,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.8571428571428572,
+        "stage": "cold_2",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "banker_half_even_28_5",
+      "cycles": [
+        28.0,
+        29.0
+      ],
+      "prev_ema": 28.5,
+      "expected": {
+        "legal_cycles": [
+          28.0,
+          29.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0
+        ],
+        "n": 2,
+        "n_eff": 2.0,
+        "window": 6,
+        "latest_cycle": 29.0,
+        "dropped_illegal": 0,
+        "ema_prev": 28.5,
+        "new_ema": 28.65,
+        "w_mean": 28.540540540540537,
+        "fused": 28.58432432432432,
+        "mu_post": 28.51920901527843,
+        "sigma_post": 1.3905764146604642,
+        "prior_weight": 0.7142857142857143,
+        "posterior_n_eff": 1.986937590711176,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": false,
+        "predicted_cycle": 28.58432432432432,
+        "std": 2.0,
+        "interval_days": 3.674234614174767,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.8571428571428572,
+        "stage": "cold_2",
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "identical_cycles_min_std",
+      "cycles": [
+        30.0,
+        30.0,
+        30.0,
+        30.0
+      ],
+      "prev_ema": 29.5,
+      "expected": {
+        "legal_cycles": [
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "robust_weights": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n": 4,
+        "n_eff": 4.0,
+        "window": 6,
+        "latest_cycle": 30.0,
+        "dropped_illegal": 0,
+        "ema_prev": 29.5,
+        "new_ema": 29.65,
+        "w_mean": 30.0,
+        "fused": 29.86,
+        "mu_post": 29.95871903847895,
+        "sigma_post": 1.005675672006492,
+        "prior_weight": 0.5555555555555556,
+        "posterior_n_eff": 3.873345625223287,
+        "shrink_irregularity": 0.0,
+        "bayes_applied": true,
+        "predicted_cycle": 29.95871903847895,
+        "std": 2.0,
+        "interval_days": 3.3541019662496847,
+        "interval_n_eff_applied": true,
+        "interval_mult_applied": 1.5,
+        "confidence": 0.8571428571428572,
+        "stage": "bayesian",
+        "model_version": "bayesian_v1"
+      }
+    }
+  ],
+  "predict_next_period": [
+    {
+      "name": "null_last_start",
+      "last_period_start": null,
+      "cycles": [],
+      "prev_ema": null,
+      "expected": {
+        "predicted_date": null,
+        "predicted_start_lower": null,
+        "predicted_start_upper": null,
+        "confidence": 0.0,
+        "model_version": "none",
+        "model_params": {
+          "mean_cycle": 28.0,
+          "std_cycle": 7.0,
+          "n_records": 0,
+          "ema_cycle": 28.0,
+          "prior_weight": 1.0
+        }
+      }
+    },
+    {
+      "name": "cold_n0",
+      "last_period_start": "2026-01-15",
+      "cycles": [],
+      "prev_ema": null,
+      "expected": {
+        "predicted_date": "2026-02-12",
+        "predicted_start_lower": "2026-02-02",
+        "predicted_start_upper": "2026-02-22",
+        "confidence": 0.4,
+        "model_version": "cold_start_1",
+        "model_params": {
+          "mean_cycle": 28.0,
+          "std_cycle": 7.0,
+          "n_records": 0,
+          "ema_cycle": 28.0,
+          "prior_weight": 1.0,
+          "shrink_irregularity": 1.0,
+          "n_eff": 0.0,
+          "dropped_illegal": 0,
+          "bayes_applied": false
+        }
+      }
+    },
+    {
+      "name": "cold_n1",
+      "last_period_start": "2026-01-15",
+      "cycles": [
+        31.0
+      ],
+      "prev_ema": 28.0,
+      "expected": {
+        "predicted_date": "2026-02-15",
+        "predicted_start_lower": "2026-02-05",
+        "predicted_start_upper": "2026-02-25",
+        "confidence": 0.5,
+        "model_version": "cold_start_2",
+        "model_params": {
+          "mean_cycle": 31.0,
+          "std_cycle": 7.0,
+          "n_records": 1,
+          "ema_cycle": 28.9,
+          "prior_weight": 0.8333,
+          "shrink_irregularity": 1.0,
+          "n_eff": 1.0,
+          "dropped_illegal": 0,
+          "bayes_applied": false
+        }
+      }
+    },
+    {
+      "name": "cold_n2_half_even",
+      "last_period_start": "2026-01-15",
+      "cycles": [
+        27.0,
+        28.0
+      ],
+      "prev_ema": 27.5,
+      "expected": {
+        "predicted_date": "2026-02-12",
+        "predicted_start_lower": "2026-02-08",
+        "predicted_start_upper": "2026-02-16",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 27.5843,
+          "std_cycle": 2.0,
+          "n_records": 2,
+          "ema_cycle": 27.65,
+          "prior_weight": 0.7143,
+          "shrink_irregularity": 0.0,
+          "n_eff": 2.0,
+          "dropped_illegal": 0,
+          "bayes_applied": false
+        }
+      }
+    },
+    {
+      "name": "normal_bayesian",
+      "last_period_start": "2026-03-10",
+      "cycles": [
+        28.0,
+        29.0,
+        28.0,
+        30.0,
+        29.0
+      ],
+      "prev_ema": 28.7,
+      "expected": {
+        "predicted_date": "2026-04-08",
+        "predicted_start_lower": "2026-04-05",
+        "predicted_start_upper": "2026-04-11",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 28.8785,
+          "std_cycle": 2.0,
+          "n_records": 5,
+          "ema_cycle": 28.79,
+          "prior_weight": 0.5,
+          "shrink_irregularity": 0.0,
+          "n_eff": 5.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true
+        }
+      }
+    },
+    {
+      "name": "overdue_past_anchor",
+      "last_period_start": "2025-11-01",
+      "cycles": [
+        28.0,
+        28.0,
+        29.0,
+        28.0
+      ],
+      "prev_ema": 28.2,
+      "expected": {
+        "predicted_date": "2025-11-29",
+        "predicted_start_lower": "2025-11-26",
+        "predicted_start_upper": "2025-12-02",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 28.2612,
+          "std_cycle": 2.0,
+          "n_records": 4,
+          "ema_cycle": 28.14,
+          "prior_weight": 0.5556,
+          "shrink_irregularity": 0.0,
+          "n_eff": 4.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true
+        }
+      }
+    },
+    {
+      "name": "leap_year_feb28",
+      "last_period_start": "2024-02-28",
+      "cycles": [
+        28.0,
+        29.0,
+        28.0
+      ],
+      "prev_ema": 28.3,
+      "expected": {
+        "predicted_date": "2024-03-27",
+        "predicted_start_lower": "2024-03-24",
+        "predicted_start_upper": "2024-03-30",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 28.3215,
+          "std_cycle": 2.0,
+          "n_records": 3,
+          "ema_cycle": 28.21,
+          "prior_weight": 0.625,
+          "shrink_irregularity": 0.0,
+          "n_eff": 3.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true
+        }
+      }
+    },
+    {
+      "name": "leap_year_feb29",
+      "last_period_start": "2024-02-29",
+      "cycles": [
+        28.0,
+        29.0,
+        30.0,
+        28.0
+      ],
+      "prev_ema": 28.8,
+      "expected": {
+        "predicted_date": "2024-03-29",
+        "predicted_start_lower": "2024-03-26",
+        "predicted_start_upper": "2024-04-01",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 28.7445,
+          "std_cycle": 2.0,
+          "n_records": 4,
+          "ema_cycle": 28.56,
+          "prior_weight": 0.5556,
+          "shrink_irregularity": 0.0,
+          "n_eff": 4.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true
+        }
+      }
+    },
+    {
+      "name": "non_leap_feb28",
+      "last_period_start": "2025-02-28",
+      "cycles": [
+        28.0,
+        29.0,
+        28.0
+      ],
+      "prev_ema": 28.3,
+      "expected": {
+        "predicted_date": "2025-03-28",
+        "predicted_start_lower": "2025-03-25",
+        "predicted_start_upper": "2025-03-31",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 28.3215,
+          "std_cycle": 2.0,
+          "n_records": 3,
+          "ema_cycle": 28.21,
+          "prior_weight": 0.625,
+          "shrink_irregularity": 0.0,
+          "n_eff": 3.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true
+        }
+      }
+    },
+    {
+      "name": "year_wrap_dec_jan",
+      "last_period_start": "2025-12-18",
+      "cycles": [
+        29.0,
+        30.0,
+        29.0,
+        31.0
+      ],
+      "prev_ema": 29.4,
+      "expected": {
+        "predicted_date": "2026-01-17",
+        "predicted_start_lower": "2026-01-14",
+        "predicted_start_upper": "2026-01-20",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 29.8161,
+          "std_cycle": 2.0,
+          "n_records": 4,
+          "ema_cycle": 29.88,
+          "prior_weight": 0.5556,
+          "shrink_irregularity": 0.0,
+          "n_eff": 4.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true
+        }
+      }
+    },
+    {
+      "name": "irregular_high_std",
+      "last_period_start": "2026-06-01",
+      "cycles": [
+        20.0,
+        42.0,
+        22.0,
+        44.0,
+        24.0
+      ],
+      "prev_ema": 31.0,
+      "expected": {
+        "predicted_date": "2026-06-28",
+        "predicted_start_lower": "2026-06-08",
+        "predicted_start_upper": "2026-07-18",
+        "confidence": 0.3751,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 27.1721,
+          "std_cycle": 8.749,
+          "n_records": 5,
+          "ema_cycle": 28.9,
+          "prior_weight": 0.5588,
+          "shrink_irregularity": 1.0,
+          "n_eff": 3.9481,
+          "dropped_illegal": 0,
+          "bayes_applied": true
+        }
+      }
+    },
+    {
+      "name": "with_dropped_illegal",
+      "last_period_start": "2026-06-01",
+      "cycles": [
+        4.0,
+        28.0,
+        29.0,
+        110.0,
+        28.0
+      ],
+      "prev_ema": 28.3,
+      "expected": {
+        "predicted_date": "2026-06-29",
+        "predicted_start_lower": "2026-06-26",
+        "predicted_start_upper": "2026-07-02",
+        "confidence": 0.8571,
+        "model_version": "bayesian_v1",
+        "model_params": {
+          "mean_cycle": 28.3215,
+          "std_cycle": 2.0,
+          "n_records": 3,
+          "ema_cycle": 28.21,
+          "prior_weight": 0.625,
+          "shrink_irregularity": 0.0,
+          "n_eff": 3.0,
+          "dropped_illegal": 2,
+          "bayes_applied": true
+        }
+      }
+    }
+  ],
+  "on_new_cycle_added": [
+    {
+      "name": "first_record_prev_none",
+      "new_start": "2026-01-01",
+      "prev_start": null,
+      "current_params": {
+        "mean_cycle": 28.0,
+        "std_cycle": 7.0,
+        "n_records": 0,
+        "ema_cycle": 28.0,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 1.0,
+        "cycle_lengths": []
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 28.0,
+          "std_cycle": 7.0,
+          "n_records": 0,
+          "ema_cycle": 28.0,
+          "prior_mean": 28.0,
+          "prior_std": 7.0,
+          "prior_weight": 1.0
+        },
+        "prediction": {
+          "predicted_date": "2026-01-29",
+          "predicted_start_lower": "2026-01-19",
+          "predicted_start_upper": "2026-02-08",
+          "confidence": 0.4,
+          "model_version": "cold_start_1",
+          "model_params": {
+            "mean_cycle": 28.0,
+            "std_cycle": 7.0,
+            "n_records": 0,
+            "ema_cycle": 28.0,
+            "prior_weight": 1.0,
+            "shrink_irregularity": 1.0,
+            "n_eff": 0.0,
+            "dropped_illegal": 0,
+            "bayes_applied": false
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": null
+      }
+    },
+    {
+      "name": "second_record_normal_29d",
+      "new_start": "2026-01-30",
+      "prev_start": "2026-01-01",
+      "current_params": {
+        "mean_cycle": 28.0,
+        "std_cycle": 7.0,
+        "n_records": 0,
+        "ema_cycle": 28.0,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 1.0,
+        "cycle_lengths": []
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.0,
+          "std_cycle": 7.0,
+          "n_records": 1,
+          "ema_cycle": 28.299999999999997,
+          "prior_mean": 28.924528301886788,
+          "prior_std": 1.9230478952816463,
+          "prior_weight": 0.8333333333333334,
+          "n_eff": 1.0,
+          "dropped_illegal": 0,
+          "bayes_applied": false,
+          "shrink_irregularity": 1.0
+        },
+        "prediction": {
+          "predicted_date": "2026-02-28",
+          "predicted_start_lower": "2026-02-18",
+          "predicted_start_upper": "2026-03-10",
+          "confidence": 0.5,
+          "model_version": "cold_start_2",
+          "model_params": {
+            "mean_cycle": 29.0,
+            "std_cycle": 7.0,
+            "n_records": 1,
+            "ema_cycle": 28.3,
+            "prior_weight": 0.8333,
+            "shrink_irregularity": 1.0,
+            "n_eff": 1.0,
+            "dropped_illegal": 0,
+            "bayes_applied": false
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": 29
+      }
+    },
+    {
+      "name": "hard_invalid_short_5d",
+      "new_start": "2026-03-06",
+      "prev_start": "2026-03-01",
+      "current_params": {
+        "mean_cycle": 29.0,
+        "std_cycle": 2.0,
+        "n_records": 3,
+        "ema_cycle": 28.7,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 0.625,
+        "cycle_lengths": [
+          28.0,
+          29.0,
+          30.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.0,
+          "std_cycle": 2.0,
+          "n_records": 3,
+          "ema_cycle": 28.7,
+          "prior_mean": 28.0,
+          "prior_std": 7.0,
+          "prior_weight": 0.625
+        },
+        "prediction": {
+          "predicted_date": "2026-04-04",
+          "predicted_start_lower": "2026-04-01",
+          "predicted_start_upper": "2026-04-07",
+          "confidence": 0.8571,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.078,
+            "std_cycle": 2.0,
+            "n_records": 3,
+            "ema_cycle": 28.81,
+            "prior_weight": 0.625,
+            "shrink_irregularity": 0.0,
+            "n_eff": 3.0,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": true,
+        "is_hard_invalid": true,
+        "cycle_length": 5
+      }
+    },
+    {
+      "name": "hard_invalid_long_95d",
+      "new_start": "2026-06-04",
+      "prev_start": "2026-03-01",
+      "current_params": {
+        "mean_cycle": 29.0,
+        "std_cycle": 2.0,
+        "n_records": 3,
+        "ema_cycle": 28.7,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 0.625,
+        "cycle_lengths": [
+          28.0,
+          29.0,
+          30.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.0,
+          "std_cycle": 2.0,
+          "n_records": 3,
+          "ema_cycle": 28.7,
+          "prior_mean": 28.0,
+          "prior_std": 7.0,
+          "prior_weight": 0.625
+        },
+        "prediction": {
+          "predicted_date": "2026-07-03",
+          "predicted_start_lower": "2026-06-30",
+          "predicted_start_upper": "2026-07-06",
+          "confidence": 0.8571,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.078,
+            "std_cycle": 2.0,
+            "n_records": 3,
+            "ema_cycle": 28.81,
+            "prior_weight": 0.625,
+            "shrink_irregularity": 0.0,
+            "n_eff": 3.0,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": true,
+        "is_hard_invalid": true,
+        "cycle_length": 95
+      }
+    },
+    {
+      "name": "deviation_anomalous_50d",
+      "new_start": "2026-04-20",
+      "prev_start": "2026-03-01",
+      "current_params": {
+        "mean_cycle": 29.0,
+        "std_cycle": 2.0,
+        "n_records": 3,
+        "ema_cycle": 28.7,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 0.625,
+        "cycle_lengths": [
+          28.0,
+          29.0,
+          30.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.24960315048385,
+          "std_cycle": 5.447376712095306,
+          "n_records": 4,
+          "ema_cycle": 35.166999999999994,
+          "prior_mean": 29.981429853588185,
+          "prior_std": 3.058749975239807,
+          "prior_weight": 0.603654883163571,
+          "n_eff": 3.2828784119106698,
+          "dropped_illegal": 0,
+          "bayes_applied": true,
+          "shrink_irregularity": 0.6118441780238264
+        },
+        "prediction": {
+          "predicted_date": "2026-05-19",
+          "predicted_start_lower": "2026-05-08",
+          "predicted_start_upper": "2026-05-30",
+          "confidence": 0.6109,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.2496,
+            "std_cycle": 5.4474,
+            "n_records": 4,
+            "ema_cycle": 35.167,
+            "prior_weight": 0.6037,
+            "shrink_irregularity": 0.6118,
+            "n_eff": 3.2829,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": true,
+        "is_hard_invalid": false,
+        "cycle_length": 50
+      }
+    },
+    {
+      "name": "deviation_boundary_exact_14d_not_anomalous",
+      "new_start": "2026-04-13",
+      "prev_start": "2026-03-01",
+      "current_params": {
+        "mean_cycle": 29.0,
+        "std_cycle": 2.0,
+        "n_records": 2,
+        "ema_cycle": 28.5,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 0.7143,
+        "cycle_lengths": [
+          28.0,
+          30.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.230109039296188,
+          "std_cycle": 4.926381102719396,
+          "n_records": 3,
+          "ema_cycle": 32.919999999999995,
+          "prior_mean": 29.837394794133818,
+          "prior_std": 3.1207466604182157,
+          "prior_weight": 0.6862911435357991,
+          "n_eff": 2.2855377008652655,
+          "dropped_illegal": 0,
+          "bayes_applied": true,
+          "shrink_irregularity": 0.48159527567984894
+        },
+        "prediction": {
+          "predicted_date": "2026-05-12",
+          "predicted_start_lower": "2026-05-02",
+          "predicted_start_upper": "2026-05-22",
+          "confidence": 0.6481,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.2301,
+            "std_cycle": 4.9264,
+            "n_records": 3,
+            "ema_cycle": 32.92,
+            "prior_weight": 0.6863,
+            "shrink_irregularity": 0.4816,
+            "n_eff": 2.2855,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": 43
+      }
+    },
+    {
+      "name": "seq_step_0_2025-09-01",
+      "new_start": "2025-09-01",
+      "prev_start": null,
+      "current_params": {
+        "mean_cycle": 28.0,
+        "std_cycle": 7.0,
+        "n_records": 0,
+        "ema_cycle": 28.0,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 1.0,
+        "cycle_lengths": []
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 28.0,
+          "std_cycle": 7.0,
+          "n_records": 0,
+          "ema_cycle": 28.0,
+          "prior_mean": 28.0,
+          "prior_std": 7.0,
+          "prior_weight": 1.0
+        },
+        "prediction": {
+          "predicted_date": "2025-09-29",
+          "predicted_start_lower": "2025-09-19",
+          "predicted_start_upper": "2025-10-09",
+          "confidence": 0.4,
+          "model_version": "cold_start_1",
+          "model_params": {
+            "mean_cycle": 28.0,
+            "std_cycle": 7.0,
+            "n_records": 0,
+            "ema_cycle": 28.0,
+            "prior_weight": 1.0,
+            "shrink_irregularity": 1.0,
+            "n_eff": 0.0,
+            "dropped_illegal": 0,
+            "bayes_applied": false
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": null
+      }
+    },
+    {
+      "name": "seq_step_1_2025-09-30",
+      "new_start": "2025-09-30",
+      "prev_start": "2025-09-01",
+      "current_params": {
+        "mean_cycle": 28.0,
+        "std_cycle": 7.0,
+        "n_records": 0,
+        "ema_cycle": 28.0,
+        "prior_mean": 28.0,
+        "prior_std": 7.0,
+        "prior_weight": 1.0,
+        "cycle_lengths": []
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.0,
+          "std_cycle": 7.0,
+          "n_records": 1,
+          "ema_cycle": 28.299999999999997,
+          "prior_mean": 28.924528301886788,
+          "prior_std": 1.9230478952816463,
+          "prior_weight": 0.8333333333333334,
+          "n_eff": 1.0,
+          "dropped_illegal": 0,
+          "bayes_applied": false,
+          "shrink_irregularity": 1.0
+        },
+        "prediction": {
+          "predicted_date": "2025-10-29",
+          "predicted_start_lower": "2025-10-19",
+          "predicted_start_upper": "2025-11-08",
+          "confidence": 0.5,
+          "model_version": "cold_start_2",
+          "model_params": {
+            "mean_cycle": 29.0,
+            "std_cycle": 7.0,
+            "n_records": 1,
+            "ema_cycle": 28.3,
+            "prior_weight": 0.8333,
+            "shrink_irregularity": 1.0,
+            "n_eff": 1.0,
+            "dropped_illegal": 0,
+            "bayes_applied": false
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": 29
+      }
+    },
+    {
+      "name": "seq_step_2_2025-10-28",
+      "new_start": "2025-10-28",
+      "prev_start": "2025-09-30",
+      "current_params": {
+        "mean_cycle": 29.0,
+        "std_cycle": 7.0,
+        "n_records": 1,
+        "ema_cycle": 28.299999999999997,
+        "prior_mean": 28.924528301886788,
+        "prior_std": 1.9230478952816463,
+        "prior_weight": 0.8333333333333334,
+        "n_eff": 1.0,
+        "dropped_illegal": 0,
+        "bayes_applied": false,
+        "shrink_irregularity": 1.0,
+        "cycle_lengths": [
+          29.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 28.35967567567567,
+          "std_cycle": 2.0,
+          "n_records": 2,
+          "ema_cycle": 28.209999999999994,
+          "prior_mean": 28.441327662986666,
+          "prior_std": 1.3905764146604642,
+          "prior_weight": 0.7142857142857143,
+          "n_eff": 2.0,
+          "dropped_illegal": 0,
+          "bayes_applied": false,
+          "shrink_irregularity": 0.0
+        },
+        "prediction": {
+          "predicted_date": "2025-11-25",
+          "predicted_start_lower": "2025-11-21",
+          "predicted_start_upper": "2025-11-29",
+          "confidence": 0.8571,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 28.3597,
+            "std_cycle": 2.0,
+            "n_records": 2,
+            "ema_cycle": 28.21,
+            "prior_weight": 0.7143,
+            "shrink_irregularity": 0.0,
+            "n_eff": 2.0,
+            "dropped_illegal": 0,
+            "bayes_applied": false
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": 28
+      }
+    },
+    {
+      "name": "seq_step_3_2025-11-27",
+      "new_start": "2025-11-27",
+      "prev_start": "2025-10-28",
+      "current_params": {
+        "mean_cycle": 28.35967567567567,
+        "std_cycle": 2.0,
+        "n_records": 2,
+        "ema_cycle": 28.209999999999994,
+        "prior_mean": 28.441327662986666,
+        "prior_std": 1.3905764146604642,
+        "prior_weight": 0.7142857142857143,
+        "n_eff": 2.0,
+        "dropped_illegal": 0,
+        "bayes_applied": false,
+        "shrink_irregularity": 0.0,
+        "cycle_lengths": [
+          29.0,
+          28.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.02979717081267,
+          "std_cycle": 2.0,
+          "n_records": 3,
+          "ema_cycle": 28.746999999999993,
+          "prior_mean": 29.02979717081267,
+          "prior_std": 1.1489592249913931,
+          "prior_weight": 0.625,
+          "n_eff": 3.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true,
+          "shrink_irregularity": 0.0
+        },
+        "prediction": {
+          "predicted_date": "2025-12-26",
+          "predicted_start_lower": "2025-12-23",
+          "predicted_start_upper": "2025-12-29",
+          "confidence": 0.8571,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.0298,
+            "std_cycle": 2.0,
+            "n_records": 3,
+            "ema_cycle": 28.747,
+            "prior_weight": 0.625,
+            "shrink_irregularity": 0.0,
+            "n_eff": 3.0,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": 30
+      }
+    },
+    {
+      "name": "seq_step_4_2025-12-26",
+      "new_start": "2025-12-26",
+      "prev_start": "2025-11-27",
+      "current_params": {
+        "mean_cycle": 29.02979717081267,
+        "std_cycle": 2.0,
+        "n_records": 3,
+        "ema_cycle": 28.746999999999993,
+        "prior_mean": 29.02979717081267,
+        "prior_std": 1.1489592249913931,
+        "prior_weight": 0.625,
+        "n_eff": 3.0,
+        "dropped_illegal": 0,
+        "bayes_applied": true,
+        "shrink_irregularity": 0.0,
+        "cycle_lengths": [
+          29.0,
+          28.0,
+          30.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.018544656713463,
+          "std_cycle": 2.0,
+          "n_records": 4,
+          "ema_cycle": 28.822899999999994,
+          "prior_mean": 29.018544656713463,
+          "prior_std": 1.005675672006492,
+          "prior_weight": 0.5555555555555556,
+          "n_eff": 4.0,
+          "dropped_illegal": 0,
+          "bayes_applied": true,
+          "shrink_irregularity": 0.0
+        },
+        "prediction": {
+          "predicted_date": "2026-01-24",
+          "predicted_start_lower": "2026-01-21",
+          "predicted_start_upper": "2026-01-27",
+          "confidence": 0.8571,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.0185,
+            "std_cycle": 2.0,
+            "n_records": 4,
+            "ema_cycle": 28.8229,
+            "prior_weight": 0.5556,
+            "shrink_irregularity": 0.0,
+            "n_eff": 4.0,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": 29
+      }
+    },
+    {
+      "name": "seq_step_5_2026-02-14",
+      "new_start": "2026-02-14",
+      "prev_start": "2025-12-26",
+      "current_params": {
+        "mean_cycle": 29.018544656713463,
+        "std_cycle": 2.0,
+        "n_records": 4,
+        "ema_cycle": 28.822899999999994,
+        "prior_mean": 29.018544656713463,
+        "prior_std": 1.005675672006492,
+        "prior_weight": 0.5555555555555556,
+        "n_eff": 4.0,
+        "dropped_illegal": 0,
+        "bayes_applied": true,
+        "shrink_irregularity": 0.0,
+        "cycle_lengths": [
+          29.0,
+          28.0,
+          30.0,
+          29.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.486652951554646,
+          "std_cycle": 4.546893711562039,
+          "n_records": 5,
+          "ema_cycle": 35.17603,
+          "prior_mean": 29.877867878790077,
+          "prior_std": 2.4492498167537913,
+          "prior_weight": 0.5387036293022632,
+          "n_eff": 4.281541330018646,
+          "dropped_illegal": 0,
+          "bayes_applied": true,
+          "shrink_irregularity": 0.38672342789050984
+        },
+        "prediction": {
+          "predicted_date": "2026-03-15",
+          "predicted_start_lower": "2026-03-06",
+          "predicted_start_upper": "2026-03-24",
+          "confidence": 0.6752,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.4867,
+            "std_cycle": 4.5469,
+            "n_records": 5,
+            "ema_cycle": 35.176,
+            "prior_weight": 0.5387,
+            "shrink_irregularity": 0.3867,
+            "n_eff": 4.2815,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": true,
+        "is_hard_invalid": false,
+        "cycle_length": 50
+      }
+    },
+    {
+      "name": "seq_step_6_2026-03-15",
+      "new_start": "2026-03-15",
+      "prev_start": "2026-02-14",
+      "current_params": {
+        "mean_cycle": 29.486652951554646,
+        "std_cycle": 4.546893711562039,
+        "n_records": 5,
+        "ema_cycle": 35.17603,
+        "prior_mean": 29.877867878790077,
+        "prior_std": 2.4492498167537913,
+        "prior_weight": 0.5387036293022632,
+        "n_eff": 4.281541330018646,
+        "dropped_illegal": 0,
+        "bayes_applied": true,
+        "shrink_irregularity": 0.38672342789050984,
+        "cycle_lengths": [
+          29.0,
+          28.0,
+          30.0,
+          29.0,
+          50.0
+        ]
+      },
+      "expected": {
+        "model_params": {
+          "mean_cycle": 29.468995973404926,
+          "std_cycle": 3.9828119083976863,
+          "n_records": 6,
+          "ema_cycle": 33.323221,
+          "prior_mean": 29.668359561709703,
+          "prior_std": 1.9422108449267705,
+          "prior_weight": 0.4863464704173525,
+          "n_eff": 5.28073668491787,
+          "dropped_illegal": 0,
+          "bayes_applied": true,
+          "shrink_irregularity": 0.24570297709942157
+        },
+        "prediction": {
+          "predicted_date": "2026-04-13",
+          "predicted_start_lower": "2026-04-06",
+          "predicted_start_upper": "2026-04-20",
+          "confidence": 0.7155,
+          "model_version": "bayesian_v1",
+          "model_params": {
+            "mean_cycle": 29.469,
+            "std_cycle": 3.9828,
+            "n_records": 6,
+            "ema_cycle": 33.3232,
+            "prior_weight": 0.4863,
+            "shrink_irregularity": 0.2457,
+            "n_eff": 5.2807,
+            "dropped_illegal": 0,
+            "bayes_applied": true
+          }
+        },
+        "is_anomalous": false,
+        "is_hard_invalid": false,
+        "cycle_length": 29
+      }
+    }
+  ],
+  "evaluate_predictions": [
+    {
+      "name": "empty",
+      "predictions": [],
+      "expected": {
+        "error": "no_evaluated_predictions"
+      }
+    },
+    {
+      "name": "unverified_only",
+      "predictions": [
+        {
+          "id": 1,
+          "predicted_date": "2026-02-01",
+          "predicted_start_lower": "2026-01-28",
+          "predicted_start_upper": "2026-02-05",
+          "actual_date": null,
+          "created_at": "2026-01-05 10:00:00"
+        }
+      ],
+      "expected": {
+        "error": "no_evaluated_predictions"
+      }
+    },
+    {
+      "name": "single_exact_plus_unverified",
+      "predictions": [
+        {
+          "id": 1,
+          "predicted_date": "2026-02-01",
+          "predicted_start_lower": "2026-01-29",
+          "predicted_start_upper": "2026-02-04",
+          "actual_date": "2026-02-01",
+          "created_at": "2026-01-05 10:00:00"
+        },
+        {
+          "id": 2,
+          "predicted_date": "2026-03-01",
+          "predicted_start_lower": "2026-02-26",
+          "predicted_start_upper": "2026-03-04",
+          "actual_date": null,
+          "created_at": "2026-02-01 10:00:00"
+        }
+      ],
+      "expected": {
+        "total_predictions": 2,
+        "evaluated": 1,
+        "hit_rate_pm1": 1.0,
+        "hit_rate_pm2": 1.0,
+        "hit_rate_pm3": 1.0,
+        "hit_rate_pm5": 1.0,
+        "hit_rate_pm7": 1.0,
+        "mae": 0.0,
+        "interval_coverage": 1.0,
+        "bias": 0.0,
+        "trend": "stable"
+      }
+    },
+    {
+      "name": "improving_trend_unordered",
+      "predictions": [
+        {
+          "id": 4,
+          "predicted_date": "2026-05-01",
+          "predicted_start_lower": "2026-04-28",
+          "predicted_start_upper": "2026-05-04",
+          "actual_date": "2026-05-01",
+          "created_at": "2026-04-01 10:00:00"
+        },
+        {
+          "id": 1,
+          "predicted_date": "2026-02-01",
+          "predicted_start_lower": "2026-01-28",
+          "predicted_start_upper": "2026-02-05",
+          "actual_date": "2026-02-07",
+          "created_at": "2026-01-01 10:00:00"
+        },
+        {
+          "id": 3,
+          "predicted_date": "2026-04-01",
+          "predicted_start_lower": "2026-03-29",
+          "predicted_start_upper": "2026-04-04",
+          "actual_date": "2026-04-02",
+          "created_at": "2026-03-01 10:00:00"
+        },
+        {
+          "id": 2,
+          "predicted_date": "2026-03-01",
+          "predicted_start_lower": "2026-02-26",
+          "predicted_start_upper": "2026-03-04",
+          "actual_date": "2026-02-24",
+          "created_at": "2026-02-01 10:00:00"
+        }
+      ],
+      "expected": {
+        "total_predictions": 4,
+        "evaluated": 4,
+        "hit_rate_pm1": 0.5,
+        "hit_rate_pm2": 0.5,
+        "hit_rate_pm3": 0.5,
+        "hit_rate_pm5": 0.75,
+        "hit_rate_pm7": 1.0,
+        "mae": 3.0,
+        "interval_coverage": 0.5,
+        "bias": 0.5,
+        "trend": "improving"
+      }
+    },
+    {
+      "name": "degrading_trend_with_ties",
+      "predictions": [
+        {
+          "id": 10,
+          "predicted_date": "2026-01-15",
+          "predicted_start_lower": "2026-01-12",
+          "predicted_start_upper": "2026-01-18",
+          "actual_date": "2026-01-15",
+          "created_at": "2026-01-01 00:00:00"
+        },
+        {
+          "id": 11,
+          "predicted_date": "2026-01-15",
+          "predicted_start_lower": "2026-01-12",
+          "predicted_start_upper": "2026-01-18",
+          "actual_date": "2026-01-16",
+          "created_at": "2026-01-01 00:00:00"
+        },
+        {
+          "id": 12,
+          "predicted_date": "2026-02-15",
+          "predicted_start_lower": "2026-02-12",
+          "predicted_start_upper": "2026-02-18",
+          "actual_date": "2026-02-19",
+          "created_at": "2026-01-01 00:00:00"
+        },
+        {
+          "id": 13,
+          "predicted_date": "2026-03-15",
+          "predicted_start_lower": "2026-03-12",
+          "predicted_start_upper": "2026-03-18",
+          "actual_date": "2026-03-23",
+          "created_at": "2026-01-01 00:00:00"
+        },
+        {
+          "id": 14,
+          "predicted_date": "2026-04-15",
+          "predicted_start_lower": "2026-04-12",
+          "predicted_start_upper": "2026-04-18",
+          "actual_date": "2026-04-10",
+          "created_at": "2026-01-01 00:00:00"
+        }
+      ],
+      "expected": {
+        "total_predictions": 5,
+        "evaluated": 5,
+        "hit_rate_pm1": 0.4,
+        "hit_rate_pm2": 0.4,
+        "hit_rate_pm3": 0.4,
+        "hit_rate_pm5": 0.8,
+        "hit_rate_pm7": 0.8,
+        "mae": 3.6,
+        "interval_coverage": 0.4,
+        "bias": 1.6,
+        "trend": "degrading"
+      }
+    },
+    {
+      "name": "stable_trend_4_items",
+      "predictions": [
+        {
+          "id": 1,
+          "predicted_date": "2026-01-20",
+          "predicted_start_lower": "2026-01-17",
+          "predicted_start_upper": "2026-01-23",
+          "actual_date": "2026-01-21",
+          "created_at": "2026-01-01 00:00:00"
+        },
+        {
+          "id": 2,
+          "predicted_date": "2026-02-20",
+          "predicted_start_lower": "2026-02-17",
+          "predicted_start_upper": "2026-02-23",
+          "actual_date": "2026-02-19",
+          "created_at": "2026-02-01 00:00:00"
+        },
+        {
+          "id": 3,
+          "predicted_date": "2026-03-20",
+          "predicted_start_lower": "2026-03-17",
+          "predicted_start_upper": "2026-03-23",
+          "actual_date": "2026-03-21",
+          "created_at": "2026-03-01 00:00:00"
+        },
+        {
+          "id": 4,
+          "predicted_date": "2026-04-20",
+          "predicted_start_lower": "2026-04-17",
+          "predicted_start_upper": "2026-04-23",
+          "actual_date": "2026-04-19",
+          "created_at": "2026-04-01 00:00:00"
+        }
+      ],
+      "expected": {
+        "total_predictions": 4,
+        "evaluated": 4,
+        "hit_rate_pm1": 1.0,
+        "hit_rate_pm2": 1.0,
+        "hit_rate_pm3": 1.0,
+        "hit_rate_pm5": 1.0,
+        "hit_rate_pm7": 1.0,
+        "mae": 1.0,
+        "interval_coverage": 1.0,
+        "bias": 0.0,
+        "trend": "stable"
+      }
+    }
+  ],
+  "compute_fertility_window": [
+    {
+      "name": "null_predicted",
+      "predicted_period_date": null,
+      "current_period_start": "2026-03-01",
+      "current_period_end": null,
+      "cycle_std": 7.0,
+      "predicted_period_days": 5,
+      "expected": {
+        "available": false,
+        "ovulation_date": null,
+        "ovulation_sigma_days": 0.0,
+        "fertile_window": null,
+        "less_certain_windows": [],
+        "predicted_period_days": 5,
+        "current_period_predicted_end": null,
+        "next_period_predicted_end": null,
+        "predicted_period_windows": [],
+        "basis": "calendar_rule"
+      }
+    },
+    {
+      "name": "null_start",
+      "predicted_period_date": "2026-03-29",
+      "current_period_start": null,
+      "current_period_end": null,
+      "cycle_std": 2.5,
+      "predicted_period_days": null,
+      "expected": {
+        "available": false,
+        "ovulation_date": null,
+        "ovulation_sigma_days": 0.0,
+        "fertile_window": null,
+        "less_certain_windows": [],
+        "predicted_period_days": null,
+        "current_period_predicted_end": null,
+        "next_period_predicted_end": null,
+        "predicted_period_windows": [],
+        "basis": "calendar_rule"
+      }
+    },
+    {
+      "name": "open_period_with_predicted_days",
+      "predicted_period_date": "2026-03-29",
+      "current_period_start": "2026-03-01",
+      "current_period_end": null,
+      "cycle_std": 2.345,
+      "predicted_period_days": 5,
+      "expected": {
+        "available": true,
+        "ovulation_date": "2026-03-15",
+        "ovulation_sigma_days": 2.35,
+        "fertile_window": {
+          "start": "2026-03-10",
+          "end": "2026-03-16"
+        },
+        "less_certain_windows": [
+          {
+            "phase": "follicular",
+            "basis": "predicted",
+            "start": "2026-03-06",
+            "end": "2026-03-09"
+          },
+          {
+            "phase": "luteal",
+            "basis": null,
+            "start": "2026-03-17",
+            "end": "2026-03-28"
+          }
+        ],
+        "predicted_period_days": 5,
+        "current_period_predicted_end": "2026-03-05",
+        "next_period_predicted_end": "2026-04-02",
+        "predicted_period_windows": [
+          {
+            "start": "2026-03-01",
+            "end": "2026-03-05"
+          },
+          {
+            "start": "2026-03-29",
+            "end": "2026-04-02"
+          }
+        ],
+        "basis": "calendar_rule"
+      }
+    },
+    {
+      "name": "open_period_without_predicted_days",
+      "predicted_period_date": "2026-03-29",
+      "current_period_start": "2026-03-01",
+      "current_period_end": null,
+      "cycle_std": 7.0,
+      "predicted_period_days": null,
+      "expected": {
+        "available": true,
+        "ovulation_date": "2026-03-15",
+        "ovulation_sigma_days": 7.0,
+        "fertile_window": {
+          "start": "2026-03-10",
+          "end": "2026-03-16"
+        },
+        "less_certain_windows": [
+          {
+            "phase": "luteal",
+            "basis": null,
+            "start": "2026-03-17",
+            "end": "2026-03-28"
+          }
+        ],
+        "predicted_period_days": null,
+        "current_period_predicted_end": null,
+        "next_period_predicted_end": null,
+        "predicted_period_windows": [],
+        "basis": "calendar_rule"
+      }
+    },
+    {
+      "name": "closed_period_with_predicted_days",
+      "predicted_period_date": "2026-03-29",
+      "current_period_start": "2026-03-01",
+      "current_period_end": "2026-03-06",
+      "cycle_std": 2.675,
+      "predicted_period_days": 5,
+      "expected": {
+        "available": true,
+        "ovulation_date": "2026-03-15",
+        "ovulation_sigma_days": 2.67,
+        "fertile_window": {
+          "start": "2026-03-10",
+          "end": "2026-03-16"
+        },
+        "less_certain_windows": [
+          {
+            "phase": "follicular",
+            "basis": "actual",
+            "start": "2026-03-07",
+            "end": "2026-03-09"
+          },
+          {
+            "phase": "luteal",
+            "basis": null,
+            "start": "2026-03-17",
+            "end": "2026-03-28"
+          }
+        ],
+        "predicted_period_days": 5,
+        "current_period_predicted_end": "2026-03-06",
+        "next_period_predicted_end": "2026-04-02",
+        "predicted_period_windows": [
+          {
+            "start": "2026-03-29",
+            "end": "2026-04-02"
+          }
+        ],
+        "basis": "calendar_rule"
+      }
+    },
+    {
+      "name": "closed_period_without_predicted_days",
+      "predicted_period_date": "2026-03-29",
+      "current_period_start": "2026-03-01",
+      "current_period_end": "2026-03-05",
+      "cycle_std": 4.125,
+      "predicted_period_days": null,
+      "expected": {
+        "available": true,
+        "ovulation_date": "2026-03-15",
+        "ovulation_sigma_days": 4.12,
+        "fertile_window": {
+          "start": "2026-03-10",
+          "end": "2026-03-16"
+        },
+        "less_certain_windows": [
+          {
+            "phase": "follicular",
+            "basis": "actual",
+            "start": "2026-03-06",
+            "end": "2026-03-09"
+          },
+          {
+            "phase": "luteal",
+            "basis": null,
+            "start": "2026-03-17",
+            "end": "2026-03-28"
+          }
+        ],
+        "predicted_period_days": null,
+        "current_period_predicted_end": null,
+        "next_period_predicted_end": null,
+        "predicted_period_windows": [],
+        "basis": "calendar_rule"
+      }
+    },
+    {
+      "name": "short_cycle_ovulation_before_start",
+      "predicted_period_date": "2026-03-14",
+      "current_period_start": "2026-03-01",
+      "current_period_end": "2026-03-04",
+      "cycle_std": 3.5,
+      "predicted_period_days": 4,
+      "expected": {
+        "available": true,
+        "ovulation_date": null,
+        "ovulation_sigma_days": 3.5,
+        "fertile_window": null,
+        "less_certain_windows": [],
+        "predicted_period_days": 4,
+        "current_period_predicted_end": "2026-03-04",
+        "next_period_predicted_end": "2026-03-17",
+        "predicted_period_windows": [
+          {
+            "start": "2026-03-14",
+            "end": "2026-03-17"
+          }
+        ],
+        "basis": "calendar_rule"
+      }
+    },
+    {
+      "name": "short_cycle_fertile_clamped",
+      "predicted_period_date": "2026-03-18",
+      "current_period_start": "2026-03-01",
+      "current_period_end": null,
+      "cycle_std": -1.5,
+      "predicted_period_days": 5,
+      "expected": {
+        "available": true,
+        "ovulation_date": "2026-03-04",
+        "ovulation_sigma_days": 0.0,
+        "fertile_window": {
+          "start": "2026-03-01",
+          "end": "2026-03-05"
+        },
+        "less_certain_windows": [
+          {
+            "phase": "luteal",
+            "basis": null,
+            "start": "2026-03-06",
+            "end": "2026-03-17"
+          }
+        ],
+        "predicted_period_days": 5,
+        "current_period_predicted_end": "2026-03-05",
+        "next_period_predicted_end": "2026-03-22",
+        "predicted_period_windows": [
+          {
+            "start": "2026-03-01",
+            "end": "2026-03-05"
+          },
+          {
+            "start": "2026-03-18",
+            "end": "2026-03-22"
+          }
+        ],
+        "basis": "calendar_rule"
+      }
+    }
+  ],
+  "prediction_trace": [
+    {
+      "name": "cold_n0",
+      "last_period_start": "2026-01-01",
+      "cycles": [],
+      "prev_ema": null,
+      "expected": {
+        "steps": [
+          {
+            "step": 1,
+            "name": "加权平均",
+            "value": 28.0,
+            "formula": "weighted_mean(cycles, N=6, decay=0.85, robust_weights)",
+            "description": "最近6次周期加权平均，异常值按偏离程度降权而非丢弃"
+          },
+          {
+            "step": 2,
+            "name": "EMA更新",
+            "value": 28.0,
+            "formula": "ema_update(prev=28.0, new=None, alpha=0.3)",
+            "description": "EMA学习率0.3；无合法周期（n=0），EMA 保持 28.0 不更新"
+          },
+          {
+            "step": 3,
+            "name": "融合预测",
+            "value": 28.0,
+            "formula": "先验均值 28.0（冷启动，无周期数据）",
+            "description": "尚无有效周期（只有锚点记录），使用先验默认值28天"
+          },
+          {
+            "step": 4,
+            "name": "贝叶斯调整",
+            "value": 28.0,
+            "formula": "无合法周期 → 不执行共轭后验与附加收缩，直接取先验均值 28.0",
+            "description": "无周期数据，后验退化为先验均值（与实际预测一致）"
+          },
+          {
+            "step": 5,
+            "name": "预测区间",
+            "value": "28.0 ± 10.5 天",
+            "formula": "std=7.0, mult=1.5（未叠加展宽修正：冷启动，有效周期不足 2 个）, n_eff修正=1.0",
+            "description": "标准差7.0（加权，含降权样本），区间半宽10.5天；未叠加展宽修正（区间 = std·INTERVAL_STD_MULT：冷启动，有效周期不足 2 个）"
+          },
+          {
+            "step": 6,
+            "name": "置信度",
+            "value": 0.4,
+            "formula": "冷启动置信度 0.4（无有效周期，按 1 条记录档）",
+            "description": "标准差越小置信度越高"
+          }
+        ],
+        "final_prediction": {
+          "predicted_cycle_length": 28.0,
+          "confidence": 0.4,
+          "std": 7.0,
+          "interval": 10.5
+        },
+        "algorithm_stage": "empty",
+        "bayes_applied": false,
+        "n": 0,
+        "model_version": "cold_start_1"
+      }
+    },
+    {
+      "name": "cold_n1",
+      "last_period_start": "2026-01-30",
+      "cycles": [
+        29.0
+      ],
+      "prev_ema": 28.0,
+      "expected": {
+        "steps": [
+          {
+            "step": 1,
+            "name": "加权平均",
+            "value": 29.0,
+            "formula": "weighted_mean(cycles, N=6, decay=0.85, robust_weights)",
+            "description": "最近6次周期加权平均，异常值按偏离程度降权而非丢弃（29×1.00）"
+          },
+          {
+            "step": 2,
+            "name": "EMA更新",
+            "value": 28.3,
+            "formula": "ema_update(prev=28.0, new=29.0, alpha=0.3)",
+            "description": "EMA学习率0.3；冷启动种子 prev 取先验均值 28.0（n=1 时忽略传入的 prev_ema）"
+          },
+          {
+            "step": 3,
+            "name": "融合预测",
+            "value": 29.0,
+            "formula": "最近周期长度 29（冷启动，1个有效周期）",
+            "description": "仅有1个有效周期，直接使用该周期长度"
+          },
+          {
+            "step": 5,
+            "name": "预测区间",
+            "value": "29.0 ± 10.5 天",
+            "formula": "std=7.0, mult=1.5（未叠加展宽修正：冷启动，有效周期不足 2 个）, n_eff修正=1.0",
+            "description": "标准差7.0（加权，含降权样本），区间半宽10.5天；未叠加展宽修正（区间 = std·INTERVAL_STD_MULT：冷启动，有效周期不足 2 个）"
+          },
+          {
+            "step": 6,
+            "name": "置信度",
+            "value": 0.5,
+            "formula": "冷启动置信度 0.5（1 个有效周期，按 2 条记录档）",
+            "description": "标准差越小置信度越高"
+          }
+        ],
+        "final_prediction": {
+          "predicted_cycle_length": 29.0,
+          "confidence": 0.5,
+          "std": 7.0,
+          "interval": 10.5
+        },
+        "algorithm_stage": "cold_1",
+        "bayes_applied": false,
+        "n": 1,
+        "model_version": "cold_start_2"
+      }
+    },
+    {
+      "name": "cold_n2",
+      "last_period_start": "2026-02-28",
+      "cycles": [
+        29.0,
+        29.0
+      ],
+      "prev_ema": 28.3,
+      "expected": {
+        "steps": [
+          {
+            "step": 1,
+            "name": "加权平均",
+            "value": 29.0,
+            "formula": "weighted_mean(cycles, N=6, decay=0.85, robust_weights)",
+            "description": "最近6次周期加权平均，异常值按偏离程度降权而非丢弃（29×1.00, 29×1.00）"
+          },
+          {
+            "step": 2,
+            "name": "EMA更新",
+            "value": 28.51,
+            "formula": "ema_update(prev=28.3, new=29.0, alpha=0.3)",
+            "description": "EMA学习率0.3"
+          },
+          {
+            "step": 3,
+            "name": "融合预测",
+            "value": 28.8,
+            "formula": "(1-0.4)*29.0 + 0.4*28.51",
+            "description": "加权平均与EMA的加权融合（冷启动 n=2，本值即为最终预测）"
+          },
+          {
+            "step": 5,
+            "name": "预测区间",
+            "value": "28.8 ± 3.7 天",
+            "formula": "std=2.0, mult=1.5（irr=0，无附加展宽）, n_eff修正=1.225",
+            "description": "标准差2.0（加权，含降权样本），区间半宽3.7天；含小样本不确定性展宽 √(1+1/n_eff)（F4 校准）"
+          },
+          {
+            "step": 6,
+            "name": "置信度",
+            "value": 0.857,
+            "formula": "clamp(1.0 - 2.0/14.0, 0.3, 0.95)",
+            "description": "标准差越小置信度越高"
+          }
+        ],
+        "final_prediction": {
+          "predicted_cycle_length": 28.8,
+          "confidence": 0.857,
+          "std": 2.0,
+          "interval": 3.7
+        },
+        "algorithm_stage": "cold_2",
+        "bayes_applied": false,
+        "n": 2,
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "bayesian_regular",
+      "last_period_start": "2026-05-01",
+      "cycles": [
+        28.0,
+        29.0,
+        28.0,
+        29.0,
+        28.0
+      ],
+      "prev_ema": 28.5,
+      "expected": {
+        "steps": [
+          {
+            "step": 1,
+            "name": "加权平均",
+            "value": 28.39,
+            "formula": "weighted_mean(cycles, N=6, decay=0.85, robust_weights)",
+            "description": "最近6次周期加权平均，异常值按偏离程度降权而非丢弃（28×1.00, 29×1.00, 28×1.00, 29×1.00, 28×1.00）"
+          },
+          {
+            "step": 2,
+            "name": "EMA更新",
+            "value": 28.35,
+            "formula": "ema_update(prev=28.5, new=28.0, alpha=0.3)",
+            "description": "EMA学习率0.3"
+          },
+          {
+            "step": 3,
+            "name": "融合预测",
+            "value": 28.38,
+            "formula": "(1-0.4)*28.39 + 0.4*28.35（未进入最终预测）",
+            "description": "加权平均与EMA的加权融合 —— **仅供审计**：n≥3 时最终预测由下一步直接对历史周期求共轭后验，不使用本值"
+          },
+          {
+            "step": 4,
+            "name": "贝叶斯调整",
+            "value": 28.39,
+            "formula": "normal_conjugate_posterior(mu_0=28.0, sigma_0=7.0, obs=全部合法周期(5个), w=robust_weights×decay^Δ(0.85), n_eff=4.75)",
+            "description": "共轭后验均值即为最终预测周期：窗口离散度低于规律阈值 3.0 天，不附加先验收缩（本步直接对全部 5 个合法周期求后验，不消费上一步的融合值 28.38；后验权重＝鲁棒降权×时间衰减 0.85，后验有效样本量 4.75；审计用先验权重 50.0%——本档离散度未达附加收缩阈值，该权重只作审计、不进入点预测）"
+          },
+          {
+            "step": 5,
+            "name": "预测区间",
+            "value": "28.4 ± 3.3 天",
+            "formula": "std=2.0, mult=1.5（irr=0，无附加展宽）, n_eff修正=1.095",
+            "description": "标准差2.0（加权，含降权样本），区间半宽3.3天；含小样本不确定性展宽 √(1+1/n_eff)（F4 校准）"
+          },
+          {
+            "step": 6,
+            "name": "置信度",
+            "value": 0.857,
+            "formula": "clamp(1.0 - 2.0/14.0, 0.3, 0.95)",
+            "description": "标准差越小置信度越高"
+          }
+        ],
+        "final_prediction": {
+          "predicted_cycle_length": 28.39,
+          "confidence": 0.857,
+          "std": 2.0,
+          "interval": 3.3
+        },
+        "algorithm_stage": "bayesian",
+        "bayes_applied": true,
+        "n": 5,
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "bayesian_irregular",
+      "last_period_start": "2026-05-01",
+      "cycles": [
+        21.0,
+        38.0,
+        23.0,
+        41.0,
+        25.0
+      ],
+      "prev_ema": 30.2,
+      "expected": {
+        "steps": [
+          {
+            "step": 1,
+            "name": "加权平均",
+            "value": 27.48,
+            "formula": "weighted_mean(cycles, N=6, decay=0.85, robust_weights)",
+            "description": "最近6次周期加权平均，异常值按偏离程度降权而非丢弃（21×1.00, 38×0.68, 23×1.00, 41×0.41, 25×1.00）"
+          },
+          {
+            "step": 2,
+            "name": "EMA更新",
+            "value": 28.64,
+            "formula": "ema_update(prev=30.2, new=25.0, alpha=0.3)",
+            "description": "EMA学习率0.3"
+          },
+          {
+            "step": 3,
+            "name": "融合预测",
+            "value": 27.94,
+            "formula": "(1-0.4)*27.48 + 0.4*28.64（未进入最终预测）",
+            "description": "加权平均与EMA的加权融合 —— **仅供审计**：n≥3 时最终预测由下一步直接对历史周期求共轭后验，不使用本值"
+          },
+          {
+            "step": 4,
+            "name": "贝叶斯调整",
+            "value": 27.81,
+            "formula": "normal_conjugate_posterior(mu_0=28.0, sigma_0=7.0, obs=全部合法周期(5个), w=robust_weights×decay^Δ(0.85), n_eff=4.33) + 1.0·pw·(28.0 − mu_post)",
+            "description": "周期离散度较高（加权 std=8.25 天），按离散度比例附加先验收缩 52.0%：后验 27.6 → 最终 27.81"
+          },
+          {
+            "step": 5,
+            "name": "预测区间",
+            "value": "27.8 ± 18.2 天",
+            "formula": "std=8.25, mult=1.5+0.5·irr(1.0)=2.0, n_eff修正=1.103",
+            "description": "标准差8.25（加权，含降权样本），区间半宽18.2天；含小样本不确定性展宽 √(1+1/n_eff)（F4 校准）与不规律附加展宽（irr=1.0）"
+          },
+          {
+            "step": 6,
+            "name": "置信度",
+            "value": 0.41,
+            "formula": "clamp(1.0 - 8.25/14.0, 0.3, 0.95)",
+            "description": "标准差越小置信度越高"
+          }
+        ],
+        "final_prediction": {
+          "predicted_cycle_length": 27.81,
+          "confidence": 0.41,
+          "std": 8.25,
+          "interval": 18.2
+        },
+        "algorithm_stage": "bayesian",
+        "bayes_applied": true,
+        "n": 5,
+        "model_version": "bayesian_v1"
+      }
+    },
+    {
+      "name": "bayesian_anomalous_and_illegal",
+      "last_period_start": "2026-05-01",
+      "cycles": [
+        4.0,
+        28.0,
+        29.0,
+        65.0,
+        28.0,
+        100.0,
+        29.0
+      ],
+      "prev_ema": 31.0,
+      "expected": {
+        "steps": [
+          {
+            "step": 1,
+            "name": "加权平均",
+            "value": 29.82,
+            "formula": "weighted_mean(cycles, N=6, decay=0.85, robust_weights)",
+            "description": "最近6次周期加权平均，异常值按偏离程度降权而非丢弃（28×1.00, 29×1.00, 65×0.15, 28×1.00, 29×1.00）"
+          },
+          {
+            "step": 2,
+            "name": "EMA更新",
+            "value": 30.4,
+            "formula": "ema_update(prev=31.0, new=29.0, alpha=0.3)",
+            "description": "EMA学习率0.3"
+          },
+          {
+            "step": 3,
+            "name": "融合预测",
+            "value": 30.05,
+            "formula": "(1-0.4)*29.82 + 0.4*30.4（未进入最终预测）",
+            "description": "加权平均与EMA的加权融合 —— **仅供审计**：n≥3 时最终预测由下一步直接对历史周期求共轭后验，不使用本值"
+          },
+          {
+            "step": 4,
+            "name": "贝叶斯调整",
+            "value": 28.64,
+            "formula": "normal_conjugate_posterior(mu_0=28.0, sigma_0=7.0, obs=全部合法周期(5个), w=robust_weights×decay^Δ(0.85), n_eff=4.02) + 1.0·pw·(28.0 − mu_post)",
+            "description": "周期离散度较高（加权 std=7.8 天），按离散度比例附加先验收缩 53.9%：后验 29.39 → 最终 28.64"
+          },
+          {
+            "step": 5,
+            "name": "预测区间",
+            "value": "28.6 ± 17.3 天",
+            "formula": "std=7.8, mult=1.5+0.5·irr(1.0)=2.0, n_eff修正=1.111",
+            "description": "标准差7.8（加权，含降权样本），区间半宽17.3天；含小样本不确定性展宽 √(1+1/n_eff)（F4 校准）与不规律附加展宽（irr=1.0）；2 个非法周期（<7或>90天）已剔除"
+          },
+          {
+            "step": 6,
+            "name": "置信度",
+            "value": 0.443,
+            "formula": "clamp(1.0 - 7.8/14.0, 0.3, 0.95)",
+            "description": "标准差越小置信度越高"
+          }
+        ],
+        "final_prediction": {
+          "predicted_cycle_length": 28.64,
+          "confidence": 0.443,
+          "std": 7.8,
+          "interval": 17.3
+        },
+        "algorithm_stage": "bayesian",
+        "bayes_applied": true,
+        "n": 5,
+        "model_version": "bayesian_v1"
+      }
+    }
+  ],
+  "config": {
+    "numbers": {
+      "PRIOR_MEAN": 28.0,
+      "PRIOR_STD": 7.0,
+      "WEIGHT_DECAY": 0.85,
+      "EMA_ALPHA": 0.3,
+      "EMA_FUSION_WEIGHT": 0.4,
+      "INTERVAL_STD_MULT": 1.5,
+      "PRIOR_DECAY_K": 5.0,
+      "MIN_STD": 2.0,
+      "CONFIDENCE_MIN": 0.3,
+      "CONFIDENCE_MAX": 0.95,
+      "CONFIDENCE_COLD_0": 0.3,
+      "CONFIDENCE_COLD_1": 0.4,
+      "CONFIDENCE_COLD_2": 0.5,
+      "CONFIDENCE_STD_SCALE": 14.0,
+      "ROBUST_MAD_SCALE": 1.4826,
+      "ROBUST_MIN_SCALE": 2.0,
+      "ROBUST_SOFT_Z": 1.5,
+      "ROBUST_MIN_WEIGHT": 0.15,
+      "ADAPTIVE_SHRINK_REGULAR_STD": 3.0,
+      "ADAPTIVE_SHRINK_IRREGULAR_STD": 7.0,
+      "INTERVAL_IRREGULAR_EXTRA": 0.5
+    },
+    "ints": {
+      "STATS_WINDOW_N": 12,
+      "MIN_CYCLE_DAYS": 7,
+      "MAX_CYCLE_DAYS": 90,
+      "ANOMALY_DEVIATION_THRESHOLD": 14,
+      "ANOMALY_CONSECUTIVE_THRESHOLD": 3,
+      "COLD_START_THRESHOLD": 3,
+      "STATS_WINDOW_N_V080": 6,
+      "LUTEAL_PHASE_DAYS": 14,
+      "FERTILE_PRE_OVULATION_DAYS": 5,
+      "FERTILE_POST_OVULATION_DAYS": 1
+    },
+    "texts": {
+      "MODEL_VERSION_NONE": "none",
+      "MODEL_VERSION_COLD_1": "cold_start_1",
+      "MODEL_VERSION_COLD_2": "cold_start_2",
+      "MODEL_VERSION_BAYESIAN": "bayesian_v1",
+      "PRODUCT_NAME": "PeriodIQ",
+      "DATA_ANOMALY_CODE": "DATA_ANOMALY",
+      "API_PREFIX": "/api/v1"
+    }
+  }
+}

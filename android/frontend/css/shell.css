@@ -1,0 +1,96 @@
+/* ===== shell.css =====
+ * 1 Role: W1-1R Win desktop shell. A glass titlebar lid, the five-destination dock turned into a slim floating glass capsule on the left edge (vertically centred, same dock, no sidebar slab), and a page canvas whose starfield runs edge to edge under both. Defines --shell-h, --rail-w, --rail-ax and the --shell-col contract, offsets #app / pages / transition overlays, styles the injected #app-titlebar. Everything is inert unless <body> has piq-shell.
+ * 2 Dependencies: css/base.css (--ink --bg --hl --sh --gl --ds --e --grain; .dock .pill .tb .nb .glass .page .pgi #app; #app-titlebar{display:none}); load after every page stylesheet. DOM comes from js/shell/desktop.js: #app-titlebar > .titlebar-drag(.titlebar-mark .titlebar-product .titlebar-sep .titlebar-page#titlebar-page) + .titlebar-actions(.titlebar-btn[data-win] x3, .titlebar-close). Dock DOM is untouched: nav#dock > i.pill + 5 x button.tb(svg, label, i.nb). No fonts, images, stylesheet imports or external URLs.
+ * 3 Contract: every rule is scoped to body.piq-shell (keyframes aside), so without piq-shell the 390/360 layout is untouched. Titlebar 44px (--shell-h). Capsule: 64px wide with a 12px margin (62px / 6px under 880px), height 5 rows + padding, centred in the space below the titlebar and never closer than 8px to it. Pages get padding-left:var(--rail-w) so content clears the capsule while the starfield and page glow still run under it. Pages choose their own column by setting --shell-col on their #pg-* (default 600px). The dock keeps its own left/transform pair: left is offset by half the capsule width so any hide state that rewrites transform still lines up; display, opacity and transform are never set here. Pill slides on Y from --i. Keyframes x-wave / x-sweep / x-pill-sq only. Reduced motion keeps static states; close stays distinct by inversion, never by colour.
+ * 4 Forbidden changes: no JS, listeners, postMessage, drag or window-control behaviour (the bridge owns win_*); no DOM or class/id renames; no native drag-region property; no page-internal, base.css or index.html edits; no colour, image, font or external asset; no rules outside body.piq-shell; no fifth or sixth destination.
+ */
+
+/* ---------- shell variables, capsule sizes and page canvas offsets ---------- */
+body.piq-shell{--shell-h:44px;--shell-col:600px;--shell-spring:cubic-bezier(.34,1.56,.64,1);--rail-w:88px;--rail-ax:44px;--rail-cw:64px;--rail-m:12px;--x-row:56px}
+@media (max-width:879px){body.piq-shell{--rail-w:74px;--rail-ax:37px;--rail-cw:62px;--rail-m:6px;--x-row:54px}}
+body.piq-shell #app{padding-top:var(--shell-h)}
+body.piq-shell #pg-auth .auth-wrap{padding-top:var(--shell-h)}
+body.piq-shell #app .page{min-height:calc(100dvh - var(--shell-h));padding-left:var(--rail-w)}
+body.piq-shell #app .page.leaving,body.piq-shell #app .page.entering{top:var(--shell-h);min-height:0}
+body.piq-shell #app .pgi{max-width:var(--shell-col);margin-inline:auto}
+
+/* ---------- capsule: the dock turned vertical, same five destinations ---------- */
+body.piq-shell .dock{--x-rh:calc(5*var(--x-row) + 12px);left:calc(var(--rail-m) + var(--rail-cw)/2);width:var(--rail-cw);height:var(--x-rh);top:max(calc(var(--shell-h) + 8px),calc(var(--shell-h) + (100dvh - var(--shell-h) - var(--x-rh))/2));bottom:auto;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(5,var(--x-row));align-content:start;padding:6px;border-radius:calc(var(--rail-cw)/2)}
+body.piq-shell .dock .tb{height:var(--x-row);min-height:0;border-radius:26px;transition:opacity .4s}
+body.piq-shell .dock .tb:hover{opacity:.9}
+body.piq-shell .dock .tb[aria-current]{opacity:1}
+body.piq-shell .dock .tb svg{transition:transform .6s var(--shell-spring)}
+body.piq-shell .dock .tb:hover svg{transform:scale(1.1)}
+body.piq-shell .dock .tb:active svg{transform:scale(.9)}
+body.piq-shell .dock .tb:focus-visible{outline:2px solid rgb(var(--ink));outline-offset:-3px;opacity:1}
+/* pill: slides on Y by --i, lens thickness like the titlebar buttons */
+body.piq-shell .dock .pill{top:6px;bottom:auto;left:6px;right:6px;width:auto;height:var(--x-row);transform:translateY(calc(var(--i,0)*100%))}
+body.piq-shell .dock .pill::before{border-radius:26px;background:linear-gradient(155deg,rgba(var(--ink),.2),rgba(var(--ink),.07) 55%,rgba(var(--ink),.14));box-shadow:inset 0 0 0 1px rgba(var(--hl),.1),inset 0 1.5px 1px -1px rgba(var(--hl),.7),inset 0 -1.5px 1px -1px rgba(var(--ink),.3),inset 6px 7px 12px -8px rgba(var(--hl),.45),0 0 0 .5px rgba(var(--ink),.3)}
+body.piq-shell .dock .pill.mv::before{animation-name:x-pill-sq}
+@keyframes x-pill-sq{40%{scale:.9 1.14}}
+
+/* ---------- titlebar: glass lid ---------- */
+body.piq-shell #app-titlebar{position:fixed;z-index:1000;top:0;left:0;right:0;height:var(--shell-h);display:flex;align-items:stretch;justify-content:space-between;overflow:hidden;color:rgb(var(--ink));cursor:default;-webkit-user-select:none;user-select:none;
+background:linear-gradient(180deg,rgba(var(--hl),.1),transparent 60%),linear-gradient(rgba(var(--bg),.4),rgba(var(--bg),.4)),linear-gradient(180deg,rgba(var(--ink),calc(var(--gl) + .045)),rgba(var(--ink),var(--gl)) 70%,rgba(var(--ink),calc(var(--gl) + .02)));
+-webkit-backdrop-filter:blur(8px) saturate(1.6) brightness(1.1);backdrop-filter:blur(8px) saturate(1.6) brightness(1.1);
+box-shadow:inset 0 1px 0 rgba(var(--hl),.5),inset 0 -1px 1px -1px rgba(var(--ink),.3),inset 0 -14px 18px -16px rgba(var(--sh),.55),inset 0 0 18px rgba(var(--hl),.05),0 14px 28px -18px rgba(var(--sh),var(--ds))}
+body.piq-shell #app-titlebar>*{position:relative;z-index:1}
+body.piq-shell #app-titlebar::before{content:"";position:absolute;inset:0;pointer-events:none;background:var(--grain);background-size:180px;opacity:.45}
+body.piq-shell #app-titlebar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;pointer-events:none;
+background-image:linear-gradient(90deg,transparent,rgba(var(--ink),.9),transparent),linear-gradient(90deg,rgba(var(--ink),.2),rgba(var(--ink),.34) 10%,rgba(var(--ink),.3) 86%,rgba(var(--ink),0));
+background-size:34% 100%,100% 100%;background-repeat:no-repeat;background-position:-52% 0,0 0}
+body.piq-shell #app-titlebar:hover::after{animation:x-sweep 1.5s var(--e) both}
+@keyframes x-sweep{from{background-position:-52% 0,0 0}to{background-position:152% 0,0 0}}
+
+/* ---------- left cluster: drag region; the star mark sits on the rail's icon axis ---------- */
+body.piq-shell #app-titlebar .titlebar-drag{flex:1 1 0;min-width:0;height:100%;display:flex;align-items:center;padding-left:calc(var(--rail-ax) - 8px)}
+body.piq-shell #app-titlebar .titlebar-drag>*{pointer-events:none}
+body.piq-shell #app-titlebar .titlebar-mark{flex:none;display:grid;place-items:center;width:16px;height:16px;margin-right:10px}
+body.piq-shell #app-titlebar .titlebar-mark svg{display:block;width:100%;height:100%;fill:currentColor;filter:drop-shadow(0 0 4px rgba(var(--hl),.45));transition:filter .5s var(--e)}
+body.piq-shell #app-titlebar:hover .titlebar-mark svg{filter:drop-shadow(0 0 6px rgba(var(--hl),.75))}
+body.piq-shell #app-titlebar .titlebar-product{flex:none;font-size:12.5px;font-weight:700;line-height:1;letter-spacing:.045em;white-space:nowrap;opacity:.88;text-shadow:0 0 14px rgba(var(--bg),.55);transition:opacity .45s var(--e)}
+body.piq-shell #app-titlebar .titlebar-sep{flex:none;display:block;width:1px;height:14px;margin:0 12px;background:linear-gradient(rgba(var(--ink),0),rgba(var(--ink),.45),rgba(var(--ink),0))}
+body.piq-shell #app-titlebar .titlebar-page{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;font-weight:600;line-height:1.4;letter-spacing:.06em;opacity:.62;text-shadow:0 0 14px rgba(var(--bg),.55);transition:opacity .45s var(--e)}
+body.piq-shell #app-titlebar:hover .titlebar-product{opacity:1}
+body.piq-shell #app-titlebar:hover .titlebar-page{opacity:.86}
+
+/* ---------- right cluster: window buttons (48 x 44 hit area) ---------- */
+body.piq-shell #app-titlebar .titlebar-actions{flex:none;display:flex;align-items:stretch;height:100%;padding-right:6px}
+body.piq-shell #app-titlebar .titlebar-btn{position:relative;flex:none;display:grid;place-items:center;width:48px;height:100%;min-width:44px;min-height:44px;margin:0;padding:0;border:0;border-radius:0;background:none;-webkit-appearance:none;appearance:none;color:inherit;cursor:default;-webkit-user-select:none;user-select:none;outline:0}
+body.piq-shell #app-titlebar .titlebar-btn svg{position:relative;z-index:1;display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.62;pointer-events:none;transition:opacity .35s var(--e),transform .6s var(--shell-spring)}
+body.piq-shell #app-titlebar .titlebar-btn::before{content:"";position:absolute;inset:5px;border-radius:13px;pointer-events:none;opacity:0;transform:scale(.82);
+background:linear-gradient(155deg,rgba(var(--ink),.17),rgba(var(--ink),.05) 55%,rgba(var(--ink),.11));
+box-shadow:inset 0 0 0 1px rgba(var(--hl),.12),inset 0 1.5px 1px -1px rgba(var(--hl),.8),inset 0 -1.5px 1px -1px rgba(var(--ink),.34),inset 5px 6px 10px -7px rgba(var(--hl),.5),0 0 0 .5px rgba(var(--ink),.3);
+transition:opacity .35s var(--e),transform .6s var(--shell-spring),background .3s var(--e)}
+body.piq-shell #app-titlebar .titlebar-btn::after{content:"";position:absolute;inset:5px;border-radius:13px;pointer-events:none;opacity:0;
+background:radial-gradient(circle closest-side,rgba(var(--ink),0) 52%,rgba(var(--ink),.32) 74%,rgba(var(--ink),0) 100%) 50% 50%/0% 0% no-repeat}
+@keyframes x-wave{0%{opacity:0;background-size:0% 0%}18%{opacity:1}100%{opacity:0;background-size:300% 300%}}
+body.piq-shell #app-titlebar .titlebar-btn:hover::before,body.piq-shell #app-titlebar .titlebar-btn:focus-visible::before{opacity:1;transform:none}
+body.piq-shell #app-titlebar .titlebar-btn:hover::after,body.piq-shell #app-titlebar .titlebar-btn:focus-visible::after{animation:x-wave .95s var(--e) both}
+body.piq-shell #app-titlebar .titlebar-btn:hover svg,body.piq-shell #app-titlebar .titlebar-btn:focus-visible svg{opacity:1}
+body.piq-shell #app-titlebar .titlebar-btn:focus-visible::before{outline:2px solid rgb(var(--ink));outline-offset:1px}
+body.piq-shell #app-titlebar .titlebar-btn:active::before{opacity:1;transform:scale(.9);transition-duration:.12s,.12s,.3s}
+body.piq-shell #app-titlebar .titlebar-btn:active svg{transform:scale(.88)}
+body.piq-shell #app-titlebar .titlebar-close svg{stroke-width:1.9;opacity:.78}
+body.piq-shell #app-titlebar .titlebar-close::after{background-image:radial-gradient(circle closest-side,rgba(var(--bg),0) 52%,rgba(var(--bg),.38) 74%,rgba(var(--bg),0) 100%)}
+body.piq-shell #app-titlebar .titlebar-close:hover::before,body.piq-shell #app-titlebar .titlebar-close:focus-visible::before{background:rgb(var(--ink));box-shadow:inset 0 1px 1px rgba(var(--bg),.4),0 0 0 .5px rgba(var(--ink),.6),0 0 18px -4px rgba(var(--ink),.55)}
+body.piq-shell #app-titlebar .titlebar-close:hover svg,body.piq-shell #app-titlebar .titlebar-close:focus-visible svg{color:rgb(var(--bg));opacity:1}
+body.piq-shell #app-titlebar .titlebar-close:active::before{opacity:.85}
+
+/* ---------- reduced motion: keep static states, drop movement ---------- */
+@media (prefers-reduced-motion:reduce){
+body.piq-shell #app-titlebar,body.piq-shell #app-titlebar *,body.piq-shell #app-titlebar::before,body.piq-shell #app-titlebar::after,body.piq-shell #app-titlebar *::before,body.piq-shell #app-titlebar *::after{animation:none!important;transition-duration:.01ms!important}
+body.piq-shell #app-titlebar .titlebar-btn::before{transform:none}
+body.piq-shell .dock .pill.mv::before{animation:none}
+body.piq-shell .dock .tb,body.piq-shell .dock .tb svg{transition-duration:.01ms!important}
+body.piq-shell .dock .tb:hover svg{transform:none}
+}
+
+/* ---------- forced colors ---------- */
+@media (forced-colors:active){
+body.piq-shell #app-titlebar{box-shadow:none;border-bottom:1px solid CanvasText}
+body.piq-shell #app-titlebar .titlebar-btn svg{opacity:1}
+body.piq-shell #app-titlebar .titlebar-btn:hover::before,body.piq-shell #app-titlebar .titlebar-btn:focus-visible::before{background:none;outline:2px solid Highlight}
+body.piq-shell .dock{box-shadow:none;border:1px solid CanvasText}
+body.piq-shell .dock .pill::before{box-shadow:none;outline:1px solid Highlight}
+}

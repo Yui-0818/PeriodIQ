@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 宿主窗口主题（Android 收尾轮 3.1.0）。
+     为什么需要它们：WebView 只能决定页面内（data-theme）的颜色，WebView 绘制之前的窗口/系统
+     splash 由 **Activity 主题** 决定。此前 manifest 钉死 `Theme.DeviceDefault.NoActionBar`（深色
+     DeviceDefault），所以即使用户选的是 Light，冷启动仍先闪约 0.35–1.0 s 的深色窗口。
+     现在由 MainActivity 在 super.onCreate() 之前按已存主题 setTheme()，窗口底色与页面对齐：
+       · PiqThemeLight  —— 固定浅底
+       · PiqThemeDark   —— 固定深底（从未选过时的默认，与 index.html 的 data-theme="dark" 一致）
+       · PiqThemeSystem —— 底色随系统明暗（values-night 覆盖），也是 manifest 的启动主题：
+         系统 splash 只能用清单里的静态主题，跟随系统是唯一不会与"用户选择相矛盾"的口径，
+         且它在 MainActivity 第一帧之前只有一帧左右的停留（见 onCreate 的首帧拆分）。
+     只加窗口底色与状态栏明暗，不改任何控件样式。 -->
+<resources>
+
+    <!-- System（也是 manifest 的启动/splash 主题）：底色与状态栏明暗随系统。 -->
+    <style name="PiqThemeBase" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/piq_window_system</item>
+        <item name="android:windowLightStatusBar">@bool/piq_system_light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/piq_system_light_bars</item>
+    </style>
+
+    <style name="PiqThemeSystem" parent="@style/PiqThemeBase" />
+
+    <style name="PiqThemeLight" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/piq_window_light</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <style name="PiqThemeDark" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/piq_window_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+</resources>

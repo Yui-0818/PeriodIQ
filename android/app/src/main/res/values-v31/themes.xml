@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- API 31+：系统 splash 的背景显式钉成与窗口底色同一个颜色（否则由父主题的
+     `Theme.DeviceDefault`（深色）决定，Light 用户仍会先看到深色 splash）。
+     样式资源在限定符之间是"整份替换"而不是逐项合并，所以这里重复基础项。 -->
+<resources>
+
+    <style name="PiqThemeBase" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/piq_window_system</item>
+        <item name="android:windowLightStatusBar">@bool/piq_system_light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/piq_system_light_bars</item>
+        <item name="android:windowSplashScreenBackground">@color/piq_window_system</item>
+        <!-- Round 4：抑制系统启动窗口（splash 的浅/深只按应用夜间模式取色，首次安装/`pm clear`
+             之后还没有写入过用户偏好，跟随系统就会与"默认深色"矛盾）。应用自己的首帧底色由
+             MainActivity 的 FrameLayout 自绘（同一套 setTheme 口径），实测见 README/证据。 -->
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 系统深色模式下，System 主题的窗口底色随系统变深（Light/Dark 两个主题用固定色，不走这里）。 -->
+<resources>
+    <color name="piq_window_system">#1A1B20</color>
+</resources>
