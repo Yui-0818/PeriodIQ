@@ -1,0 +1,17 @@
+# PeriodIQ（Win 端）— 后端运行时依赖
+# python_requires：>=3.11（conda 环境 001）
+# 2026-10-25 基线裁剪：移除 pytest/pytest-asyncio/httpx/websocket-client/requests
+# （测试体系与启动器已随基线移除，运行时代码零引用；历史依赖清单未保留）
+
+# Web 框架
+FastAPI==0.133.1
+Uvicorn==0.41.0
+
+# 数据库
+aiosqlite==0.22.1
+
+# 数据校验
+Pydantic==2.13.4
+
+# Windows 桌面提醒 toast（2026-10-26；services/reminder.py，导入与调用全程守护）
+winotify==1.1.0

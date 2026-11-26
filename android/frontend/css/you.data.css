@@ -1,0 +1,228 @@
+/* ------------------------------------------------------------------
+   1 角色：You 页 Data 卫星专属样式（#pg-you 内）：天文台档案——JSON/CSV 双体（环行星与七星团）、轨道插入导入（引力透镜画布与步骤体）、异常/成功观测读数、星图式格式说明；W1-4B 在末尾增加 Windows 桌面层（body.piq-shell），移动端规则原样保留。
+   2 依赖：you.css 先加载并提供共用规则（.pb/.gh/.rowb/.hint/.say/.gx/.gxi/.ano/.blk/.eb/.sc/.rvl）与 base.css 变量（--ink/--bg/--hl）；DOM 为 .sat[data-i="2"]（you.transfer.js 生成 .x-fmt 说明块与 .x-run/.x-go/.x-nil 状态）；本文件在 you.css 之后加载。
+   3 契约：早期跨端契约；桌面层全部限定在 body.piq-shell #pg-you .sat[data-i="2"]（右窗 564 宽排布，<=899px 为 435 宽窄排布）；新增名仅 --x-*（--x-sp/-sm/-ln 缓动、--x-a 彗星起点、--x-px 探测器位置）与 x-* 关键帧（x-launch/-tail/-pop/-dock/-draw/-perturb）；沿用既有 x- 类。
+   4 禁止改动项：不改 id/class/aria/流程与文案；不写入其余四个卫星；不改 you.css 共用类；无外部资源；prefers-reduced-motion 下桌面运动全部取消，状态与计数保留。
+   ------------------------------------------------------------------ */
+#pg-you .sat[data-i="2"] .tt{font-size:16px}
+#pg-you .sat[data-i="2"] .sc{overflow-x:hidden}
+/* ---- notes stay here: a sealed observatory note */
+#pg-you .loc{display:flex;gap:16px;align-items:center;padding:0 0 4px}
+#pg-you .loc svg{box-sizing:border-box;width:44px;height:44px;flex:none;padding:11px;border-radius:50%;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;box-shadow:inset 0 0 0 1px rgba(var(--ink),.4),0 0 0 7px rgba(var(--ink),.05)}
+#pg-you .loc b{display:block;font-size:22px;font-weight:800;letter-spacing:-.05em;line-height:1}
+#pg-you .loc span{display:block;font-size:12.5px;font-weight:600;opacity:.62;margin-top:6px;line-height:1.5}
+/* ---- one archive, two bodies: ringed planet = JSON backup, seven-star cluster = CSV cycles (shared by export, import and guide) */
+#pg-you :is(#ex-json,.fmt[data-fmt=json],#x-fmt-t-json)::before,#pg-you :is(#ex-csv,.fmt[data-fmt=csv],#x-fmt-t-csv)::before{content:"";position:absolute;left:50%;top:var(--oy,18px);width:40px;height:40px;margin-left:-20px;pointer-events:none;transition:transform .9s cubic-bezier(.34,1.56,.64,1),filter .8s cubic-bezier(.25,.1,.25,1)}
+#pg-you :is(#ex-json,.fmt[data-fmt=json],#x-fmt-t-json)::before{border-radius:50%;background:radial-gradient(circle,rgb(var(--ink)) 0 6px,rgba(var(--ink),.18) 7px,transparent 19px)}
+#pg-you :is(#ex-json,.fmt[data-fmt=json],#x-fmt-t-json)::after{content:"";position:absolute;left:50%;top:calc(var(--oy,18px) + 12px);width:68px;height:16px;margin-left:-34px;border:1px solid rgba(var(--ink),.6);border-radius:50%;transform:rotate(-16deg);pointer-events:none;transition:transform 1s cubic-bezier(.34,1.56,.64,1)}
+#pg-you :is(#ex-csv,.fmt[data-fmt=csv],#x-fmt-t-csv)::before{--s:rgb(var(--ink)) 0 1.8px,#0000 2.4px;background:radial-gradient(circle at 20px 20px,rgb(var(--ink)) 0 2.6px,#0000 3.2px),radial-gradient(circle at 33px 20px,var(--s)),radial-gradient(circle at 26.5px 31.3px,var(--s)),radial-gradient(circle at 13.5px 31.3px,var(--s)),radial-gradient(circle at 7px 20px,var(--s)),radial-gradient(circle at 13.5px 8.7px,var(--s)),radial-gradient(circle at 26.5px 8.7px,var(--s))}
+#pg-you :is(#ex-csv,.fmt[data-fmt=csv],#x-fmt-t-csv)::after{content:"";position:absolute;left:50%;top:calc(var(--oy,18px) - 6px);width:52px;height:52px;margin-left:-26px;border:1px dashed rgba(var(--ink),.45);border-radius:50%;pointer-events:none;transition:transform 1s cubic-bezier(.34,1.56,.64,1)}
+#pg-you .xb.x-run::before{transform:scale(1.2);filter:drop-shadow(0 0 9px rgba(var(--ink),.75))}
+#pg-you #ex-json.x-run::after{transform:rotate(164deg)}
+#pg-you #ex-csv.x-run::after{transform:rotate(180deg) scale(1.12)}
+/* ---- export: two apertures on one barycentre orbit */
+#pg-you .xrow{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:4px}
+#pg-you .xrow::before{content:"";position:absolute;z-index:-1;inset:8px -10px 4px;border:1px dashed rgba(var(--ink),.26);border-radius:50%;pointer-events:none}
+#pg-you .xb{--oy:22px;position:relative;isolation:isolate;overflow:hidden;align-self:start;display:grid;gap:3px;align-content:end;justify-items:center;min-height:186px;padding:84px 10px 16px;border:0;border-radius:60px 60px 26px 26px;background:rgba(var(--ink),.05);box-shadow:inset 0 0 0 .5px rgba(var(--ink),.4),inset 0 1px 1px rgba(var(--hl),.35),inset 0 -10px 24px -14px rgba(var(--ink),.18);text-align:center;color:inherit;cursor:pointer}
+#pg-you .xb+.xb{margin-top:24px}
+#pg-you .xb:active{transform:scale(.95);background:rgba(var(--ink),.12)}
+#pg-you .xb b{font-size:16px;font-weight:800;letter-spacing:-.03em}
+#pg-you .xb span{font-size:11.5px;font-weight:600;opacity:.6;line-height:1.35}
+#pg-you .xb,#pg-you .imp .pb{transition:background .5s,color .5s,transform .6s cubic-bezier(.34,1.56,.64,1)}
+#pg-you .pr{position:relative;height:1px;margin-top:16px;border-top:1px dashed rgba(var(--ink),.28)}
+#pg-you .pr::after{content:"";position:absolute;left:0;top:-5px;width:9px;height:9px;background:rgb(var(--ink));clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);opacity:0}
+#pg-you .pr.x-go::after{animation:xComet 1.1s cubic-bezier(.5,0,.2,1) both}
+@keyframes xComet{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 9px);opacity:0}}
+#pg-you :is(#exs,#ims):not(:empty)::before{content:"";display:inline-block;width:9px;height:9px;margin-right:8px;background:currentColor;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+/* ---- import: orbital insertion through a gravity lens (canvas) and three small bodies */
+#pg-you .imp{position:relative}
+#pg-you #air{display:block;width:100%;height:120px;margin:-6px 0 6px}
+#pg-you #imp .gx>.gxi{visibility:hidden;transition:visibility 0s .9s}
+#pg-you #imp .gx.on>.gxi{visibility:visible;transition-delay:0s}
+#pg-you #imp-go,#pg-you #imp-file{width:100%;justify-content:space-between;min-height:60px;padding:0 24px;border-radius:99px;font-size:19px;font-weight:800;letter-spacing:-.04em}
+#pg-you #imp-go::after{content:"";width:18px;height:18px;background:currentColor;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);transition:transform .9s cubic-bezier(.34,1.56,.64,1)}
+#pg-you #imp-go:active::after{transform:rotate(90deg) scale(1.3)}
+#pg-you #imp-file{background:none;box-shadow:none;border:1px dashed rgba(var(--ink),.6)}
+#pg-you #imp-file::after{content:"";width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1.5px currentColor}
+#pg-you #ip2:has(#imp-ok[aria-disabled=false]) #imp-file::after{background:currentColor}
+#pg-you .fmt{--oy:16px;position:relative;isolation:isolate;overflow:hidden;flex:1;display:grid;justify-items:center;align-content:end;gap:2px;min-height:138px;padding:68px 8px 14px;border-radius:60px 60px 22px 22px;text-align:center}
+#pg-you .fmt b{font-size:26px}
+#pg-you .fmt small{font-size:11px;font-weight:600;opacity:.6;line-height:1.3}
+#pg-you .fline{position:relative;padding-left:22px;font-size:13px;font-weight:700;opacity:.85;line-height:1.45;overflow-wrap:anywhere}
+#pg-you .fline::before{content:"";position:absolute;left:0;top:3px;width:12px;height:12px;background:rgb(var(--ink));clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);opacity:.3;transition:opacity .6s cubic-bezier(.25,.1,.25,1)}
+#pg-you #ip2:has(#imp-ok[aria-disabled=false]) .fline::before{opacity:1}
+#pg-you .pb[aria-disabled=true]{opacity:.35}
+/* ---- anomaly: a perturbed orbit, entries read as unexamined bodies */
+#pg-you #ipa .ano{position:relative}
+#pg-you #ipa .ano::before{content:"Unusual entries";display:block;margin-bottom:8px}
+#pg-you #ipa .ano::after{content:"";position:absolute;right:2px;top:-6px;width:46px;height:26px;border:1px dashed rgba(var(--ink),.5);border-radius:50%;transform:rotate(-18deg);background:radial-gradient(circle at 90% 50%,rgb(var(--ink)) 0 2.5px,transparent 3px);pointer-events:none}
+#pg-you #imano div{position:relative;margin:8px 0;padding:0 0 0 20px;border:0}
+#pg-you #imano div::before{content:"";position:absolute;left:0;top:.28em;width:9px;height:9px;border-radius:50%;box-shadow:inset 0 0 0 1.4px currentColor}
+/* ---- success: three bodies lit by what arrived; a zero stays dim */
+#pg-you .echo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding-top:2px}
+#pg-you .echo::before{content:"Imported";grid-column:1/-1;display:block;margin-bottom:4px}
+#pg-you .echo>div{position:relative;display:grid;justify-items:center;align-content:start;gap:3px;padding:34px 0 6px;text-align:center;background:radial-gradient(circle at 50% 14px,rgba(var(--ink),.2),transparent 30px)}
+#pg-you .echo>div::before{content:"";position:absolute;left:50%;top:4px;width:20px;height:20px;margin-left:-10px;background:rgb(var(--ink));clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+#pg-you .echo>div.x-nil{background:none}
+#pg-you .echo>div.x-nil::before{opacity:.25}
+#pg-you .echo>div.x-nil b{opacity:.45}
+#pg-you .echo b{font-size:42px}
+#pg-you #ipr.on .echo>div::before{animation:xStar 1.1s cubic-bezier(.34,1.56,.64,1) backwards}
+#pg-you #ipr.on .echo>div:nth-child(2)::before{animation-delay:.12s}
+#pg-you #ipr.on .echo>div:nth-child(3)::before{animation-delay:.24s}
+@keyframes xStar{from{transform:scale(0) rotate(-90deg)}}
+#pg-you :is(.x-fmt-n i,.x-fmt-o small,.echo span),#pg-you .echo::before,#pg-you #ipa .ano::before{font-style:normal;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5}
+#pg-you :is(.fmt b,.echo b,.x-fmt-o b){font-weight:800;letter-spacing:-.06em;line-height:1}
+/* ---- the codex: two plates (one per channel), a field chart and run-in notes */
+#pg-you .x-fmt{margin-top:34px}
+#pg-you .x-fmt-sum{margin:0;font-size:15px;font-weight:600;line-height:1.5;letter-spacing:-.015em}
+#pg-you .x-fmt-sum b{font-weight:800}
+#pg-you .x-fmt-pair{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr 1fr;margin-top:24px}
+#pg-you .x-fmt-pair::before{content:"";position:absolute;z-index:-1;left:0;top:-4px;width:50%;height:100%;background:radial-gradient(58% 52% at 50% 36%,rgba(var(--ink),.24),transparent 74%);transform:translateX(calc(var(--i,0)*100%));transition:transform .9s cubic-bezier(.34,1.56,.64,1)}
+#pg-you .x-fmt-pair::after{content:"";position:absolute;left:30%;right:30%;top:34px;border-top:1px dashed rgba(var(--ink),.3);pointer-events:none}
+#pg-you .x-fmt-o{--oy:14px;position:relative;display:grid;justify-items:center;align-content:start;gap:4px;min-height:104px;padding:62px 0 10px;border:0;border-radius:30px;background:none;color:inherit;font:inherit;cursor:pointer;opacity:.5;transition:opacity .6s cubic-bezier(.25,.1,.25,1),transform .5s cubic-bezier(.34,1.56,.64,1)}
+#pg-you .x-fmt-o[aria-selected=true]{opacity:1}
+#pg-you .x-fmt-o:active{transform:scale(.95)}
+#pg-you .x-fmt-o b{font-size:26px}
+#pg-you .x-fmt-o::before{transform:scale(.8)}
+#pg-you .x-fmt-o[aria-selected=true]::before{transform:scale(1);filter:drop-shadow(0 0 8px rgba(var(--ink),.6))}
+#pg-you .x-fmt-pane{display:none;padding-top:14px}
+#pg-you .x-fmt-pane.on{display:block;animation:xfIn .9s cubic-bezier(.25,.1,.25,1) backwards}
+@keyframes xfIn{from{clip-path:circle(0 at 50% 0);opacity:0}to{clip-path:circle(150% at 50% 0);opacity:1}}
+#pg-you .x-fmt-lead{margin:0;font-size:20px;font-weight:800;letter-spacing:-.04em;line-height:1.15}
+#pg-you .x-fmt-sig{display:block;width:100%;height:auto;margin:12px 0 2px;overflow:visible}
+#pg-you .x-fmt-sig :is(path,ellipse){fill:none;stroke:currentColor;stroke-width:1;stroke-dasharray:2 4;opacity:.42}
+#pg-you .x-fmt-sig circle{fill:currentColor}
+#pg-you .x-fmt-sig .x-o{fill:rgb(var(--bg));stroke:currentColor;stroke-width:1.3}
+#pg-you .x-fmt-sig .x-f{fill:none;stroke:currentColor;stroke-width:1;opacity:.38}
+#pg-you .x-fmt-sig text{fill:currentColor;font-size:10.5px;font-weight:600;letter-spacing:.04em;opacity:.62}
+#pg-you .x-fmt-cap{margin:0 0 4px;font-size:11.5px;font-weight:600;line-height:1.45;opacity:.6}
+#pg-you .x-fmt-n{margin:12px 0 0;font-size:13px;font-weight:600;line-height:1.55;opacity:.88;overflow-wrap:anywhere}
+#pg-you .x-fmt-n i{margin-right:8px}
+#pg-you .x-fmt-n b{font-weight:800}
+#pg-you .x-fmt-key{counter-reset:xf;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px;margin:10px 0 0}
+#pg-you .x-fmt-f{counter-increment:xf;position:relative;min-width:0;padding-left:20px}
+#pg-you .x-fmt-f::before{content:"";position:absolute;left:0;top:4px;width:9px;height:9px;border-radius:50%;background:rgb(var(--ink))}
+#pg-you .x-fmt-opt::before{background:rgb(var(--bg));box-shadow:inset 0 0 0 1.3px rgb(var(--ink))}
+#pg-you .x-fmt-f b{display:block;font-size:12.5px;font-weight:800;letter-spacing:-.02em;overflow-wrap:anywhere}
+#pg-you .x-fmt-f b::before{content:counter(xf);margin-right:6px;font-size:10px;font-weight:600;opacity:.5}
+#pg-you .x-fmt-f span{display:block;margin-top:2px;font-size:11.5px;font-weight:600;opacity:.65;line-height:1.4}
+#pg-you .x-fmt-lg{margin:0;align-self:end;font-size:11.5px}
+#pg-you .x-fmt-hdr{margin:12px 0 0;padding-left:12px;border-left:1px solid rgba(var(--ink),.4);font:600 10.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;opacity:.72;overflow-wrap:anywhere;-webkit-user-select:all;user-select:all}
+#pg-you .x-fmt-go{justify-self:center;min-height:44px;padding:0;font-size:12.5px;opacity:.75}
+/* ---- Data focus */
+#pg-you :is(.xb,.fmt,.x-fmt-o,.x-fmt-go):focus-visible{outline:1.5px solid rgb(var(--ink));outline-offset:3px}
+/* ---- W1-4B desktop observatory (body.piq-shell): right pane 564 wide (content ~492), narrow tier <=899 (content ~363) */
+body.piq-shell #pg-you .sat[data-i="2"]{--x-sp:cubic-bezier(.34,1.56,.64,1);--x-sm:cubic-bezier(.25,.1,.25,1);--x-ln:cubic-bezier(.5,0,.2,1)}
+/* notes stay here: the journal path runs out and stops at a wall — nothing crosses it */
+body.piq-shell #pg-you .sat[data-i="2"] .loc::after{content:"";flex:none;width:64px;height:14px;margin-left:auto;background:linear-gradient(rgb(var(--ink)),rgb(var(--ink))) 100% 50%/1px 100% no-repeat,repeating-linear-gradient(90deg,rgba(var(--ink),.5) 0 3px,transparent 3px 8px) 0 50%/calc(100% - 7px) 1px no-repeat;opacity:.55}
+/* export: two apertures on one barycentre orbit; the orbit turns toward the body that fires */
+body.piq-shell #pg-you .sat[data-i="2"] .xrow{gap:20px;padding-top:6px}
+body.piq-shell #pg-you .sat[data-i="2"] .xrow::before{inset:12px -6px 6px;transition:transform 1.2s var(--x-sp)}
+body.piq-shell #pg-you .sat[data-i="2"] .xrow:has(#ex-json.x-run)::before{transform:rotate(-1.4deg)}
+body.piq-shell #pg-you .sat[data-i="2"] .xrow:has(#ex-csv.x-run)::before{transform:rotate(1.4deg)}
+body.piq-shell #pg-you .sat[data-i="2"] .xb{--oy:20px;min-height:160px;padding:80px 12px 16px;border-radius:80px 80px 26px 26px}
+body.piq-shell #pg-you .sat[data-i="2"] .xb+.xb{margin-top:30px}
+body.piq-shell #pg-you .sat[data-i="2"] .xb:is(:hover,:focus-visible){background:rgba(var(--ink),.1)}
+body.piq-shell #pg-you .sat[data-i="2"] .xb:is(:hover,:focus-visible)::before{transform:translateY(-4px) scale(1.12)}
+body.piq-shell #pg-you .sat[data-i="2"] #ex-json:is(:hover,:focus-visible)::after{transform:rotate(-38deg)}
+body.piq-shell #pg-you .sat[data-i="2"] #ex-csv:is(:hover,:focus-visible)::after{transform:rotate(70deg)}
+body.piq-shell #pg-you .sat[data-i="2"] .xb.x-run::before{transform:translateY(-6px) scale(1.26);filter:drop-shadow(0 0 10px rgba(var(--ink),.8))}
+body.piq-shell #pg-you .sat[data-i="2"] #ex-json.x-run::after{transform:rotate(164deg)}
+body.piq-shell #pg-you .sat[data-i="2"] #ex-csv.x-run::after{transform:rotate(180deg) scale(1.12)}
+/* export travel: charge -> comet leaves from the fired body along the lane (tail draws behind it) -> status star ignites on arrival */
+body.piq-shell #pg-you .sat[data-i="2"] .pr{margin-top:20px}
+body.piq-shell #pg-you .sat[data-i="2"] .xrow:has(#ex-json:focus)~.pr{--x-a:25%}
+body.piq-shell #pg-you .sat[data-i="2"] .xrow:has(#ex-csv:focus)~.pr{--x-a:75%}
+body.piq-shell #pg-you .sat[data-i="2"] .pr::before{content:"";position:absolute;left:var(--x-a,0%);right:0;top:-1px;height:2px;background:linear-gradient(90deg,transparent,rgb(var(--ink)));clip-path:inset(0 100% 0 0);opacity:0;pointer-events:none}
+body.piq-shell #pg-you .sat[data-i="2"] .pr.x-go::before{animation:x-tail 1.1s var(--x-ln) both}
+body.piq-shell #pg-you .sat[data-i="2"] .pr.x-go::after{animation:x-launch 1.1s var(--x-ln) both}
+body.piq-shell #pg-you .sat[data-i="2"] :is(#exs,#ims):not(:empty)::before{animation:x-pop .9s var(--x-sp) .5s backwards}
+@keyframes x-launch{0%{left:calc(var(--x-a,0%) - 4px);opacity:0;transform:scale(.4)}12%{opacity:1;transform:scale(1)}88%{opacity:1}100%{left:calc(100% - 9px);opacity:0}}
+@keyframes x-tail{0%{clip-path:inset(0 100% 0 0);opacity:1}90%{opacity:1}100%{clip-path:inset(0);opacity:0}}
+@keyframes x-pop{from{transform:scale(0) rotate(-90deg)}60%{transform:scale(1.6) rotate(20deg)}}
+/* import: one dome. the lens canvas is its sky; a probe flies the approach lane (st 0 > 1 > 2 > capture at the lens) while each step docks in from above */
+body.piq-shell #pg-you .sat[data-i="2"] .imp{--x-px:10%;isolation:isolate;overflow:hidden;padding:0 0 18px;border-radius:200px 200px 30px 30px/84px 84px 30px 30px;background:radial-gradient(70% 90px at 50% 56px,rgba(var(--ink),.15),transparent),rgba(var(--ink),.035);box-shadow:inset 0 0 0 .5px rgba(var(--ink),.38),inset 0 1px 1px rgba(var(--hl),.3),inset 0 -12px 28px -18px rgba(var(--ink),.2)}
+body.piq-shell #pg-you .sat[data-i="2"] .imp[data-st="1"]{--x-px:27%}
+body.piq-shell #pg-you .sat[data-i="2"] .imp[data-st="2"],body.piq-shell #pg-you .sat[data-i="2"] .imp:has(#ipa.on){--x-px:40%}
+body.piq-shell #pg-you .sat[data-i="2"] .imp:has(#ipr.on){--x-px:50%}
+body.piq-shell #pg-you .sat[data-i="2"] .imp::before,body.piq-shell #pg-you .sat[data-i="2"] .imp::after{content:"";position:absolute;z-index:1;pointer-events:none}
+body.piq-shell #pg-you .sat[data-i="2"] .imp::before{left:0;top:60px;width:var(--x-px);height:1px;background:linear-gradient(90deg,transparent,rgba(var(--ink),.85));transition:width 1s var(--x-sp)}
+body.piq-shell #pg-you .sat[data-i="2"] .imp::after{left:var(--x-px);top:54px;width:13px;height:13px;margin-left:-6px;background:rgb(var(--ink));clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);transition:left 1s var(--x-sp),transform 1s var(--x-sp)}
+body.piq-shell #pg-you .sat[data-i="2"] .imp:has(#ipa.on)::after{animation:x-perturb .9s var(--x-sp) 2}
+body.piq-shell #pg-you .sat[data-i="2"] .imp:has(#ipr.on)::after{transform:scale(2.1) rotate(90deg)}
+@keyframes x-perturb{30%{translate:0 -9px}65%{translate:0 6px}}
+body.piq-shell #pg-you .sat[data-i="2"] #air{height:120px;margin:0 0 14px}
+body.piq-shell #pg-you .sat[data-i="2"] #imp .gx{padding-inline:26px}
+body.piq-shell #pg-you .sat[data-i="2"] .imp>.say{padding-inline:26px}
+body.piq-shell #pg-you .sat[data-i="2"] #imp .gx.on>.gxi>*{animation:x-dock .95s var(--x-sp) backwards}
+body.piq-shell #pg-you .sat[data-i="2"] #imp .gx.on>.gxi>:nth-child(2){animation-delay:.07s}
+body.piq-shell #pg-you .sat[data-i="2"] #imp .gx.on>.gxi>:nth-child(3){animation-delay:.14s}
+@keyframes x-dock{from{opacity:0;transform:translateY(-30px) scale(.94);filter:blur(5px)}}
+body.piq-shell #pg-you .sat[data-i="2"] :is(.pb,.gh){min-height:44px}
+body.piq-shell #pg-you .sat[data-i="2"] #ip0 .gxi{display:flex;align-items:center;gap:20px}
+body.piq-shell #pg-you .sat[data-i="2"] #imp-go,body.piq-shell #pg-you .sat[data-i="2"] #imp-file{flex:none;width:auto;min-width:208px;min-height:56px}
+body.piq-shell #pg-you .sat[data-i="2"] #ip0 .hint{flex:1;min-width:0;margin:0}
+body.piq-shell #pg-you .sat[data-i="2"] #ip1 .gxi{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:18px}
+body.piq-shell #pg-you .sat[data-i="2"] #ip1 .rowb{gap:14px}
+body.piq-shell #pg-you .sat[data-i="2"] .fmt{--oy:14px;min-height:118px;padding:64px 8px 12px;border-radius:70px 70px 22px 22px;transition:opacity .5s var(--x-sm),background .5s,transform .6s var(--x-sp)}
+body.piq-shell #pg-you .sat[data-i="2"] .fmt:is(:hover,:focus-visible)::before{transform:translateY(-8px) scale(1.2);filter:drop-shadow(0 0 8px rgba(var(--ink),.6))}
+body.piq-shell #pg-you .sat[data-i="2"] .fmt:active::before{transform:translateY(-24px) scale(.5)}
+body.piq-shell #pg-you .sat[data-i="2"] .rowb:has(.fmt:is(:hover,:focus-visible)) .fmt:not(:hover,:focus-visible){opacity:.5}
+body.piq-shell #pg-you .sat[data-i="2"] #ip2 .gxi{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px 18px}
+body.piq-shell #pg-you .sat[data-i="2"] #ip2 .rowb{grid-column:1/-1}
+body.piq-shell #pg-you .sat[data-i="2"] #ipa .gxi{display:grid;grid-template-columns:minmax(0,1fr) 176px;align-items:end;gap:16px 22px}
+body.piq-shell #pg-you .sat[data-i="2"] #ipa .rowb{flex-direction:column;align-items:stretch;gap:8px}
+/* success: three stars, one constellation line drawn star to star */
+body.piq-shell #pg-you .sat[data-i="2"] .echo{gap:0;padding-top:0}
+body.piq-shell #pg-you .sat[data-i="2"] .echo b{font-size:56px;max-width:100%;overflow-wrap:anywhere}
+body.piq-shell #pg-you .sat[data-i="2"] .echo>div+div::after{content:"";position:absolute;top:14px;left:calc(-50% + 14px);right:calc(50% + 14px);border-top:1px dashed rgba(var(--ink),.45)}
+body.piq-shell #pg-you .sat[data-i="2"] #ipr.on .echo>div+div::after{animation:x-draw .8s var(--x-ln) .45s backwards}
+body.piq-shell #pg-you .sat[data-i="2"] #ipr.on .echo>div:nth-child(3)::after{animation-delay:.7s}
+@keyframes x-draw{from{clip-path:inset(0 100% 0 0)}}
+/* guide: text left, the two bodies right; selecting one swings its ring and lifts it */
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 24px;align-items:center}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt>*{grid-column:1/-1}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt>.x-fmt-sum{grid-column:1;font-size:14px}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt>.x-fmt-pair{grid-column:2;margin-top:0}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-pane{padding-top:20px}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-lead{font-size:22px}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-sig{max-height:168px}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-key{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 18px}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-o{transition:opacity .6s var(--x-sm),transform .7s var(--x-sp)}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-o[aria-selected=true]{transform:translateY(-4px)}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-o:active{transform:scale(.95)}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-o[aria-selected=false]::before{transform:translateY(6px) scale(.72)}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-o[aria-selected=true]::before{transform:scale(1.18);filter:drop-shadow(0 0 9px rgba(var(--ink),.65))}
+body.piq-shell #pg-you .sat[data-i="2"] #x-fmt-t-json[aria-selected=true]::after{transform:rotate(164deg)}
+body.piq-shell #pg-you .sat[data-i="2"] #x-fmt-t-csv[aria-selected=true]::after{transform:rotate(180deg) scale(1.12)}
+body.piq-shell #pg-you .sat[data-i="2"] :is(.pb,.gh,.x-fmt-go):focus-visible{outline:1.5px solid rgb(var(--ink));outline-offset:3px}
+/* 800 tier: right pane ~435, content ~363 — stacked steps, shallower dome, two-column key */
+@media (max-width:899px){
+body.piq-shell #pg-you .sat[data-i="2"] .xrow{gap:12px}
+body.piq-shell #pg-you .sat[data-i="2"] .loc::after{display:none}
+body.piq-shell #pg-you .sat[data-i="2"] .xb{min-height:142px;padding:70px 8px 14px;border-radius:64px 64px 24px 24px}
+body.piq-shell #pg-you .sat[data-i="2"] .xb+.xb{margin-top:20px}
+body.piq-shell #pg-you .sat[data-i="2"] .imp{border-radius:150px 150px 26px 26px/64px 64px 26px 26px}
+body.piq-shell #pg-you .sat[data-i="2"] #imp .gx,body.piq-shell #pg-you .sat[data-i="2"] .imp>.say{padding-inline:18px}
+body.piq-shell #pg-you .sat[data-i="2"] #ip0 .gxi{display:block}
+body.piq-shell #pg-you .sat[data-i="2"] #imp-go,body.piq-shell #pg-you .sat[data-i="2"] #imp-file{width:100%}
+body.piq-shell #pg-you .sat[data-i="2"] #ip0 .hint{margin-top:12px}
+body.piq-shell #pg-you .sat[data-i="2"] :is(#ip1,#ip2,#ipa) .gxi{grid-template-columns:minmax(0,1fr)}
+body.piq-shell #pg-you .sat[data-i="2"] #imp-x1{justify-self:start}
+body.piq-shell #pg-you .sat[data-i="2"] #ipa .rowb{flex-direction:row}
+body.piq-shell #pg-you .sat[data-i="2"] .echo b{font-size:36px}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt{display:block}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt>.x-fmt-pair{margin-top:20px}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-key{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* motion off: every state and count stays, nothing travels, blurs or loops */
+@media (prefers-reduced-motion:reduce){
+body.piq-shell #pg-you .sat[data-i="2"] *,body.piq-shell #pg-you .sat[data-i="2"] *::before,body.piq-shell #pg-you .sat[data-i="2"] *::after{animation:none!important;transition:none!important;filter:none!important}
+}
+@media (forced-colors:active){
+body.piq-shell #pg-you .sat[data-i="2"] :is(.xb,.fmt,.imp){border:1px solid CanvasText}
+body.piq-shell #pg-you .sat[data-i="2"] .x-fmt-o[aria-selected=true]{outline:2px solid Highlight}
+body.piq-shell #pg-you .sat[data-i="2"] .imp::after,body.piq-shell #pg-you .sat[data-i="2"] .pr::after,body.piq-shell #pg-you .sat[data-i="2"] .echo>div::before{background:CanvasText}
+body.piq-shell #pg-you .sat[data-i="2"] :is(.pb,.gh,.x-fmt-go,.xb,.fmt,.x-fmt-o):focus-visible{outline:2px solid Highlight}
+}

@@ -1,0 +1,21 @@
+name: Feature Request
+description: Suggest a new feature or improvement (noncommercial / personal use)
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Target Platform
+      options:
+        - Android
+        - Windows
+        - Both
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Feature Description
+      description: Describe what you would like to see and how it fits PeriodIQ's local-first, privacy-first design.
+    validations:
+      required: true

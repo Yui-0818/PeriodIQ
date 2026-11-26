@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 首帧窗口底色（Android 收尾轮 3.1.0）：与前端 index.html 的 data-theme 一一对应。
+     light = 页面浅色底（实测 body 247,247,247）；dark = 既有暗色首屏用的深色底（26,27,32）。
+     system 的取值另有 values-night/colors.xml 覆盖，随系统明暗。 -->
+<resources>
+    <color name="piq_window_light">#F7F7F7</color>
+    <color name="piq_window_dark">#1A1B20</color>
+    <color name="piq_window_system">#F7F7F7</color>
+</resources>

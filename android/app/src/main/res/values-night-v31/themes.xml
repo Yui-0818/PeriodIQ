@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- API 31+ 且系统深色：与 values-v31/themes.xml 同一份定义，只是颜色取 values-night 的深色值。 -->
+<resources>
+
+    <style name="PiqThemeBase" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/piq_window_system</item>
+        <item name="android:windowLightStatusBar">@bool/piq_system_light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/piq_system_light_bars</item>
+        <item name="android:windowSplashScreenBackground">@color/piq_window_system</item>
+    </style>
+
+</resources>

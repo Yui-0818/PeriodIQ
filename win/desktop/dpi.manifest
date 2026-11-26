@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  R26-A：Win32 application manifest，单一权威声明 Per-Monitor V2 DPI 感知。
+  由 tools/build_desktop.py::compile_native_host 以 csc /win32manifest 嵌入 native_host.exe。
+  权威顺序：本 manifest > Program.Main 运行时 SetProcessDpiAwarenessContext 兜底。
+  两者并存时以 manifest 为准（进程创建时已定 PMv2，运行时调用会失败——预期内）。
+-->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity version="1.0.0.0" name="PeriodIQ.native_host.desktop" type="win32"/>
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <!-- 旧接口：true/PM = Per-Monitor（V1）；与 dpiAwareness 互补 -->
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/PM</dpiAware>
+      <!-- Win10 1607+：首选 PerMonitorV2，回退 PerMonitor -->
+      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2,PerMonitor</dpiAwareness>
+    </windowsSettings>
+  </application>
+</assembly>

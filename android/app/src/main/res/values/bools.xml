@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 系统栏图标的明暗（System 主题）：白天亮底用深色图标，values-night 覆盖为 false。 -->
+<resources>
+    <bool name="piq_system_light_bars">true</bool>
+</resources>
